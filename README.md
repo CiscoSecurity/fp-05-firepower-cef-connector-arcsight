@@ -11,7 +11,7 @@ Copyright (c) 2017 by Cisco Systems, Inc.
     CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 
 # eStreamer eNcore
-The SourceFire eStreamer client. 
+The Cisco eStreamer client. 
 
 The Cisco Event Streamer (also known as eStreamer) allows you to stream System intrusion,
 discovery, and connection data from Firepower Management Center or managed device (also
