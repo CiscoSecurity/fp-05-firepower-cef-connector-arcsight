@@ -1,3 +1,5 @@
+[![Gitter chat](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/CiscoSecurity/Lobby "Gitter chat")
+
 # License
 
 Copyright (c) 2017 by Cisco Systems, Inc.
