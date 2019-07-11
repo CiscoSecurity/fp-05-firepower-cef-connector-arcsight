@@ -149,8 +149,8 @@ FIELD_MAPPING = {
         'linkType': u'link_type',
         'packetData': u'packet',
         'packetLength': u'packet_len',
-        'packetMicrosecond': u'packet_sec',
-        'packetSecond': u'packet_usec'},
+        'packetMicrosecond': u'packet_usec',
+        'packetSecond': u'packet_sec'},
 
     # 4
     definitions.RECORD_PRIORITY: {
@@ -1660,3 +1660,11 @@ def dumps( source ):
         escapeNewLines = True )
 
     return line
+© 2019 GitHub, Inc.
+Help
+Support
+API
+Training
+Blog
+About
+GitHub Enterprise Server 2.16.4
