@@ -1660,11 +1660,3 @@ def dumps( source ):
         escapeNewLines = True )
 
     return line
-© 2019 GitHub, Inc.
-Help
-Support
-API
-Training
-Blog
-About
-GitHub Enterprise Server 2.16.4
