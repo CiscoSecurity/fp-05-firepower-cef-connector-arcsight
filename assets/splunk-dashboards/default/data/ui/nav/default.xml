@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nav color="#0c5173">
+    <collection label="Dashboards">
+        <view name="estreamer_summary" />
+        <divider />
+        <view name="sensor_summary" />
+        <view name="policy_summary" />
+        <view name="host_summary" />
+        <view name="flow_summary" />
+        <divider />
+        <view name="ids_event_summary" />
+        <view name="file_event_summary" />
+        <view name="correlation_summary" />
+    </collection>
+    <collection label="Search">
+        <a href="/app/$$APP_ID/search?q=%60SfeS-estreamer-logs%60">Search eStreamer Logs</a>
+        <divider />
+        <a href="/app/$$APP_ID/search?q=%60SfeS-ids-ips-logs%60">Search Intrusion Logs</a>
+        <a href="/app/$$APP_ID/search?q=%60SfeS-file-malware-logs%60">Search File / Malware Logs</a>
+        <a href="/app/$$APP_ID/search?q=%60SfeS-correlation-logs%60">Search Correlation Logs</a>
+        <a href="/app/$$APP_ID/search?q=%60SfeS-flow-logs%60">Search Flow Logs</a>
+        <divider />
+        <view name="profile_ip" />
+        <view name="profile_port" />
+        <view name="profile_user" />
+    </collection>
+    <collection label="Help">
+        <saved name="Client Status" />
+        <saved name="Client Logs" />
+        <saved name="Client Warnings and Errors" />
+        <divider />
+        <view name="help" />
+        <divider />
+        <a href="$$APP_URL">Check for Updates</a>
+        <view name="about" />
+    </collection>
+</nav>

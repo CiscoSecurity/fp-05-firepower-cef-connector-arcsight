@@ -1,0 +1,104 @@
+<form stylesheet="app.css">
+  <label>Host Summary</label>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="time" searchWhenChanged="true">
+      <default>
+        <earliestTime>-24h</earliestTime>
+        <latestTime>now</latestTime>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <map>
+      <title>Source Address Map</title>
+      <searchString>`SfeS-non-correlation-logs` | iplocation src_ip | geostats globallimit=100 latfield=lat longfield=lon count by src_ip</searchString>
+      <option name="height">350</option>
+      <option name="mapping.markerLayer.markerOpacity">0.8</option>
+      <option name="mapping.markerLayer.markerMinSize">10</option>
+      <option name="mapping.markerLayer.markerMaxSize">60</option>
+      <option name="mapping.map.center">(30.810646,-10.556976)</option>
+      <option name="mapping.map.zoom">1</option>
+    </map>
+    <map>
+      <title>Destination Address Map</title>
+      <searchString>`SfeS-non-correlation-logs` | iplocation dest_ip | geostats globallimit=100 latfield=lat longfield=lon count by dest_ip</searchString>
+      <option name="height">350</option>
+      <option name="mapping.markerLayer.markerOpacity">0.8</option>
+      <option name="mapping.markerLayer.markerMinSize">10</option>
+      <option name="mapping.markerLayer.markerMaxSize">60</option>
+      <option name="mapping.map.center">(30.810646,-10.556976)</option>
+      <option name="mapping.map.zoom">1</option>
+    </map>
+  </row>
+  <row>
+    <table>
+      <title>Top Source Addresses</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 src_ip, src_ip_country | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="drilldown">cell</option>
+      <option name="count">10</option>
+      <option name="dataOverlayMode">none</option>
+    </table>
+    <table>
+      <title>Top Destination Addresses</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 dest_ip, dest_ip_country | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="drilldown">cell</option>
+      <option name="count">10</option>
+      <option name="dataOverlayMode">none</option>
+    </table>
+  </row>
+  <row>
+    <table>
+      <title>Top Source Ports</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 src_port | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="drilldown">row</option>
+      <option name="count">10</option>
+      <option name="dataOverlayMode">none</option>
+    </table>
+    <table>
+      <title>Top Destination Ports</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 dest_port | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="drilldown">row</option>
+      <option name="count">10</option>
+      <option name="dataOverlayMode">none</option>
+    </table>
+  </row>
+  <row>
+    <table>
+      <title>Top Source-Destination Address Pairs</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 src_ip, dest_ip | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="dataOverlayMode">none</option>
+      <option name="drilldown">cell</option>
+      <option name="count">10</option>
+    </table>
+    <table>
+      <title>Top Source-Destination Port Pairs</title>
+      <searchString>`SfeS-non-correlation-logs` | top limit=200 src_port, dest_port | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="dataOverlayMode">none</option>
+      <option name="drilldown">cell</option>
+    </table>
+  </row>
+</form>

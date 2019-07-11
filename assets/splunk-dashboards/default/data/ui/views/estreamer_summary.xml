@@ -1,0 +1,129 @@
+<form stylesheet="app.css">
+  <label>eStreamer Summary</label>
+  <fieldset autoRun="true" submitButton="false">
+    <input type="time" searchWhenChanged="true">
+      <default>
+        <earliestTime>-24h</earliestTime>
+        <latestTime>now</latestTime>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <single>
+      <searchString>`SfeS-client-check-logs` | eval state=case(status_id=-1,"Error", status_id=0,"Disabled", status_id=1,"Running", status_id=2,"Running", status_id=3,"Stopping", status_id=4,"Restarting") | table state</searchString>
+      <earliestTime>-90s</earliestTime>
+      <latestTime>now</latestTime>
+      <drilldown>
+        <link>search?q=`SfeS-client-check-logs`</link>
+      </drilldown>
+      <option name="underLabel">eStreamer Client Status</option>
+    </single>
+    <single>
+      <searchString>`SfeS-estreamer-logs` | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>search?q=`SfeS-estreamer-logs`</link>
+      </drilldown>
+      <option name="underLabel">All Logs</option>
+    </single>
+    <single>
+      <searchString>`SfeS-flow-logs` | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>search?q=`SfeS-flow-logs`</link>
+      </drilldown>
+      <option name="underLabel">Flow Logs</option>
+    </single>
+  </row>
+  <row>
+    <single>
+      <searchString>`SfeS-ids-ips-logs` | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>ids_event_summary</link>
+      </drilldown>
+      <option name="underLabel">IDS / IPS Events</option>
+    </single>
+    <single>
+      <searchString>`SfeS-file-malware-logs` | dedup 1 instance_id, connection_id | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>file_event_summary</link>
+      </drilldown>
+      <option name="underLabel">File / Malware Events</option>
+    </single>
+    <single>
+      <searchString>`SfeS-correlation-logs` | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>correlation_summary</link>
+      </drilldown>
+      <option name="underLabel">Correlation Events</option>
+    </single>
+    <single>
+      <searchString>`SfeS-flow-logs` sec_intel_event=Yes | stats count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <drilldown>
+        <link>search?q=`SfeS-flow-logs` sec_intel_event=Yes</link>
+      </drilldown>
+      <option name="underLabel">Security Intelligence Events</option>
+    </single>
+  </row>
+  <row>
+    <chart>
+      <title>Log Timeline by Record Type</title>
+      <searchString>`SfeS-estreamer-logs` | timechart limit=100 count by rec_type_simple</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="height">320</option>
+      <option name="charting.chart">line</option>
+      <option name="charting.chart.nullValueMode">zero</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.legend.placement">bottom</option>
+      <option name="charting.axisTitleX.visibility">collapsed</option>
+      <option name="charting.axisTitleY.visibility">collapsed</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+    </chart>
+    <table>
+      <title>Top Record Types</title>
+      <searchString>`SfeS-estreamer-logs` | stats count sparkline by rec_type_simple | sort -count</searchString>
+      <earliestTime>$earliest$</earliestTime>
+      <latestTime>$latest$</latestTime>
+      <option name="height">60</option>
+      <option name="charting.chart">pie</option>
+      <option name="charting.chart.style">shiny</option>
+      <option name="charting.drilldown">all</option>
+      <option name="charting.axisTitleX.visibility">visible</option>
+      <option name="charting.axisTitleY.visibility">visible</option>
+      <option name="charting.axisX.scale">linear</option>
+      <option name="charting.axisY.scale">linear</option>
+      <option name="charting.chart.nullValueMode">gaps</option>
+      <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+      <option name="charting.chart.stackMode">default</option>
+      <option name="charting.layout.splitSeries">0</option>
+      <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+      <option name="charting.legend.placement">right</option>
+      <option name="wrap">true</option>
+      <option name="rowNumbers">true</option>
+      <option name="dataOverlayMode">none</option>
+      <option name="drilldown">row</option>
+      <option name="count">10</option>
+      <format type="sparkline" field="sparkline">
+        <option name="lineColor">#990000</option>
+        <option name="fillColor">#ff9999</option>
+      </format>
+    </table>
+  </row>
+</form>

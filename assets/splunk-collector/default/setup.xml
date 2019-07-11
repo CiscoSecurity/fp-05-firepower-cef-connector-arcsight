@@ -1,0 +1,103 @@
+<setup>
+    <block title="" endpoint="encore/configure" entity="main">
+        <text>
+            <![CDATA[<h1>]]>
+                $$APP_NAME ($$APP_VERSION)
+            <![CDATA[</h1>]]>
+        </text>
+
+        <text>
+            <![CDATA[<legend style="margin: 15px 0px 6px 0px;">]]>Installation<![CDATA[</legend>]]>
+        </text>
+        <text>
+            Please read the $$APP_NAME Operations Guide for details on installation. In summary you must:
+            <![CDATA[<ul>]]>
+            <![CDATA[<li>Follow authentication below, copy up your PKCS12 and process it</li>]]>
+            <![CDATA[<li>Enable the `Files &amp; Directory` Data Input</li>]]>
+            <![CDATA[<li>Enable the three `Scripts` Data Inputs</li>]]>
+            <![CDATA[<li>Set `Is enabled?` (below) to true</li>]]>
+            <![CDATA[</ul>]]>
+            Please note that data collection for $$APP_NAME does not currently work in Windows
+
+            <![CDATA[<br/><br/>]]>
+            If you see `Error while posting to url=/servicesNS/nobody/TA-eStreamer/encore/configure/main` when
+            you press `Save` then please search the logs for more information:  
+
+            <![CDATA[<br/><br/>]]>
+            <![CDATA[<a target="_blank" href="/app/search/search?q=search%20index%3D_internal%20source%3D%22*splunkd.log%22%20AdminManagerExternal&earliest=-4h%40h&latest=now">Search: index=_internal source="*splunkd.log" AdminManagerExternal</a>]]>
+            </text>
+
+        
+        <text>
+            <![CDATA[<legend style="margin: 15px 0px 6px 0px;">]]>Control<![CDATA[</legend>]]>
+        </text>
+        <input field="client_enabled">
+            <label>
+                Is enabled? The eNcore client should remain disabled until configured. If running, it may take a
+                moment or two for the client to stop once disabled.
+            </label>
+            <type>bool</type>
+        </input>
+
+        <text>
+            <![CDATA[<legend style="margin: 15px 0px 6px 0px;">]]>Connection<![CDATA[</legend>]]>
+        </text>
+        <input field="host">
+            <label>FMC Hostname or IP address</label>
+            <type>text</type>
+        </input>
+        <input field="port">
+            <label>Port</label>
+            <type>text</type>
+        </input>
+
+        <text>
+            <![CDATA[<legend style="margin: 15px 0px 6px 0px;">]]>Authentication<![CDATA[</legend>]]>
+        </text>
+        <text>
+            $$APP_NAME needs to authenticate with your FMC. This requires a PKCS12 file to be created on your FMC and
+            then installed locally. There is no way to do this without manually copying the file onto this server.
+        </text>
+
+        <text>
+            <![CDATA[<span style="font-weight: 700;">]]>
+                You need to rename the PKCS12 file `client.pkcs12` and place it in this exact location:
+            <![CDATA[</span>]]>
+        </text>
+
+        <text>
+            <![CDATA[<span style="font-family: monospace; margin-left: 30px;">]]>
+                $SPLUNK_HOME/etc/apps/$$APP_ID/bin/encore/client.pkcs12
+            <![CDATA[</span>]]>
+        </text>
+
+        <input field="process_pkcs12">
+            <label>Process PKCS12 file? (You must do this if you add a new PKCS12 file or change the host)</label>
+            <type>bool</type>
+        </input>
+        <input field="pkcs12_password">
+            <label>PKCS12 password</label>
+            <type>password</type>
+        </input>
+
+        <text>
+            <![CDATA[<legend style="margin: 15px 0px 6px 0px;">]]>Data<![CDATA[</legend>]]>
+        </text>
+        <input field="write_packets">
+            <label>Packets? Packet logs can be large and use up storage</label>
+            <type>bool</type>
+        </input>
+
+        <input field="write_connections">
+            <label>Connections? This is a very high-volume option and may consume significant network and storage usage</label>
+            <type>bool</type>
+        </input>
+
+        <input field="write_metadata">
+            <label>Metadata? Metadata logs are not event-driven but can prove informative</label>
+            <type>bool</type>
+        </input>
+
+    </block>
+
+</setup>
