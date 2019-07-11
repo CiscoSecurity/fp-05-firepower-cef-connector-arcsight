@@ -1,0 +1,1 @@
+{"basic_builder": {"description": "$$APP_DESCRIPTION", "large_icon": "$$APP_ICON_LARGE", "build_no": 3, "theme": "#00a1d9", "appname": "$$APP_ID", "tab_version": "$$APP_VERSION", "tab_build_no": "23", "author": "$$APP_AUTHOR", "friendly_name": "$$APP_NAME", "small_icon": "$$APP_ICON_SMALL", "visible": true, "version": "$$APP_VERSION"}}

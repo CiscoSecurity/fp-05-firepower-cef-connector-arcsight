@@ -1,0 +1,3 @@
+fw_rule_action,action
+Allow,allowed
+Block,blocked

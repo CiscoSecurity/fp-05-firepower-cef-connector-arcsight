@@ -1,0 +1,143 @@
+<dashboard>
+  <label>Documentation</label>
+  
+  <row>
+    <html>
+      <h2>$$APP_NAME Help</h2>
+      <ul>
+        <li><a href="#upgrading">Upgrading the App</a></li>
+        <li><a href="#dash">Dashboards</a></li>
+        <ul>
+          <li><a href="#dash1">eStreamer Summary</a></li>
+          <li><a href="#dash2">Sensor Summary</a></li>
+          <li><a href="#dash3">Policy Summary</a></li>
+          <li><a href="#dash4">Host Summary</a></li>
+          <li><a href="#dash8">Flow Summary</a></li>
+          <li><a href="#dash5">Intrusion Event Summary</a></li>
+          <li><a href="#dash6">File / Malware Event Summary</a></li>
+          <li><a href="#dash7">Correlation Event Summary</a></li>
+        </ul>
+        <li><a href="#search">Searching</a></li>
+        <li><a href="#actions">Event Actions</a></li>
+        <ul>
+          <li><a href="#action1">eStreamer: Save PCAP</a></li>
+          <li><a href="#action2">eStreamer: View Event</a></li>
+          <li><a href="#action3">eStreamer: View Connection</a></li>
+        </ul>
+      </ul>
+    </html>
+  </row>
+  
+  <row>
+    <html>
+      <a name="upgrading" /><h2>Upgrading the App</h2>
+      <p>Before installing an upgrade to the app, it is recommended to disable the eStreamer
+        client prior to the upgrade and to wait for it to stop before continuing.  This can
+        be done from the app Setup page.  Ensure sure the "Upgrade app" check box is
+        selected when installing the app package.  Once the upgrade has been completed, and
+        Splunk restarted, the client can be re-enabled from the Setup page.</p>
+    </html>
+  </row>
+  
+  <row>
+    <html>
+      <a name="dash" /><h2>Dashboards</h2>
+      <p>There are five dashboards provided by the app. Each of them gives a different
+        high-level view of the data being provided by eStreamer from the Defense Center.
+        It's important to note that each of the dashboards has a time selector at the top
+        of the screen that allows for a change of the time period represented in the
+        dashboard. Below is a brief description of each of the dashboards:</p>
+      
+      <a name="dash1" /><h4>eStreamer Summary</h4>
+      <p>This dashboard provides an overview of the state of the eStreamer client, counts
+        of the important eStreamer records being seen, and a timeline view of the records
+        coming into Splunk.</p>
+
+      <a name="dash2" /><h4>Sensor Summary</h4>
+      <p>This dashboard shows the distribution of events across the managed devices and
+        security zones that are defined on each device. At the bottom of the dashboard is
+        a sorted list of each device, and its associated interfaces and security zones.
+        The devices with the most hits are displayed first.</p>
+
+      <a name="dash3" /><h4>Policy Summary</h4>
+      <p>This dashboard shows the distribution of events across the access control
+        policies, access control policy rules, and intrusion policies. This middle of
+        the dashboard is a sorted list of each device, and its associated policies and
+        rules. The devices with the most hits are displayed first. The bottom of the
+        dashboard provides the distribution of events across the correlation policies
+        and rules.</p>
+
+      <a name="dash4" /><h4>Host Summary</h4>
+      <p>This dashboard shows the geographic region of the source and destination
+        addresses involved in events, where possible. It's important to note that IP
+        addresses in the RFC1918 space, or other reserved block, will not properly map.
+        Next come sorted lists of the most frequently involved source and destination
+        addresses, then a sorted list showing the most frequently involved source and
+        destination address pairs. Lastly comes the most frequently involved ports, both
+        as a source and a destination.</p>
+
+      <a name="dash8" /><h4>Flow Summary</h4>
+      <p>This dashboard shows detail about network connections being seen by the sensors.
+        It provides a breakdown by application protocols, client applications, web
+        applications, and detail about sensor, policy, and rule hit distributions.</p>
+
+      <a name="dash5" /><h4>Intrusion Event Summary</h4>
+      <p>This dashboard shows the timeline of events coming into Splunk, as well as the
+        distribution of events across the devices, priorities, impacts, and IPS block
+        results. At the bottom of the dashboard is a sorted list of the most frequently
+        hit signatures and signature classifications.</p>
+
+      <a name="dash6" /><h4>File / Malware Event Summary</h4>
+      <p>This dashboard shows the timeline of events coming into Splunk, as well as the
+        distribution of events across the devices, actions, disposition, and file types.
+        At the bottom of the dashboard is a sorted list of the most frequently seen
+        files.</p>
+
+      <a name="dash7" /><h4>Correlation Event Summary</h4>
+      <p>This dashboard shows the timeline of events coming into Splunk, as well as the
+        distribution of events across the devices, policies, event types, and blocks.
+        At the bottom of the dashboard is a sorted list of the most frequently seen
+        correlations.</p>
+    </html>
+  </row>
+  
+  <row>
+    <html>
+      <a name="search" /><h2>Searching</h2>
+      <p>eStreamer for Splunk puts logs into a dedicated index named estreamer. This
+        means that searches against the eStreamer data must use <tt>index=estreamer</tt>.
+        There are also two distinct source types associated with this app:
+        <tt>eStreamer</tt> and <tt>client_check</tt>. All eStreamer logs use the
+        <tt>eStreamer</tt> source type, where only eStreamer client status messages use
+        the <tt>client_check</tt> source type.</p>
+      <p>The <b>Search</b> menu provides quick access the different event searches, as well as
+        IP address, port, and user profiling searches.</p>
+    </html>
+  </row>
+
+  <row>
+    <html>
+      <a name="actions" /><h2>Event Actions</h2>
+      <p>eStreamer for Splunk adds three items to the <b>Event Actions</b> menu available
+        in searches:</p>
+        
+      <a name="action1" /><h4>eStreamer: Save PCAP</h4>
+      <p>This action will only work for PACKET eStreamer records
+        (<tt>rec_type_simple=PACKET</tt>). It takes the values of the <tt>event_id</tt>
+        and <tt>packet</tt> fields and decodes the hex encoded packet, returning a PCAP
+        as a downloadable file using the event ID for the filename (for example,
+        5110.pcap). It is important to note that the <b>Log packets</b> setting must be
+        enabled for this Event Action to be of use.</p>
+        
+      <a name="action2" /><h4>eStreamer: View Event</h4>
+      <p>This action will work for any log containing the <tt>event_id</tt> field.  It
+        will open a new search looking for any logs with the same event ID value.</p>
+        
+      <a name="action3" /><h4>eStreamer: View Connection</h4>
+      <p>This action will work for any log containing the <tt>instance_id</tt> and
+        <tt>connection_id</tt> fields.  It will open a new search looking for any
+        logs with the same connection values.</p>
+    </html>
+  </row>
+  
+</dashboard>

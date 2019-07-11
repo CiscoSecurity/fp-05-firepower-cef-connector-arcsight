@@ -1,0 +1,59 @@
+.dashboard-row .dashboard-panel .single .Error a {
+  color: #cc0000;
+}
+.dashboard-row .dashboard-panel .single .Disabled a {
+  color: #999999;
+}
+.dashboard-row .dashboard-panel .single .Running a {
+  color: #009900;
+}
+.dashboard-row .dashboard-panel .single .Starting a {
+  color: #009900;
+}
+.dashboard-row .dashboard-panel .single .Stopping a {
+  color: #999999;
+}
+.dashboard-row .dashboard-panel .single .panel-body .under-label {
+  color: #333333;
+}
+.dashboard-row .dashboard-panel .single .panel-head {
+  height: 13px;
+}
+.dashboard-row .dashboard-panel .single .panel-head .refresh-time-indicator {
+  color: #cccccc;
+  height: 11px;
+  padding: 2px 5px 0px 0px;
+}
+
+.dashboard-row .dashboard-panel .chart .panel-head h3 {
+  font-size: 12px;
+  color: #ffffff;
+  text-shadow: none;
+  background-color: #333333;
+  border-bottom: 2px solid #d92623;
+}
+.dashboard-row .dashboard-panel .chart .panel-head .refresh-time-indicator {
+  color: #999999;
+}
+
+.dashboard-row .dashboard-panel .table .panel-head h3 {
+  font-size: 12px;
+  color: #ffffff;
+  text-shadow: none;
+  background-color: #333333;
+  border-bottom: 2px solid #d92623;
+}
+.dashboard-row .dashboard-panel .table .panel-head .refresh-time-indicator {
+  color: #999999;
+}
+
+.dashboard-row .dashboard-panel .map .panel-head h3 {
+  font-size: 12px;
+  color: #ffffff;
+  text-shadow: none;
+  background-color: #333333;
+  border-bottom: 2px solid #d92623;
+}
+.dashboard-row .dashboard-panel .map .panel-head .refresh-time-indicator {
+  color: #999999;
+}
