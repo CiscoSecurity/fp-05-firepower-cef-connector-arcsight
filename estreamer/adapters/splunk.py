@@ -25,6 +25,7 @@ the kvpair adapter
 import estreamer.common
 import estreamer.definitions as definitions
 import estreamer
+import argparse
 
 from estreamer.adapters.kvpair import dumps as kvdumps
 from estreamer.metadata import View
@@ -1585,6 +1586,25 @@ def __selectWithNewKeys( record ):
     index = record['recordType']
     output = {}
 
+    # Create settings
+    parser = argparse.ArgumentParser(description='Runs eStreamer eNcore')
+    parser.add_argument(
+        'configFilepath',
+        help = 'The filepath of the config file')
+
+    parser.add_argument(
+        '--pkcs12',
+        action = "count",
+        help = 'Reprocess pkcs12 file')
+
+    args = parser.parse_args()
+
+    settingsFilepath = args.configFilepath
+    settings = estreamer.Settings.create( settingsFilepath )
+
+
+    settingsFilepath = args.configFilepath
+
     # Map each of the fields
     if index in FIELD_MAPPING:
         recordMap = FIELD_MAPPING[index]
@@ -1592,7 +1612,20 @@ def __selectWithNewKeys( record ):
             newKey = recordMap[ key ]
             if newKey is not None and len(newKey) > 0:
                 if key in record:
-                    output[newKey] = record[key]
+                    if key == "packetData":
+
+
+                        if settings.pcapOutputFormat:
+                            if settings.pcapOutputFormat == "ascii":
+                                output[newKey] = estreamer.common.Packet.createFromHex(record[key]).getPayloadAsAscii()
+                            elif settings.pcapOutputFormat == "utf8":
+                                output[newKey] = estreamer.common.Packet.createFromHex(record[key]).getPayloadAsUtf8()
+                            else:
+                                output[newKey] = record[key] 
+                        else:
+                            output[newKey] = record[key]    
+                    else: 
+                        output[newKey] = record[key]
 
     # Copy the computed fields
     try:
