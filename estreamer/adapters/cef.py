@@ -789,7 +789,7 @@ class Cef( object ):
             CEF_DEV_PRODUCT,
             CEF_DEV_VERSION,
             sigId,
-            name,
+            name.replace('|','\|'),
             severity,
             data,
             SYSLOG_NUMERIC,
