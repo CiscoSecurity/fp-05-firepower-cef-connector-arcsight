@@ -16,8 +16,10 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import json
 import os
+import io
 import estreamer.crossprocesslogging as logging
 
 class Bookmark( object ):
@@ -32,7 +34,7 @@ class Bookmark( object ):
             self.logger.info('Bookmark file {0} does not exist.'.format( filepath ))
 
         else:
-            with open( filepath, 'r' ) as reader:
+            with io.open( filepath, 'r' ) as reader:
                 try:
                     self.store = json.loads( reader.read() )
                     self.logger.info('Opening bookmark file {0}.'.format( filepath ))
@@ -54,7 +56,7 @@ class Bookmark( object ):
             if self.logger.isEnabledFor( logging.VERBOSE ):
                 self.logger.log( logging.VERBOSE, 'Saving {0}'.format( str( self.store ) ))
 
-            with open( self.filepath, 'w' ) as bookmarkFile:
+            with io.open( self.filepath, 'w' ) as bookmarkFile:
                 bookmarkFile.write( json.dumps( self.store ) )
 
             self.isDirty = False

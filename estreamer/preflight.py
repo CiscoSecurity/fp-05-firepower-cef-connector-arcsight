@@ -17,6 +17,7 @@
 #
 #*********************************************************************/
 from __future__ import print_function
+from __future__ import absolute_import
 import os
 import sys
 
@@ -73,7 +74,8 @@ class Preflight( object ):
     def _isPython27( self ):
         return sys.version.startswith( '2.7' )
 
-
+    def _isPython3( self ): 
+        return sys.version.startswith( '3')
 
     def _isPyUnicodeUCS2( self ):
         return sys.maxunicode < 0x10000
@@ -89,15 +91,18 @@ class Preflight( object ):
             if self._isPython27():
                 self.logger.debug('I am version 2.7')
 
+                if self._isPyUnicodeUCS2():
+                   self.logger.debug('I am UnicodeUCS2')
+                
+                else:
+                   self.logger.debug('I am UnicodeUCS4')
+
+            elif self._isPython3():
+                self.logger.debug('Running Python 3')
             else:
                 self.logger.error( definitions.STRING_PREFLIGHT_WRONG_PYTHON.format( sys.version ) )
 
             self.logger.debug('Checking python version')
-            if self._isPyUnicodeUCS2():
-                self.logger.debug('I am UnicodeUCS2')
-
-            else:
-                self.logger.debug('I am UnicodeUCS4' )
 
             self.logger.debug('Checking settings')
             settings = estreamer.Settings.create( self.args.filepath )

@@ -21,8 +21,10 @@ messages
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import json
 import os
+import io
 import datetime
 import math
 import multiprocessing
@@ -35,6 +37,7 @@ import estreamer.definitions as definitions
 from estreamer.baseproc import ProcessProxy
 
 import estreamer.pipeline
+from six.moves import range
 
 #pylint: disable=W0703
 class Controller( object ):
@@ -331,7 +334,7 @@ class Controller( object ):
 
     def saveState( self, state ):
         """Saves the status to disk"""
-        with open( self.settings.statusFilepath(), 'w' ) as statusFile:
+        with io.open( self.settings.statusFilepath(), 'w' ) as statusFile:
             json.dump( {
                 'state': state
             }, statusFile )

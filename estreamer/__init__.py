@@ -17,6 +17,7 @@
 #*********************************************************************/
 
 # Version will get appended by the packager
+from __future__ import absolute_import
 from estreamer.exception import EncoreException
 from estreamer.exception import TimeoutException
 from estreamer.exception import ParsingException

@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import socket
 from estreamer.common.convert import isInt
 from estreamer.streams.base import Base

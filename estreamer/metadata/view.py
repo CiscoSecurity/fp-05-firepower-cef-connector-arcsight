@@ -17,6 +17,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import datetime
 import re
 import estreamer.crossprocesslogging
@@ -24,6 +25,7 @@ import estreamer.definitions as definitions
 from estreamer.adapters.binary import Binary
 from estreamer.common import Flatdict
 from estreamer.metadata.cache import Cache
+from six.moves import range
 
 class View( object ):
     """

@@ -17,8 +17,10 @@
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
+from __future__ import absolute_import
 import json
 import os
+import io
 
 import estreamer
 import estreamer.crossprocesslogging
@@ -161,7 +163,7 @@ class Settings( object ):
                 'Settings file: {0} does not exist or is not a file'.format(
                     filepath ))
 
-        with open( filepath, 'r' ) as configFile:
+        with io.open( filepath, 'r' ) as configFile:
             try:
                 config = json.load( configFile )
                 settings = Settings( config )

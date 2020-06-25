@@ -18,8 +18,10 @@ Transforms to and from key-value pair file lines and a dict
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import uuid
 from estreamer.common import convert
+import six
 
 
 
@@ -102,7 +104,7 @@ def dumps(
 
     """Serializes a dict to a key-value pair line"""
     items = []
-    keys = obj.keys()
+    keys = list(obj.keys())
 
     if sort:
         keys = sorted( keys )
@@ -110,7 +112,7 @@ def dumps(
     for key in keys:
         value = obj[key]
 
-        if isinstance( value, basestring ):
+        if isinstance( value, six.string_types ):
             if value.find(' ') > -1 and quoteSpaces:
                 value = '"' + value + '"'
 

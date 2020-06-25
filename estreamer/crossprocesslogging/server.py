@@ -16,8 +16,9 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import logging
-import Queue
+import queue
 import time
 import threading
 import multiprocessing
@@ -59,7 +60,7 @@ class Server( object ):
             message = self.queue.get( False )
             self.__emit( message )
 
-        except Queue.Empty:
+        except queue.Empty:
             time.sleep( defininitions.TIME_BLINK )
 
 

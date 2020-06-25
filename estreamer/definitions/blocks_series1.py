@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 from estreamer.definitions.core import TYPE_BYTE
 from estreamer.definitions.core import TYPE_UINT16
 from estreamer.definitions.core import TYPE_UINT32

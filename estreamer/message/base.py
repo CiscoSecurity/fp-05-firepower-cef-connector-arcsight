@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import struct
 import estreamer.definitions as definitions
 

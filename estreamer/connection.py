@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import binascii
 import datetime
 import socket
@@ -134,7 +135,7 @@ class Connection( object ):
 
     def __read( self, want ):
         """Read and return 'want' bytes from the network"""
-        dataBuffer = ''
+        dataBuffer = b'' #py3edit
         start = time.time()
         lastGot = 0
         got = 0

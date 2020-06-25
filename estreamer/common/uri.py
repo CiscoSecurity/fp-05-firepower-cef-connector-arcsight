@@ -16,8 +16,10 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import re
 from estreamer.exception import ParsingException
+import six
 
 class StringReader( object ):
     """Helper class to read until specific tokens in a string"""
@@ -37,7 +39,7 @@ class StringReader( object ):
         """Reads until the next token"""
         index = -1
 
-        if isinstance( tokens, basestring ):
+        if isinstance( tokens, six.string_types ):
             tokens = [ tokens ]
 
         for token in tokens:

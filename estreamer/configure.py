@@ -17,9 +17,12 @@
 #
 #*********************************************************************/
 from __future__ import print_function
+from __future__ import absolute_import
 import json
+import io
 import os
 import sys
+import six
 
 # Use this to avoid pyc bytecode everywhere
 sys.dont_write_bytecode = True
@@ -61,12 +64,10 @@ class Configure( object ):
         self.logger = estreamer.crossprocesslogging.getLogger( self.__class__.__name__ )
         self.filepath = None
 
-
-
     @staticmethod
     def _isTruish( val ):
         if val:
-            if isinstance( val, basestring ):
+            if isinstance( val, six.string_types ):
                 if val.lower() == 'true':
                     return True
 
@@ -77,8 +78,6 @@ class Configure( object ):
                 return True
 
         return False
-
-
 
     def _processarguments( self ):
         parser = argparse.ArgumentParser(description='Runs eStreamer eNcore Configuration')
@@ -305,7 +304,7 @@ class Configure( object ):
             stateDescription = definitions.STATE_STRING[ definitions.STATE_STOPPED ]
 
             try:
-                with open( statusFilepath, 'r' ) as statusFile:
+                with io.open( statusFilepath, 'r' ) as statusFile:
                     status = json.load( statusFile )
                     stateId = status['state']['id']
                     stateDescription = status['state']['description']

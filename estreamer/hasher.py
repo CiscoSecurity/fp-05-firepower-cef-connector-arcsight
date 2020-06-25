@@ -17,7 +17,9 @@
 #*********************************************************************/
 
 from __future__ import print_function
+from __future__ import absolute_import
 import hashlib
+import io
 import os
 
 class Hasher( object ):
@@ -58,12 +60,12 @@ class Hasher( object ):
 
 
     def __catFiles( self ):
-        data = ''
+        data = b'' #py3edit
         for path in self.__paths():
 
-            with open( path, mode='rb' ) as blob:
+            with io.open( path, mode='rb' ) as blob:
                 content = blob.read()
-                content = content.replace('\r\n', '\n')
+                content = content.replace(b'\r\n', b'\n')  #py3edit
                 data += content
 
         return data

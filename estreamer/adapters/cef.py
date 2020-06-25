@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import binascii
 import copy
 import time
@@ -25,6 +26,7 @@ import estreamer.adapters.kvpair
 import estreamer.definitions as definitions
 import estreamer.common
 from estreamer.metadata import View
+import six
 
 
 # Syslog settings
@@ -703,7 +705,7 @@ class Cef( object ):
     @staticmethod
     def __sanitize( value ):
         """Escapes invalid characters"""
-        if not isinstance( value, basestring ):
+        if not isinstance( value, six.string_types ):
             value = str( value )
 
         # Escape \ " ]
@@ -741,9 +743,9 @@ class Cef( object ):
                 target = self.mapping['viewdata'][source]
                 self.output[target] = value
 
-        keys = self.output.keys()
+        keys = list(self.output.keys())
         for key in keys:
-            if isinstance( self.output[ key ], basestring) and len( self.output[ key ] ) == 0:
+            if isinstance( self.output[ key ], six.string_types) and len( self.output[ key ] ) == 0:
                 del self.output[ key ]
 
             elif self.output[ key ] == 0:

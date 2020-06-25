@@ -15,10 +15,13 @@
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
+from __future__ import absolute_import
 import json
 import os
+import io
 from estreamer.exception import EncoreException
 from estreamer.exception import ParsingException
+from six.moves import range
 
 def _parse( query ):
     keys = []
@@ -125,7 +128,7 @@ def _fileValue( filepath, query, value = None ):
         raise EncoreException(
             'jsonpath: {0} does not exist or is not a file'.format( filepath ))
 
-    with open( filepath, 'r' ) as jsonFile:
+    with io.open( filepath, 'r' ) as jsonFile:
         try:
             dictionary = json.load( jsonFile )
 
@@ -137,7 +140,7 @@ def _fileValue( filepath, query, value = None ):
 
     val( dictionary, query, value )
 
-    with open( filepath, 'w' ) as jsonFile:
+    with io.open( filepath, 'w' ) as jsonFile:
         jsonFile.write( json.dumps(
             dictionary,
             indent = 4,

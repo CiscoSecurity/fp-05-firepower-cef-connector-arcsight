@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+import six
 
 #********************************************************************
 #      File:    flatdict.py
@@ -31,7 +33,7 @@ class Flatdict( object ):
 
 
     def __getitem__( self, key ):
-        if isinstance( key, basestring ):
+        if isinstance( key, six.string_types ):
             keys = key.split('.')
             data = self.store
             for item in keys:

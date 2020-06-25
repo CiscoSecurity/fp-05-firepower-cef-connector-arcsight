@@ -17,6 +17,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import estreamer.adapters.csv
 import estreamer.common
 import estreamer.definitions as definitions

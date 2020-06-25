@@ -17,7 +17,9 @@
 #*********************************************************************/
 
 from __future__ import print_function
+from __future__ import absolute_import
 import os
+import io
 
 import estreamer
 import estreamer.definitions as definitions
@@ -54,7 +56,8 @@ class Crypto( object ):
     def extract( pkcs12Filepath, password, privateKeyFilepath, certificateFilepath ):
         """Extracts the key and certificate"""
         try:
-            import OpenSSL.crypto
+            import pyOpenSSL.OpenSSL.crypto
+#            import estreamer.pyOpenSSL.pyOpenSSL-19.1.0.Crypto
 
         except ImportError:
             raise estreamer.EncoreException(
@@ -63,7 +66,7 @@ class Crypto( object ):
                     privateKeyFilepath,
                     certificateFilepath ))
 
-        with open( pkcs12Filepath, 'rb' ) as pkcs12File:
+        with io.open( pkcs12Filepath, 'rb' ) as pkcs12File:
             data = pkcs12File.read()
 
         try:
@@ -79,10 +82,10 @@ class Crypto( object ):
         # Where type is FILETYPE_PEM or FILETYPE_ASN1 (for DER).
         cryptoType = OpenSSL.crypto.FILETYPE_PEM
 
-        with open( privateKeyFilepath, 'wb+' ) as privateKeyFile:
+        with io.open( privateKeyFilepath, 'wb+' ) as privateKeyFile:
             privateKeyFile.write( OpenSSL.crypto.dump_privatekey( cryptoType, privateKey ) )
 
-        with open( certificateFilepath, 'wb+' ) as certificateFile:
+        with io.open( certificateFilepath, 'wb+' ) as certificateFile:
             certificateFile.write( OpenSSL.crypto.dump_certificate( cryptoType, certificate ) )
 
 

@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 from estreamer.definitions.blocks_series1 import BLOCK_STRING
 from estreamer.definitions.blocks_series1 import BLOCK_BLOB
 from estreamer.definitions.core import TYPE_BYTE

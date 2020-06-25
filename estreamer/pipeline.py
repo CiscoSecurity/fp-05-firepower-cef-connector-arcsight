@@ -21,7 +21,9 @@ stages in the eNcore pipeline. Namely:
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import estreamer
+import io
 import estreamer.definitions as definitions
 import estreamer.crossprocesslogging as logging
 
@@ -30,6 +32,7 @@ from estreamer.metadata import View
 from estreamer.baseproc import QueueProcess
 from estreamer.baseproc import BatchQueueProcess
 from estreamer.receiver import Receiver
+from six.moves import range
 
 #pylint: disable=R0913,W0703
 
@@ -490,7 +493,7 @@ class SynchronousSubscriber( Subscriber ):
         manageable number of onEvent()
         """
         try:
-            self.receiver.next()
+            next(self.receiver)
 
         except estreamer.ConnectionClosedException:
             self.logger.error( definitions.STRING_CONNECTION_CLOSED )

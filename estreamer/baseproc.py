@@ -17,8 +17,9 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import multiprocessing
-import Queue
+import queue
 import time
 import threading
 

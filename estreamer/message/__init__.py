@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import struct
 from estreamer.message.eventstream import EventStreamRequestMessage
 from estreamer.message.streaming import StreamingRequestMessage

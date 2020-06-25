@@ -17,6 +17,7 @@
 #*********************************************************************/
 
 #pylint: disable=W0401,W0614
+from __future__ import absolute_import
 from estreamer.definitions.blocks_series1 import *
 from estreamer.definitions.blocks_series2 import *
 from estreamer.definitions.core import *

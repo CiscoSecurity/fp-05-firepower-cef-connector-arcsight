@@ -18,6 +18,7 @@ Transforms to a Plain old Python object string
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import ast
 import pprint
 

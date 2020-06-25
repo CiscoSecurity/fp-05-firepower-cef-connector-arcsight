@@ -16,7 +16,9 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 from estreamer.streams.base import Base
+import six
 
 class LoggerStream( Base ):
     """Writes to a logger at the configured level"""
@@ -28,7 +30,7 @@ class LoggerStream( Base ):
 
     def write( self, data ):
         """Writes to the underlying logger"""
-        if isinstance( data, basestring ):
+        if isinstance( data, six.string_types ):
             data = data.strip()
 
         self.logger.log( self.level, data )

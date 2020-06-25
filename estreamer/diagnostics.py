@@ -17,6 +17,7 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import argparse
 import binascii
 import getpass
