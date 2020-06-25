@@ -6,7 +6,7 @@
 # vars
 pid=-1
 configFilepath="estreamer.conf"
-pybin="python"
+pybin="python3"
 basepath="."
 isRunning=0
 
@@ -58,46 +58,8 @@ setup() {
 }
 
 init() {
-    pythonVersion=`$pybin -V 2>&1 | grep "Python 2.7"`
-    if [ "$pythonVersion" != "" ]
-    then
-        : #echo 'Python 2.7 is installed'
-    else
-        echo 'Python 2.7 is not available'
-        echo
-        echo 'It may be that you have both or neither python 2.x and 3.x installed but that your'
-        echo 'environment is not set up correctly. To see:'
-        echo
-        echo '    which python'
-        echo 'and'
-        echo '    whereis python'
-        echo
-        echo 'It is also possible that you have conflicting versions of python installed.'
-        echo 'Wherever possible, try to use a default system install located at /usr/bin/python'
-        echo
-        exit $EXIT_CODE_ERROR
-    fi
-
-    # This only seems necessary on Linux outside of Splunk
-    pyMaxUnicodeOk=`$pybin -c 'import sys; print(0x10000 < sys.maxunicode)'`
-    if [ "$pyMaxUnicodeOk" = "False" ]
-    then
-        pyPath=`which python`
-
-        echo 'Incompatible build of python'
-        echo
-        echo 'eNcore requires the standard version of python built with PyUnicodeUCS4. You are'
-        echo 'seeing this error message because the currently executing version of python'
-        echo "($pyPath) is built with PyUnicodeUCS2."
-        echo
-        echo 'This is a known issue in certain cases when running as the splunk user (more here:'
-        echo 'https://answers.splunk.com/answers/327336/why-am-i-getting-importerror-undefined-symbol-pyun.html)'
-        echo
-        echo 'The solution is to create a new user with the standard python environment and run'
-        echo 'as that user.'
-        echo
-        exit $EXIT_CODE_ERROR
-    fi
+    pythonVersion=`$pybin -V 2>&1 | grep "Python 3*"`
+#    echo "Python Version " + sys.version()
 
     if [ ! -e "$configFilepath" ]
     then

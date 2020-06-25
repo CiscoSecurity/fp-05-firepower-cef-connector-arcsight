@@ -17,8 +17,10 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import os
 import time
+import io
 import uuid
 from estreamer.streams.base import Base
 
@@ -62,7 +64,7 @@ class FileStream( Base ):
                 filename = self.directory + '/' + self.filename.format( var )
 
             self.lines = 0
-            self.file = open( filename, 'w+' )
+            self.file = io.open( filename, 'w+' )
 
 
 
@@ -91,7 +93,7 @@ class FileStream( Base ):
     def write( self, data ):
         """Writes to the underlying stream"""
         self._ensureFile()
-        self.file.write( data.encode( self.encoding ) )
+        self.file.write( data.encode( self.encoding ).decode('utf-8') )
         self.file.flush()
         self.lines += 1
         self._ensureRotation()

@@ -18,9 +18,11 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 import binascii
 import struct
 import time
+import io
 
 import estreamer
 import estreamer.adapters.base64
