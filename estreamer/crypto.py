@@ -23,6 +23,7 @@ import io
 
 import estreamer
 import estreamer.definitions as definitions
+import estreamer.OpenSSL as openssl
 
 class Crypto( object ):
     """Helper class to contain and extract certificate and key from pkcs12"""
@@ -56,8 +57,7 @@ class Crypto( object ):
     def extract( pkcs12Filepath, password, privateKeyFilepath, certificateFilepath ):
         """Extracts the key and certificate"""
         try:
-            import pyOpenSSL.OpenSSL.crypto
-#            import estreamer.pyOpenSSL.pyOpenSSL-19.1.0.Crypto
+            import estreamer.OpenSSL.crypto
 
         except ImportError:
             raise estreamer.EncoreException(
@@ -70,9 +70,9 @@ class Crypto( object ):
             data = pkcs12File.read()
 
         try:
-            pkcs12 = OpenSSL.crypto.load_pkcs12( data, password )
+            pkcs12 = openssl.crypto.load_pkcs12( data, password )
 
-        except OpenSSL.crypto.Error:
+        except openssl.crypto.Error:
             raise estreamer.EncoreException(
                 'Unable to process pkcs12 file. Possibly a password problem')
 
@@ -80,13 +80,13 @@ class Crypto( object ):
         privateKey = pkcs12.get_privatekey()
 
         # Where type is FILETYPE_PEM or FILETYPE_ASN1 (for DER).
-        cryptoType = OpenSSL.crypto.FILETYPE_PEM
+        cryptoType = openssl.crypto.FILETYPE_PEM
 
         with io.open( privateKeyFilepath, 'wb+' ) as privateKeyFile:
-            privateKeyFile.write( OpenSSL.crypto.dump_privatekey( cryptoType, privateKey ) )
+            privateKeyFile.write( openssl.crypto.dump_privatekey( cryptoType, privateKey ) )
 
         with io.open( certificateFilepath, 'wb+' ) as certificateFile:
-            certificateFile.write( OpenSSL.crypto.dump_certificate( cryptoType, certificate ) )
+            certificateFile.write( openssl.crypto.dump_certificate( cryptoType, certificate ) )
 
 
 
