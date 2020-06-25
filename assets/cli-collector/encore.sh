@@ -6,7 +6,7 @@
 # vars
 pid=-1
 configFilepath="estreamer.conf"
-pybin="python"
+pybin="python3"
 basepath="."
 isRunning=0
 
@@ -58,24 +58,10 @@ setup() {
 }
 
 init() {
-    pythonVersion=`$pybin -V 2>&1 | grep "Python 2.7"`
+    pythonVersion=`$pybin -V 2>&1 | grep "Python"`
     if [ "$pythonVersion" != "" ]
     then
-        : #echo 'Python 2.7 is installed'
-    else
-        echo 'Python 2.7 is not available'
-        echo
-        echo 'It may be that you have both or neither python 2.x and 3.x installed but that your'
-        echo 'environment is not set up correctly. To see:'
-        echo
-        echo '    which python'
-        echo 'and'
-        echo '    whereis python'
-        echo
-        echo 'It is also possible that you have conflicting versions of python installed.'
-        echo 'Wherever possible, try to use a default system install located at /usr/bin/python'
-        echo
-        exit $EXIT_CODE_ERROR
+        : echo $pythonVerison
     fi
 
     # This only seems necessary on Linux outside of Splunk
