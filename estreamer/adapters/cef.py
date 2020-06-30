@@ -20,6 +20,8 @@ import binascii
 import copy
 import time
 import socket
+import estreamer.adapters.pretty
+import estreamer.crossprocesslogging as logging
 import estreamer
 import estreamer.adapters.kvpair
 import estreamer.definitions as definitions
@@ -301,6 +303,47 @@ MAPPING = {
             View.APP_PROTO: 'app',
             View.CLIENT_APP: 'requestClientApplication',
         },
+    },
+
+    definitions.RECORD_INTRUSION_EXTRA_DATA: {
+        'sig_id': lambda rec: 'INTRUSION_EXTRA:110:1',
+
+        'name': lambda rec: 'INTRUSION EXTRA DATA',
+
+        'severity': lambda rec: 7,
+
+        'constants': {
+            'cs1Label': 'eventId',
+        },
+
+        'lambdas': {
+            'rt': lambda rec: rec['eventSecond'] * 1000,
+            #'start': lambda rec: rec['packetSecond'] * 1000,
+            'deviceExternalId': lambda rec: rec['deviceId']
+#            'cs1': lambda rec: __packetData( rec['eventId'] )
+        },
+
+       'fields': {
+            'deviceId': 'dvchost',
+            'eventSecond': 'eventSecond',
+            'eventId': 'eventId',
+            'externalId': 'externalId',
+            'blob.blockLength': '',
+            'blob.blockType': '',
+            'checksum': '',
+            'recordLength': '',
+            'archiveTimestamp':'',
+            'blob.data': 'data',
+            'blockLength': '',
+            'blockType': '',
+            'type': 'type',
+            'blob': 'blob'
+        },
+
+        'viewdata': {
+            View.SENSOR: 'dvchost'
+        },
+
     },
 
     # 112
@@ -692,10 +735,23 @@ class Cef( object ):
         self.record = estreamer.common.Flatdict( source, True )
         self.output = None
         self.mapping = None
+        self.logger = logging.getLogger( self.__class__.__name__ )
+
 
         if 'recordType' in self.record:
             if self.record['recordType'] in MAPPING:
                 self.mapping = MAPPING[ self.record['recordType'] ]
+                if self.record['recordType'] == 110 :
+                    self.logger.info("XFF data")
+                    for key in self.record:
+                        self.logger.info(key) # This will return me the key
+ #                       for items in self.record.store[key]:
+#                            self.logger.info("    %s" % items) # This will return me the subkey
+
+ #                           for values in self.record.store[key][items]:
+  #                              self.logger.info("        %s" % values) #this return the values for each subkey)
+#                    self.logger.info(estreamer.common.display(self.record))
+
                 self.output = {}
 
 
@@ -761,6 +817,10 @@ class Cef( object ):
         # my $hostname = hostname();
         # $hostname =~ s/\.+$//;
         hostname = socket.gethostname()
+
+        #logger
+        self.logger = logging.getLogger( self.__class__.__name__ )
+
 
         # http://search.cpan.org/~dexter/POSIX-strftime-GNU-0.02/lib/POSIX/strftime/GNU.pm
         # # Get syslog-style timestamp: MAR  1 16:23:11

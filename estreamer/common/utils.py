@@ -16,6 +16,14 @@
 #
 #*********************************************************************/
 
+def display( dict ):
+    for key in dictionary.iterkeys():
+        print key # This will return me the key
+        for items in dictionary[key]:
+            print("    %s" % items) # This will return me the subkey
+            for values in dictionary[key][items]:
+                print("        %s" % values) #this return the values for each subkey)
+
 def extend( toExtend, extendWith ):
     """
     Extends toExtend and merges the extendWith object with into

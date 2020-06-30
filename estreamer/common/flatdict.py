@@ -49,7 +49,14 @@ class Flatdict( object ):
         else:
             return self.store[ key ]
 
+    def __dump__( self ):
 
+        for key in self.store.iterkeys():
+            print key # This will return me the key
+            for items in dictionary[key]:
+                print("    %s" % items) # This will return me the subkey
+            for values in dictionary[key][items]:
+                print("        %s" % values) #this return the values for each subkey)
 
     def __iter__( self ):
         return iter( self.store )
