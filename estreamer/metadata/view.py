@@ -93,6 +93,7 @@ class View( object ):
     MSG = 'message'
     NET_PROTO = 'networkProtocol'
     NETWORK_ANALYSIS_POLICY = 'networkAnalysisPolicy'
+    ORIGINAL_CLIENT_SRC_IP = 'originalClientSrcIp'
     PARENT_DETECTION = 'parentDetection'
     PRIORITY = 'priority'
     PROTOCOL = 'protocol'
@@ -267,7 +268,12 @@ class View( object ):
 
                     self.logger.warning( msg )
 
-
+    def is_hex(s) :
+        hex_digits = set("0123456789abcdef")
+        for char in s:
+            if not (char in hex_digits):
+                return False
+        return True
 
     def create( self ):
         """Creates a dictionary with all appropriate record decorations"""
@@ -522,6 +528,28 @@ class View( object ):
         elif recordTypeId == definitions.RECORD_INTRUSION_EXTRA_DATA:
             # 110
             self.data[ View.DATA ] = record['blob']['data']
+            if(len(str(record['blob']['data']))==32) :
+                if(self.is_hex(hex32)) :
+                    if(hex32[0:20]=="00000000000000000000") : #ipv4
+                        d1 = str(int(hex32[24:26],16))
+                        d2 = str(int(hex32[26:28],16))
+                        d3 = str(int(hex32[28:30],16))
+                        d4 = str(int(hex32[30:32],16))
+                        ipv4 = d1 + "." + d2 +"." + d3 + "." + d4
+                        
+                        self.data[ View.ORIGINAL_CLIENT_IP ] = ipv4
+                    else :
+                        h1 = str(hex32[0:4])
+                        h2 = str(hex32[4:8])
+                        h3 = str(hex32[8:12])
+                        h4 = str(hex32[12:16])
+                        h5 = str(hex32[16:20])
+                        h6 = str(hex32[20:24])
+                        h7 = str(hex32[24:28])
+                        h8 = str(hex32[28:32])
+                        ipv6 = h1 + ":" + h2 + ":" + h3 + ":" + h4 + ":" + h5 + ":" + h6 + ":" + h7 +  ":" + h8
+
+                        self.data[ View.ORIGINAL_CLIENT_IP ] = ipv6
             self.__addValueIfAvailable(
                 View.TYPE,
                 [ Cache.XDATA_TYPES, record['type']] )

@@ -1612,20 +1612,7 @@ def __selectWithNewKeys( record ):
             newKey = recordMap[ key ]
             if newKey is not None and len(newKey) > 0:
                 if key in record:
-                    if key == "packetData":
-
-
-                        if settings.pcapOutputFormat:
-                            if settings.pcapOutputFormat == "ascii":
-                                output[newKey] = estreamer.common.Packet.createFromHex(record[key]).getPayloadAsAscii()
-                            elif settings.pcapOutputFormat == "utf8":
-                                output[newKey] = estreamer.common.Packet.createFromHex(record[key]).getPayloadAsUtf8()
-                            else:
-                                output[newKey] = record[key] 
-                        else:
-                            output[newKey] = record[key]    
-                    else: 
-                        output[newKey] = record[key]
+                    output[newKey] = record[key]
 
     # Copy the computed fields
     try:
