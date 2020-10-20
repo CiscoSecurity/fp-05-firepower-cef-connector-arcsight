@@ -737,25 +737,6 @@ class Cef( object ):
         self.mapping = None
         self.logger = logging.getLogger( self.__class__.__name__ )
 
-
-        if 'recordType' in self.record:
-            if self.record['recordType'] in MAPPING:
-                self.mapping = MAPPING[ self.record['recordType'] ]
-                if self.record['recordType'] == 110 :
-                    self.logger.info("XFF data")
-                    for key in self.record:
-                        self.logger.info(key) # This will return me the key
- #                       for items in self.record.store[key]:
-#                            self.logger.info("    %s" % items) # This will return me the subkey
-
- #                           for values in self.record.store[key][items]:
-  #                              self.logger.info("        %s" % values) #this return the values for each subkey)
-#                    self.logger.info(estreamer.common.display(self.record))
-
-                self.output = {}
-
-
-
     @staticmethod
     def __sanitize( value ):
         """Escapes invalid characters"""
@@ -766,10 +747,9 @@ class Cef( object ):
         value = value.replace('\\', '\\\\')
         value = value.replace('"', '\\"')
         value = value.replace(']', '\\]')
+        value = value.replace('|', '\|')
 
         return value
-
-
 
     def __convert( self ):
         """Writes the self.output dictionary"""
@@ -849,7 +829,7 @@ class Cef( object ):
             CEF_DEV_PRODUCT,
             CEF_DEV_VERSION,
             sigId,
-            name.replace('|','\|'),
+            name,
             severity,
             data,
             SYSLOG_NUMERIC,
