@@ -268,7 +268,7 @@ class View( object ):
 
                     self.logger.warning( msg )
 
-    def is_hex(s) :
+    def __isHex(self, s) :
         hex_digits = set("0123456789abcdef")
         for char in s:
             if not (char in hex_digits):
@@ -529,15 +529,16 @@ class View( object ):
             # 110
             self.data[ View.DATA ] = record['blob']['data']
             if(len(str(record['blob']['data']))==32) :
-                if(self.is_hex(hex32)) :
+                hex32 = str(record['blob']['data'])
+
+                if(self.__isHex(hex32)) :
                     if(hex32[0:20]=="00000000000000000000") : #ipv4
                         d1 = str(int(hex32[24:26],16))
                         d2 = str(int(hex32[26:28],16))
                         d3 = str(int(hex32[28:30],16))
                         d4 = str(int(hex32[30:32],16))
                         ipv4 = d1 + "." + d2 +"." + d3 + "." + d4
-                        
-                        self.data[ View.ORIGINAL_CLIENT_IP ] = ipv4
+                        self.data[ View.ORIGINAL_CLIENT_SRC_IP ] = ipv4
                     else :
                         h1 = str(hex32[0:4])
                         h2 = str(hex32[4:8])
@@ -549,7 +550,7 @@ class View( object ):
                         h8 = str(hex32[28:32])
                         ipv6 = h1 + ":" + h2 + ":" + h3 + ":" + h4 + ":" + h5 + ":" + h6 + ":" + h7 +  ":" + h8
 
-                        self.data[ View.ORIGINAL_CLIENT_IP ] = ipv6
+                        self.data[ View.ORIGINAL_CLIENT_SRC_IP ] = ipv6
             self.__addValueIfAvailable(
                 View.TYPE,
                 [ Cache.XDATA_TYPES, record['type']] )
