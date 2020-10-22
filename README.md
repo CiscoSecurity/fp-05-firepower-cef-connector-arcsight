@@ -29,6 +29,9 @@ the binary content and outputs events in various formats to support other SIEMs.
 This is a beta version of eNcore. Before the General Availability release this will be
 updated with details of paying for and receiving support.
 
+Detailed setup instructions for the CLI are included here, the specific implementation correspondences to Microsoft Sentinel integration but the CLI is the same setup
+https://www.cisco.com/c/en/us/td/docs/security/firepower/670/api/eStreamer_enCore/eStreamereNcoreSentinelOperationsGuide_409.html
+
 # Python3
 
 The 4.x branches of this project correspond to Python3 support, files use the future library as well as python3 executable, you may have to import the python3 equivalent of pip for openssl support
