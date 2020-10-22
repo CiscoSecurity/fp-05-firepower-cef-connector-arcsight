@@ -194,6 +194,11 @@ stop() {
     fi
 }
 
+clean() {
+    # Delete data older than 12 hours -> 720mins
+    find ../../data -type f -mmin +720 -delete
+}
+
 restart() {
     stop
     start
