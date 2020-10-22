@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.condition.enabled import BaseCondition as _BaseCondition
 from estreamer.condition.enabled import EnabledCondition
 from estreamer.condition.splunk import SplunkCondition

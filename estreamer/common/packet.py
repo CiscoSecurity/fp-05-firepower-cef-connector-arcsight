@@ -37,7 +37,7 @@ class Packet( object ):
         self.layer3HeaderLength = 0
 
     def __getNyble( self, indexNyble ):
-        byteIndex = indexNyble/2
+        byteIndex = int(indexNyble/2)
         byte = struct.unpack( '>B', self.data[byteIndex] )[0]
         if indexNyble % 2 == 0:
             mask = 0b11110000

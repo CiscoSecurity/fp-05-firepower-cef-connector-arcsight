@@ -22,6 +22,5 @@ to manage metadata and standard computed values from eStreamer
 # Allow invalid constant name, use of global and wildcard import
 #pylint: disable=C0103,W0603
 
-from __future__ import absolute_import
 from estreamer.metadata.cache import Cache
 from estreamer.metadata.view import View

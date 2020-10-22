@@ -21,10 +21,8 @@ Converts a dict to a csv
 from __future__ import absolute_import
 
 import csv
-import io
 import estreamer.crossprocesslogging as logging
 from estreamer.common import convert
-import six
 
 def __logger():
     return logging.getLogger(__name__)
@@ -37,7 +35,7 @@ def toValue( value, quoteAlways = False ):
         if value is None:
             return "NULL"
 
-        if isinstance( value, six.string_types ):
+        if isinstance( value, basestring ):
             value = value.encode( 'utf-8' )
         else:
             value = str( value )
@@ -95,12 +93,12 @@ def __to_lines( items, cols ):
 def dumps( objects, filepath, cols ):
     """Outputs the the json objects to a csv"""
     fileheader = ",".join(cols) + "\n"
-    with io.open(filepath, "w") as outfile:
+    with open(filepath, "w") as outfile:
         outfile.write(fileheader)
 
     lines = __to_lines(objects, cols)
     for line in lines:
-        with io.open(filepath, "a") as outfile:
+        with open(filepath, "a") as outfile:
             outfile.write(line)
 
     __logger().info("Written %i records to %s", len(lines), filepath)
@@ -114,7 +112,7 @@ def __from_csv_val( value ):
 
 def loads( filepath ):
     """Reads a CSV into an object list"""
-    with io.open(filepath, 'rb') as csvfile:
+    with open(filepath, 'rb') as csvfile:
         reader = csv.reader(csvfile)
         table = list(reader)
 

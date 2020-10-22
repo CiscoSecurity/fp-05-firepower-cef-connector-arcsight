@@ -17,7 +17,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.message.base import Base
 import estreamer.definitions as definitions
 

@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import uuid
 import datetime
 from estreamer import UnsupportedTimestampException
@@ -116,7 +115,7 @@ def toDatetime( timestamp ):
     if isinstance( timestamp, int ) or isinstance( timestamp, float ):
         dateTime = datetime.datetime.fromtimestamp( timestamp )
 
-    elif isinstance( timestamp, int ):
+    elif isinstance( timestamp, long ):
         dateTime = datetime.datetime.max
 
     elif isinstance( timestamp, datetime.date ):

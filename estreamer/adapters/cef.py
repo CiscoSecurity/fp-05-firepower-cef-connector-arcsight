@@ -705,13 +705,14 @@ class Cef( object ):
     @staticmethod
     def __sanitize( value ):
         """Escapes invalid characters"""
-        if not isinstance( value, six.string_types ):
+        if not isinstance( value, basestring ):
             value = str( value )
 
         # Escape \ " ]
         value = value.replace('\\', '\\\\')
         value = value.replace('"', '\\"')
         value = value.replace(']', '\\]')
+        value = value.replace('|', '\|')
 
         return value
 
@@ -791,7 +792,7 @@ class Cef( object ):
             CEF_DEV_PRODUCT,
             CEF_DEV_VERSION,
             sigId,
-            name.replace('|','\|'),
+            name,
             severity,
             data,
             SYSLOG_NUMERIC,

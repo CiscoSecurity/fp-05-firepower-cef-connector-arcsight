@@ -22,7 +22,6 @@ code
 
 #pylint: disable=W0401
 
-from __future__ import absolute_import
 from estreamer.definitions.core import *
 from estreamer.definitions.messages import *
 from estreamer.definitions.records import *

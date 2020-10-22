@@ -18,12 +18,10 @@ Probably only useful for debugging
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
-from __future__ import absolute_import
 import binascii
 import datetime
 import estreamer.streams
 import estreamer.definitions as definitions
-from six.moves import range
 
 COMMON = [
     'version',

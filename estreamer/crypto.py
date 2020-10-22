@@ -17,13 +17,10 @@
 #*********************************************************************/
 
 from __future__ import print_function
-from __future__ import absolute_import
 import os
-import io
 
 import estreamer
 import estreamer.definitions as definitions
-import estreamer.OpenSSL as openssl
 
 class Crypto( object ):
     """Helper class to contain and extract certificate and key from pkcs12"""
@@ -57,7 +54,7 @@ class Crypto( object ):
     def extract( pkcs12Filepath, password, privateKeyFilepath, certificateFilepath ):
         """Extracts the key and certificate"""
         try:
-            import estreamer.OpenSSL.crypto
+            import OpenSSL.crypto
 
         except ImportError:
             raise estreamer.EncoreException(
@@ -66,13 +63,13 @@ class Crypto( object ):
                     privateKeyFilepath,
                     certificateFilepath ))
 
-        with io.open( pkcs12Filepath, 'rb' ) as pkcs12File:
+        with open( pkcs12Filepath, 'rb' ) as pkcs12File:
             data = pkcs12File.read()
 
         try:
-            pkcs12 = openssl.crypto.load_pkcs12( data, password )
+            pkcs12 = OpenSSL.crypto.load_pkcs12( data, password )
 
-        except openssl.crypto.Error:
+        except OpenSSL.crypto.Error:
             raise estreamer.EncoreException(
                 'Unable to process pkcs12 file. Possibly a password problem')
 
@@ -80,13 +77,13 @@ class Crypto( object ):
         privateKey = pkcs12.get_privatekey()
 
         # Where type is FILETYPE_PEM or FILETYPE_ASN1 (for DER).
-        cryptoType = openssl.crypto.FILETYPE_PEM
+        cryptoType = OpenSSL.crypto.FILETYPE_PEM
 
-        with io.open( privateKeyFilepath, 'wb+' ) as privateKeyFile:
-            privateKeyFile.write( openssl.crypto.dump_privatekey( cryptoType, privateKey ) )
+        with open( privateKeyFilepath, 'wb+' ) as privateKeyFile:
+            privateKeyFile.write( OpenSSL.crypto.dump_privatekey( cryptoType, privateKey ) )
 
-        with io.open( certificateFilepath, 'wb+' ) as certificateFile:
-            certificateFile.write( openssl.crypto.dump_certificate( cryptoType, certificate ) )
+        with open( certificateFilepath, 'wb+' ) as certificateFile:
+            certificateFile.write( OpenSSL.crypto.dump_certificate( cryptoType, certificate ) )
 
 
 

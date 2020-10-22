@@ -16,9 +16,7 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import os
-import io
 import estreamer
 
 class PidFile( object ):
@@ -39,7 +37,7 @@ class PidFile( object ):
         if self.exists():
             raise estreamer.EncoreException('PID file already exists')
 
-        with io.open( self.filepath, 'w' ) as pidFile:
+        with open( self.filepath, 'w' ) as pidFile:
             pidFile.write( str( os.getpid() ) )
 
 
@@ -59,5 +57,5 @@ class PidFile( object ):
         if not os.path.exists( self.filepath ):
             return '-1'
 
-        with io.open( self.filepath, 'r' ) as reader:
+        with open( self.filepath, 'r' ) as reader:
             return reader.read()

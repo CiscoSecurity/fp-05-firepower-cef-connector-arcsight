@@ -19,7 +19,6 @@ database. Each class MUST have a write( record ) method
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
-from __future__ import absolute_import
 import sys
 
 from estreamer.streams.file import FileStream

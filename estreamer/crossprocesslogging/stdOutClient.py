@@ -19,7 +19,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import sys
 from estreamer.common import convert
 from estreamer.crossprocesslogging import LevelStrings

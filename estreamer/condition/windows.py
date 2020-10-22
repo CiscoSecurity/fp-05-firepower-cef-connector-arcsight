@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.condition.base import BaseCondition
 
 class WindowsCondition( BaseCondition ):

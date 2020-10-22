@@ -15,9 +15,7 @@
 #       CISCO SYSTEMS, Inc. IS STRICTLY PROHIBITED.
 #
 #*********************************************************************/
-from __future__ import absolute_import
 from estreamer.streams.base import Base
-import six
 
 class StringStream( Base ):
     """String writer shim"""
@@ -26,7 +24,7 @@ class StringStream( Base ):
 
     def write( self, value ):
         """Writes "value" to the buffer"""
-        if not isinstance( value, six.string_types ):
+        if not isinstance( value, basestring ):
             string = str( value )
         else:
             string = value
