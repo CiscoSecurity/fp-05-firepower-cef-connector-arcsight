@@ -222,6 +222,10 @@ main() {
             diagnostics
             ;;
 
+        clean)
+            clean
+            ;;
+
         foreground)
             foreground
             ;;
