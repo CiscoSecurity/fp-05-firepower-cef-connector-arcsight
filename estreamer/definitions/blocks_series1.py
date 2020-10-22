@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.definitions.core import TYPE_BYTE
 from estreamer.definitions.core import TYPE_UINT16
 from estreamer.definitions.core import TYPE_UINT32
@@ -84,6 +83,7 @@ BLOCK_USER_LOGIN_INFORMATION_60 = 159
 BLOCK_CONNECTION_STATISTICS_60 = 160
 BLOCK_CONNECTION_STATISTICS_61 = 163
 BLOCK_USER_LOGIN_INFORMATION_61 = 165
+BLOCK_USER_LOGIN_INFORMATION_DATA_50 = 167
 
 # Custom data blocks
 BLOCK_METADATA_ID_LENGTH_NAME = 10000
@@ -360,6 +360,39 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'department' },
         { 'block': BLOCK_STRING, 'name': 'phone' }],
 
+    # 121
+    BLOCK_USER_LOGIN_INFORMATION_DATA_50: [
+        { 'type': TYPE_UINT32, 'name': 'loginBlockType' },
+        { 'type': TYPE_UINT32, 'name': 'loginBlockLength' },
+        { 'type': TYPE_UINT32, 'name': 'timeStamp' },
+        { 'type': TYPE_UINT32, 'name': 'ipv4Address' },
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'block': BLOCK_STRING, 'name': 'username' },
+        { 'block': BLOCK_STRING, 'name': 'domain' },
+        { 'block': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'realmId' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT32, 'name': 'protocol' },
+        { 'type': TYPE_UINT16, 'name': 'port' },
+        { 'type': TYPE_UINT16, 'name': 'portRangeStart' },
+        { 'type': TYPE_UINT16, 'name': 'portRangeEnd' },
+        { 'type': TYPE_UINT32, 'name': 'email' },
+        { 'type': TYPE_UINT32, 'name': 'emailSizeBytes' },
+        { 'type': TYPE_IPV6, 'name': 'ipv6Address' },
+        { 'type': BLOCK_STRING, 'name': 'ipLocation' },
+        { 'type': TYPE_UINT16, 'name': 'loginType' },
+        { 'type': TYPE_UINT16, 'name': 'authType' },
+        { 'type': TYPE_UINT32, 'name': 'reportedByType' },
+        { 'type': TYPE_UINT16, 'name': 'reportedByLength' },
+        { 'block': BLOCK_STRING, 'name': 'reportedBy' },
+        { 'block': BLOCK_STRING, 'name': 'description' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionBlockType' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionBlockLength' },
+        { 'block': BLOCK_STRING, 'name': 'VPNSessionData' }],
+
+
     # 122
     BLOCK_HOST_CLIENT_APPLICATION_50: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
@@ -493,7 +526,7 @@ BLOCKS_SERIES_1 = {
     BLOCK_HOST_PROFILE_DATA_52: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockString' },
-        { 'type': TYPE_IPV6, 'name': 'ipAddress' },
+        { 'type': TYPE_IPV6, 'name': 'ipAddress' }, #eStreamer spec uint8[16]
         { 'type': TYPE_BYTE, 'name': 'hops' },
         { 'type': TYPE_BYTE, 'name': 'primarySecondary' },
         { 'list': BLOCK_OPERATING_SYSTEM_FINGERPRINT_51, 'name': 'serverFingerprints' },
@@ -595,7 +628,7 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_BYTE, 'name': 'eventImpactFlags' },
         { 'type': TYPE_BYTE, 'name': 'ipProtocol' },
         { 'type': TYPE_UINT16, 'name': 'networkProtocol' },
-        { 'type': TYPE_UINT32, 'name': 'sourceIp' }, # No longer used
+        { 'type': TYPE_IPV4, 'name': 'sourceIp' }, # No longer used
         { 'type': TYPE_BYTE, 'name': 'sourceHostType' },
         { 'type': TYPE_UINT16, 'name': 'sourceVlanId' },
         { 'type': TYPE_UUID, 'name': 'sourceOperatingSystemFingerprintUuid' },
@@ -603,7 +636,7 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'sourceUserId' },
         { 'type': TYPE_UINT16, 'name': 'sourcePort' },
         { 'type': TYPE_UINT32, 'name': 'sourceServerId' },
-        { 'type': TYPE_UINT32, 'name': 'destinationIp' }, # No longer used
+        { 'type': TYPE_IPV4, 'name': 'destinationIp' }, # No longer used
         { 'type': TYPE_BYTE, 'name': 'destinationHostType' },
         { 'type': TYPE_UINT16, 'name': 'destinationVlanId' },
         { 'type': TYPE_UUID, 'name': 'destinationOperatingSystemFingerprintUuid' },

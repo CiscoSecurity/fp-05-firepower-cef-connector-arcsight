@@ -101,8 +101,4 @@ then try enabling the EPEL repo. For more information see:
 openssl pkcs12 -in "{0}" -nocerts -nodes -out "{1}"
 openssl pkcs12 -in "{0}" -clcerts -nokeys -out "{2}"
 
-Note:  If you are using python3 the command to install OpenSSL is as follows
-
-    sudo apt install python3-openssl
-
 """

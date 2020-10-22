@@ -16,5 +16,4 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.settings.settings import Settings

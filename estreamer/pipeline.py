@@ -21,9 +21,7 @@ stages in the eNcore pipeline. Namely:
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import estreamer
-import io
 import estreamer.definitions as definitions
 import estreamer.crossprocesslogging as logging
 
@@ -32,11 +30,10 @@ from estreamer.metadata import View
 from estreamer.baseproc import QueueProcess
 from estreamer.baseproc import BatchQueueProcess
 from estreamer.receiver import Receiver
-from six.moves import range
 
 #pylint: disable=R0913,W0703
 
-def _shouldHandle( record, settings, isDecode = False ):
+def _shouldParse( record, settings ):
     """
     Decides if a record should be decoded. This will mostly look at whether or not
     we need to write the record on the basis of its recordType, however, metadata
@@ -72,13 +69,7 @@ def _shouldHandle( record, settings, isDecode = False ):
             result = True
 
     elif recordTypeId in definitions.TYPES['METADATA']:
-        if isDecode:
-            # If we're receiving metadata then always decode because of cache
-            result = True
-
-        else:
-            if settings.writeMetadata:
-                result = True
+        result = True
 
     elif recordTypeId in definitions.TYPES['PACKET']:
         if settings.writePackets:
@@ -102,6 +93,19 @@ def _shouldHandle( record, settings, isDecode = False ):
         result = False
 
     return result
+
+
+
+def _shouldOutput( record, settings ):
+    """
+    If a record has made it this far, then it almost certainly wants to be
+    written to output. The one exception to this is metadata, which may not be
+    wanted but which we always need to parse for decorating.
+    """
+    if record['recordType'] in definitions.TYPES['METADATA']:
+        return settings.writeMetadata
+
+    return True
 
 
 
@@ -131,7 +135,7 @@ def parse( message, settings ):
 
     try:
         parser = Binary( message )
-        if _shouldHandle( parser.record, settings, True ):
+        if _shouldParse( parser.record, settings ):
             parser.parse()
 
             if 'archiveTimestamp' in parser.record:
@@ -156,7 +160,7 @@ def parse( message, settings ):
         # If an error has occurred here, it's bad. It's most likely that the FMC
         # has sent us incorrect data - although could conceivably be a bad
         # message definition - although that will only be in development.
-        # 
+        #
         # In any case, if it's a bad message, then we need to file a defect with
         # the BU and ideally carry on. But log an error.
         logger = logging.getLogger( __name__ )
@@ -247,8 +251,10 @@ def parseDecorateTransformWrite( item, settings ):
 
     if event['record']:
         decorate( event['record'], settings )
-        event = transform( event, settings )
-        write( event, settings )
+
+        if _shouldOutput( event['record'], settings ):
+            event = transform( event, settings )
+            write( event, settings )
 
 
 
@@ -336,7 +342,8 @@ class Decorator( BatchQueueProcess ):
         # 'record' item - its presence indicates that we are interested in it
         if item['record']:
             decorate( item['record'], self.settings )
-            self.sendOutput( item )
+            if _shouldOutput( item['record'], self.settings ):
+                self.sendOutput( item )
 
     def onReceive( self, items ):
         def _do( items ):
@@ -436,7 +443,9 @@ class SubscriberParserDecorator( Subscriber ):
         if event['record']:
             decorate( event['record'], self.settings )
             self.count += 1
-            self.sendOutput( event )
+
+            if _shouldOutput( event['record'], self.settings ):
+                self.sendOutput( event )
 
 
 
@@ -493,7 +502,7 @@ class SynchronousSubscriber( Subscriber ):
         manageable number of onEvent()
         """
         try:
-            next(self.receiver)
+            self.receiver.next()
 
         except estreamer.ConnectionClosedException:
             self.logger.error( definitions.STRING_CONNECTION_CLOSED )

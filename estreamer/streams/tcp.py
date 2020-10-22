@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import socket
 from estreamer.streams.base import Base
 

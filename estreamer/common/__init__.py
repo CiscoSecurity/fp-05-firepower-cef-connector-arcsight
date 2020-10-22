@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.common.flatdict import Flatdict
 from estreamer.common.utils import extend
 from estreamer.common.uri import Uri

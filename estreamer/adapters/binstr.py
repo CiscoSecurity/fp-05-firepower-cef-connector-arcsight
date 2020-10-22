@@ -15,10 +15,8 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 import struct
 import estreamer
-from six.moves import range
 
 
 def _repack( message ):

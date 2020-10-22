@@ -17,7 +17,6 @@
 #*********************************************************************/
 
 #pylint: disable=W0703
-from __future__ import absolute_import
 class EncoreException( Exception ):
     """Encore exeption base class"""
     pass

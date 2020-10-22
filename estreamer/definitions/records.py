@@ -17,7 +17,6 @@
 #*********************************************************************/
 
 #pylint: disable=W0401,W0614
-from __future__ import absolute_import
 from estreamer.definitions.blocks_series1 import *
 from estreamer.definitions.blocks_series2 import *
 from estreamer.definitions.core import *
@@ -862,6 +861,12 @@ RECORDS = {
         'name': u'IOC Name Data',
         'attributes': [ { 'block': BLOCK_IOC_NAME_53 } ],
         'category': u'IOC' },
+
+    # 170
+    VPN_LOGIN_EVENT: {
+        'name': u'VPN Login Data',
+        'attributes': [ { 'block': BLOCK_USER_LOGIN_INFORMATION_DATA_50 } ],
+        'category': u'VPN LOGIN' },
 
     # 260
     METADATA_ICMP_TYPE: {

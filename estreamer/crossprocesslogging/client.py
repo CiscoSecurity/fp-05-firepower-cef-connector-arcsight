@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.crossprocesslogging.baseClient import BaseClient
 
 class Client( BaseClient ):

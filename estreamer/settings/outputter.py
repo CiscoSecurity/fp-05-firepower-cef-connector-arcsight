@@ -16,7 +16,6 @@
 #
 #*********************************************************************/
 
-from __future__ import absolute_import
 from estreamer.settings.stream import StreamSettings
 
 class OutputterSettings( object ):
