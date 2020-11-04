@@ -737,6 +737,16 @@ class Cef( object ):
         self.mapping = None
         self.logger = logging.getLogger( self.__class__.__name__ )
 
+        if 'recordType' in self.record:
+            if self.record['recordType'] in MAPPING:
+                self.mapping = MAPPING[ self.record['recordType'] ]
+                if self.record['recordType'] == 110 :
+                    self.logger.info("XFF data")
+                    for key in self.record:
+                        self.logger.info(key) # This will return me the key
+                        
+                self.output = {}
+    
     @staticmethod
     def __sanitize( value ):
         """Escapes invalid characters"""
