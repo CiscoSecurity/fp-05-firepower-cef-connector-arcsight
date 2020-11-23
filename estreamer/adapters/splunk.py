@@ -26,6 +26,7 @@ import estreamer.common
 import estreamer.definitions as definitions
 import estreamer
 import argparse
+import json
 import estreamer.crossprocesslogging as logging
 
 from estreamer.adapters.kvpair import dumps as kvdumps
@@ -99,7 +100,6 @@ FIELD_MAPPING = {
         View.MSG: 'msg',
         View.NET_PROTO: 'net_proto',
         View.NETWORK_ANALYSIS_POLICY: 'net_analysis_policy',
-        View.ORIGINAL_CLIENT_SRC_IP: 'originalClientSrcIp',
         View.PARENT_DETECTION: 'parent_detection',
         View.PRIORITY: 'priority',
         View.REC_TYPE_SIMPLE: 'rec_type_simple',
@@ -1576,25 +1576,6 @@ def __selectWithNewKeys( record ):
 
     output = {}
 
-    # Create settings
-    parser = argparse.ArgumentParser(description='Runs eStreamer eNcore')
-    parser.add_argument(
-        'configFilepath',
-        help = 'The filepath of the config file')
-
-    parser.add_argument(
-        '--pkcs12',
-        action = "count",
-        help = 'Reprocess pkcs12 file')
-
-    args = parser.parse_args()
-
-    settingsFilepath = args.configFilepath
-    settings = estreamer.Settings.create( settingsFilepath )
-
-
-    settingsFilepath = args.configFilepath
-
     # Map each of the fields
     if index in FIELD_MAPPING:
         recordMap = FIELD_MAPPING[index]
@@ -1603,24 +1584,9 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
-                    if index == 10 : 
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-                    #logger.info("Key")
-                    #logger.info(key)
-
-#                if self.record['recordType'] == 110 :
-#                    self.logger.info("XFF data")
-#                    for key in self.record:
-#                        self.logger.info(key) # This will return me the key
- #                       for items in self.record.store[key]:
-#                            self.logger.info("    %s" % items) # This will return me the subkey
-
- #                           for values in self.record.store[key][items]:
-  #                              self.logger.info("        %s" % values) #this return the values for each subkey)
-#                    self.logger.info(estreamer.common.display(self.record))
-
-
+#                    if index == 10 : 
+#                        __logger().info("Key:  "+key)
+#                        __logger().info("Value: "+str(record[key]))
 
     # Copy the computed fields
     try:
@@ -1642,7 +1608,7 @@ def __selectWithNewKeys( record ):
 
     # Always copy recordType
     output['rec_type'] = record['recordType']
-
+    
     return output
 
 
@@ -1674,6 +1640,18 @@ def dumps( source ):
     data = __convert( source )
 
     line = '{0}={1} '.format('rec_type', data['rec_type'])
+
+    if 'eventSecond' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0} {1}'.format(line, eventSec)
+        del data['eventSecond']
+
+    if 'event_sec' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0}{1}'.format(line, eventSec)
+        del data['event_sec']
+
+
     del data['rec_type']
 
     # from datetime import datetime
