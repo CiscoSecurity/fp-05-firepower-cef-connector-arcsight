@@ -26,6 +26,8 @@ import estreamer.common
 import estreamer.definitions as definitions
 import estreamer
 import argparse
+import json
+import estreamer.crossprocesslogging as logging
 
 from estreamer.adapters.kvpair import dumps as kvdumps
 from estreamer.metadata import View
@@ -98,6 +100,7 @@ FIELD_MAPPING = {
         View.MSG: 'msg',
         View.NET_PROTO: 'net_proto',
         View.NETWORK_ANALYSIS_POLICY: 'net_analysis_policy',
+        View.ORIGINAL_CLIENT_SRC_IP: 'originalClientSrcIp',
         View.PARENT_DETECTION: 'parent_detection',
         View.PRIORITY: 'priority',
         View.REC_TYPE_SIMPLE: 'rec_type_simple',
@@ -211,7 +214,7 @@ FIELD_MAPPING = {
         'hostProfile.vlanPresence': u'vlan_presence',
         'hostProfile.vlanPriority': u'vlan_priority',
         'hostProfile.vlanType': u'vlan_type',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress': u'ip_address',
         'macAddress': u'mac_address'},
 
     # 11
@@ -230,7 +233,7 @@ FIELD_MAPPING = {
         'hostServer.port': u'port',
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress': u'',
         'macAddress': u'mac_address'},
 
     # 12
@@ -249,7 +252,7 @@ FIELD_MAPPING = {
         'hostServer.port': u'port',
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress': u'',
         'macAddress': u'mac_address'},
 
     # 13
@@ -260,7 +263,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address',
         'networkProtocol': u'net_proto'},
 
@@ -272,7 +274,7 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress':  u'ip_address',
         'macAddress': u'mac_address',
         'transportProtocol': u'ip_proto'},
 
@@ -294,7 +296,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 16
@@ -313,7 +314,7 @@ FIELD_MAPPING = {
         'hostServer.port': u'port',
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress': u'ip_address',
         'macAddress': u'mac_address'},
 
     # 17
@@ -332,7 +333,6 @@ FIELD_MAPPING = {
         'hostServer.port': u'port',
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 18
@@ -346,7 +346,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 20
@@ -357,7 +356,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 21
@@ -368,7 +366,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 22
@@ -380,7 +377,6 @@ FIELD_MAPPING = {
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
         'hops': u'hops',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 23
@@ -397,7 +393,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address',
         'port': u'port'},
 
@@ -409,7 +404,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address',
         'port': u'port'},
 
@@ -427,7 +421,6 @@ FIELD_MAPPING = {
         'mac.lastSeen': u'last_seen',
         'mac.primary': u'primary',
         'mac.ttl': u'ttl',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address' },
 
     # 28
@@ -444,7 +437,6 @@ FIELD_MAPPING = {
         'mac.lastSeen': u'last_seen',
         'mac.primary': u'primary',
         'mac.ttl': u'ttl',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address' },
 
     # 29
@@ -459,7 +451,6 @@ FIELD_MAPPING = {
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
         'hostType': u'host_type',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 34
@@ -718,7 +709,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type', # -> event_desc
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 73
@@ -798,7 +788,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address',
         'user.blockLength': u'',
         'user.blockType': u'',
@@ -831,7 +820,6 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address',
         'user.applicationId': u'client_app',
         'user.blockLength': u'',
@@ -877,7 +865,7 @@ FIELD_MAPPING = {
         'eventType': u'event_type',
         'macAddress': u'mac_address',
         'hasIpv6': u'has_ipv6',
-        'legacyIpAddress': u'legacy_ip_address',
+        'ipAddress': u'ip_address',
         'osfingerprint.blockLength': u'',
         'osfingerprint.blockType': u'',
         'osfingerprint.lastSeen': u'last_seen',
@@ -906,7 +894,6 @@ FIELD_MAPPING = {
         'identity.protocol': u'ip_proto',
         'identity.serverMapId': u'server_map',
         'identity.uuid': u'identity_uuid',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 106
@@ -928,6 +915,7 @@ FIELD_MAPPING = {
         'blob.data': u'data',
         'blockLength': u'',
         'blockType': u'',
+        'originalClientSrcIp': u'originalClientSrcIp',
         'deviceId': u'device_id',
         'eventId': u'event_id',
         'type': u'type'},
@@ -1240,7 +1228,6 @@ FIELD_MAPPING = {
         'id.blockLength': u'',
         'id.blockType': u'',
         'id.value': u'id',
-        'legacyIpAddress': u'legacy_ip_address',
         'macAddress': u'mac_address'},
 
     # 161
@@ -1580,30 +1567,15 @@ FIELD_MAPPING[ definitions.RECORD_RNA_CHANGE_CLIENT_APP_UPDATE ] = \
 FIELD_MAPPING[ definitions.RECORD_FILELOG_MALWARE_EVENT ] = \
     FIELD_MAPPING[ definitions.RECORD_FILELOG_EVENT ]
 
+def __logger():
+    return logging.getLogger(__name__)
 
 
 def __selectWithNewKeys( record ):
+
     index = record['recordType']
+
     output = {}
-
-    # Create settings
-    parser = argparse.ArgumentParser(description='Runs eStreamer eNcore')
-    parser.add_argument(
-        'configFilepath',
-        help = 'The filepath of the config file')
-
-    parser.add_argument(
-        '--pkcs12',
-        action = "count",
-        help = 'Reprocess pkcs12 file')
-
-    args = parser.parse_args()
-
-    settingsFilepath = args.configFilepath
-    settings = estreamer.Settings.create( settingsFilepath )
-
-
-    settingsFilepath = args.configFilepath
 
     # Map each of the fields
     if index in FIELD_MAPPING:
@@ -1613,6 +1585,9 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
+#                    if index == 10 : 
+#                        __logger().info("Key:  "+key)
+#                        __logger().info("Value: "+str(record[key]))
 
     # Copy the computed fields
     try:
@@ -1634,7 +1609,7 @@ def __selectWithNewKeys( record ):
 
     # Always copy recordType
     output['rec_type'] = record['recordType']
-
+    
     return output
 
 
@@ -1666,6 +1641,18 @@ def dumps( source ):
     data = __convert( source )
 
     line = '{0}={1} '.format('rec_type', data['rec_type'])
+
+    if 'eventSecond' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0} {1}'.format(line, eventSec)
+        del data['eventSecond']
+
+    if 'event_sec' in data.keys():
+        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+        line = '{0}{1}'.format(line, eventSec)
+        del data['event_sec']
+
+
     del data['rec_type']
 
     # from datetime import datetime
