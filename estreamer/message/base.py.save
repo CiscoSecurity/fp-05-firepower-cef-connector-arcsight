@@ -79,11 +79,8 @@ class Base( object ):
         """
 
         self.fixData()
-        jsonSettings = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
+#        jsonSettings = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
 #        self.increaseLength(len(jsonSettings.store))
 #        self.setLength(222)
-        print 'data in base.py'
-        print self.packFormat
-        print self.data
-        
-        return struct.pack( self.packFormat, *self.data ) 
+        return self.data
+        #return struct.pack( self.packFormat, *self.data ) 
