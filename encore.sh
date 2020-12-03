@@ -13,6 +13,7 @@ isRunning=0
 # constants
 configure="$pybin ./estreamer/configure.py $configFilepath"
 diagnostics="$pybin ./estreamer/diagnostics.py $configFilepath"
+diagnosticsJson="$pybin ./estreamer/diagnosticsJson.py $configFilepath"
 service="$pybin ./estreamer/service.py $configFilepath"
 preflight="$pybin ./estreamer/preflight.py $configFilepath"
 pidFile="encore.pid"
@@ -216,6 +217,10 @@ main() {
 
         restart)
             restart
+            ;;
+
+        testJson)
+            diagnosticsJson
             ;;
 
         test)

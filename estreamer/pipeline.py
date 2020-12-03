@@ -445,7 +445,21 @@ class TransformerWriter( Writer ):
         data = transform( item, self.settings )
         write( data, self.settings )
 
+class SingleWorkerJson( Subscriber ):
+    """
+    The Everything class takes a message and outputs it
+    """
+    def __init__( self, settings, parentPipe, logQueue, inputQueue, outputQueue ):
+        super( SingleWorker, self ).__init__(
+            settings,
+            parentPipe,
+            logQueue,
+            inputQueue,
+            outputQueue )
 
+    def onEvent( self, message ):
+        parseDecorateTransformWrite( message, self.settings )
+        self.count += 1
 
 class SingleWorker( Subscriber ):
     """

@@ -1,4 +1,5 @@
 
+
 #********************************************************************
 #      File:    connection.py
 #      Author:  Sam Strachan / Huxley Barbee
@@ -16,6 +17,7 @@
 #
 #*********************************************************************/
 
+from sys import getsizeof
 import binascii
 import datetime
 import socket
@@ -25,6 +27,14 @@ import time
 import estreamer
 import estreamer.definitions
 import estreamer.crossprocesslogging as logging
+import os
+import signal
+import sys
+import time
+import estreamer
+
+WORKING_DIRECTORY = os.path.abspath( os.path.dirname(__file__) + '/..')
+sys.path.append(WORKING_DIRECTORY) 
 
 class Connection( object ):
     """
@@ -52,28 +62,42 @@ class Connection( object ):
 
         self.logger.info('Connecting to {0}:{1}'.format(host, port ))
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+        #ssl.SSLv23_METHOD
+        #ssl.PROTOCOL_SSLv3
         # Default TLS
-        tlsVersion = ssl.PROTOCOL_TLSv1
+        #tlsVersion = ssl.PROTOCOL_TLSv1
+#
+ #       if self.settings.tlsVersion == 1.2:
+ #           if hasattr(ssl, 'PROTOCOL_TLSv1_2'):
+  #              tlsVersion = ssl.PROTOCOL_TLSv1_2
+ #               self.logger.info('Using TLS v1.2')
 
-        if self.settings.tlsVersion == 1.2:
-            if hasattr(ssl, 'PROTOCOL_TLSv1_2'):
-                tlsVersion = ssl.PROTOCOL_TLSv1_2
-                self.logger.info('Using TLS v1.2')
+#            else:
+#                self.logger.warning('PROTOCOL_TLSv1_2 not found. Using TLS v1.0')
 
-            else:
-                self.logger.warning('PROTOCOL_TLSv1_2 not found. Using TLS v1.0')
+#        else:
+#            self.logger.info('Using TLS v1.0')
 
-        else:
-            self.logger.info('Using TLS v1.0')
+#        tlsVersion = ssl.PROTOCOL_TLSv3
 
+ #       if self.settings.tlsVersion == 1.3:
+ #           if hasattr(ssl, 'PROTOCOL_TLSv1_3'):
+ #               tlsVersion = ssl.PROTOCOL_TLSv1_3
+ #               self.logger.info('Using TLS v1.3')#
 
+#            else:
+ #               self.logger.warning('PROTOCOL_TLSv1_3 not found. Using TLS v1.2')
+#
+ #       else:
+  #          self.logger.info('Using TLS v1.2')
+        self.logger.info('Using  '+ str( ssl.PROTOCOL_SSLv23))
+        ssl.PROTOCOL_SSLv23
         self.socket = ssl.wrap_socket(
             sock,
             keyfile = self.pkcs12.privateKeyFilepath,
             certfile = self.pkcs12.certificateFilepath,
-            do_handshake_on_connect = True,
-            ssl_version = tlsVersion)
+            do_handshake_on_connect = True)
+#            ssl_version = tlsVersion)
 
         try:
             self.socket.settimeout( self.settings.connectTimeout )
@@ -121,15 +145,20 @@ class Connection( object ):
 
     def request( self, message ):
         """Issue a request"""
-        buf = message.getWireData()
 
+#        jsonSettings = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
+       # message.setLength(message.length+ getsizeof(jsonSettings.store))
+        #buf = message.getWireData()
+        print ' in buf'
+        #print buf
         if self.logger.isEnabledFor( logging.TRACE ):
             self.logger.log(
                 logging.TRACE,
-                'request({0})'.format( binascii.hexlify( buf ) ))
+                'request({0})'.format( binascii.hexlify( str(message) ) ))  #was buf
 
-        self.socket.send( buf )
 
+        self.socket.send( str(message) )
+        print 'request made'
 
 
     def __read( self, want ):
@@ -138,7 +167,7 @@ class Connection( object ):
         start = time.time()
         lastGot = 0
         got = 0
-
+        print 'reading data'
         while want > 0:
             try:
                 if self.logger.isEnabledFor( logging.TRACE ):
@@ -210,8 +239,9 @@ class Connection( object ):
             if self.logger.isEnabledFor( logging.TRACE ):
                 self.logger.log( logging.TRACE, 'self.__read({0})'.format(length))
 
-            message['data'] = self.__read( length )
-
+#adding json config
+            message['data'] = self.__read( length )  
+            
             if self.logger.isEnabledFor( logging.TRACE ):
                 self.logger.log( logging.TRACE, 'data: {0}'.format(
                     binascii.hexlify(message['data']) ))

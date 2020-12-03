@@ -43,7 +43,10 @@ class Settings( object ):
 
         self.osname = os.name
         self.store = jsonSettings
-
+        
+        if 'Events' in jsonSettings:
+            return 
+ 
         # Keep these values as is unless debugging
         self.allowExitWithoutFlush = False
         self.reprocessPkcs12 = False
@@ -77,13 +80,6 @@ class Settings( object ):
         self.alwaysAttemptToContinue = False
         self.enabled = True
         self.conditions = []
-
-        # additional configurable options as of 3.5.5
-        if 'pcapMaxSize' in jsonSettings:
-            self.pcapMaxSize = jsonSettings['pcapMaxSize']
-
-        if 'pcapOutputFormat' in jsonSettings:
-            self.pcapOutputFormat = jsonSettings['pcapOutputFormat']
 
         if 'alwaysAttemptToContinue' in jsonSettings:
             self.alwaysAttemptToContinue = jsonSettings['alwaysAttemptToContinue']

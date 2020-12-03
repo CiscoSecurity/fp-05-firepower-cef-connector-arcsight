@@ -1,4 +1,4 @@
-
+    
 #********************************************************************
 #      File:    base.py
 #      Author:  Sam Strachan / Huxley Barbee
@@ -18,6 +18,20 @@
 
 import struct
 import estreamer.definitions as definitions
+import estreamer
+from sys import getsizeof
+import estreamer.definitions as definitions
+import estreamer.settings as settings
+import struct
+import argparse
+import os
+import signal
+import sys
+import time
+import estreamer
+
+WORKING_DIRECTORY = os.path.abspath( os.path.dirname(__file__) + '/..')
+sys.path.append(WORKING_DIRECTORY) 
 
 class Base( object ):
     """Base message encoder"""
@@ -27,7 +41,11 @@ class Base( object ):
         self.packFormat = packFormat
         self.messageLength = 0
 
-
+    def increaseLength(self, size):
+        self.messageLength += size
+ 
+    def setLength(self, size) :
+        self.messageLength = size
 
     def set( self, index, newData ):
         """Allows the setting of a precise piece of data in the message rather
@@ -59,5 +77,13 @@ class Base( object ):
         Performs any necessary final adjustments to the message (setting length
         etc) and then formats as a series of bytes ready for transmission
         """
+
         self.fixData()
-        return struct.pack( self.packFormat, *self.data )
+        jsonSettings = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
+#        self.increaseLength(len(jsonSettings.store))
+#        self.setLength(222)
+        print 'data in base.py'
+        print self.packFormat
+        print self.data
+        
+        return struct.pack( self.packFormat, *self.data ) 
