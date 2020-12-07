@@ -19,6 +19,13 @@
 
 from estreamer.message.base import Base
 import estreamer.definitions as definitions
+import estreamer
+import os
+import sys
+import json
+
+WORKING_DIRECTORY = os.path.abspath( os.path.dirname(__file__) + '/..')
+sys.path.append(WORKING_DIRECTORY)
 
 class EventStreamRequestMessage( Base ):
     """
@@ -30,5 +37,9 @@ class EventStreamRequestMessage( Base ):
             definitions.MESSAGE_TYPE_EVENT_STREAM_REQUEST,
             '>HHLLL' )
 
-        self.append( timestamp, 4 )
-        self.append( flags, 4 )
+        jsonSetting = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
+        s=bytes(json.dumps(jsonSetting.store), 'utf-8')
+        self.append( 0, 4 )
+        self.append( 0, 4 )
+        self.append( s, len(s), '{}s'.format(len(s)) )
+#        self.append(s, sys.getsizeof(s), '{}s'.format(len(s)) )
