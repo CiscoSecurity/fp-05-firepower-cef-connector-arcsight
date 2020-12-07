@@ -43,6 +43,7 @@ import estreamer.crossprocesslogging
 import estreamer.pipeline
 
 class Diagnostics( object ):
+
     """Diagnostics class helps find out what's going on"""
     def __init__( self, settings ):
         self.settings = settings

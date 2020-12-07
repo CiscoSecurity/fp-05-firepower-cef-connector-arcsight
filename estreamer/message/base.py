@@ -40,6 +40,7 @@ class Base( object ):
         """Helper function to append additional data into a wire message."""
         self.data.append( moreData )
         self.messageLength += size
+        print('appending messageLength: {} size: {}'.format(self.messageLength, size))
 
         if extraFormat:
             self.packFormat += extraFormat
@@ -51,6 +52,7 @@ class Base( object ):
         getWireData"""
         self.data[1] = self.messageType
         self.data[2] = self.messageLength
+        print('messageLength: {}'.format(self.messageLength))
 
 
 

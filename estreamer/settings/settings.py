@@ -50,6 +50,9 @@ class Settings( object ):
         self.allowExitWithoutFlush = False
         self.reprocessPkcs12 = False
 
+        if 'Events' in jsonSettings:
+            return
+
         if 'queueSize' in jsonSettings:
             self.queueSize = jsonSettings['queueSize']
         else:
