@@ -32,11 +32,14 @@ class BaseClient( object ):
 
     def __serialise( self, data, isException = False ):
         if isinstance( data, Exception ):
-            message = data.__class__.__name__ + ': ' + data.message
-
+            message = data.__class__.__name__ + ': ' + str(data)
+#message = data.__class__.__name__ + ': ' + data.message
+            #message = str(data)
             if isException:
+#                 print (message)
+#                 print (data)
                 message += '\n'
-                message += traceback.format_exc(data)
+                message += traceback.format_exc(str(data))
 
             return message
 

@@ -50,6 +50,7 @@ class Settings( object ):
         self.allowExitWithoutFlush = False
         self.reprocessPkcs12 = False
 
+#need better wayto use this class for the reuqest.conf
         if 'Events' in jsonSettings:
             return
 
@@ -105,7 +106,7 @@ class Settings( object ):
 
         subscriptionRecords = jsonSettings['subscription']['records']
         self.subscribePacketData = subscriptionRecords['packetData']
-        self.subscribeExtended = subscriptionRecords['extended']
+  #      self.subscribeExtended = subscriptionRecords['extended']
         self.subscribeMetaData = subscriptionRecords['metadata']
         self.subscribeEventExtraData = subscriptionRecords['eventExtraData']
         self.subscribeImpactEventAlerts = subscriptionRecords['impactEventAlerts']
@@ -216,6 +217,7 @@ class Settings( object ):
     def requestFlags( self ):
         """Turns config settings into request flags"""
         flagList = []
+#        flagList.append( definitions.MESSAGE_REQUEST_BOOKMARK )
 
         if self.subscribePacketData:
             flagList.append( definitions.MESSAGE_REQUEST_PACKET_DATA )
@@ -235,14 +237,21 @@ class Settings( object ):
         if self.subscribeEventExtraData:
             flagList.append( definitions.MESSAGE_REQUEST_EVENT_EXTRA_DATA )
 
-        if self.subscribeExtended:
-            flagList.append( definitions.MESSAGE_REQUEST_EXTENDED )
+        flagList.append( definitions.MESSAGE_REQUEST_BOOKMARK )
+
+        #no longer suppported
+        #if self.subscribeExtended:
+        #    flagList.append( definitions.MESSAGE_REQUEST_EXTENDED )
 
         flags = 0
 
         for flag in flagList:
             flags |= flag
 
+        logger = estreamer.crossprocesslogging.getLogger(
+            self.__class__.__name__ )
+
+        logger.info ('Request flags zzz {0}'.format(flags))
         return flags
 
 

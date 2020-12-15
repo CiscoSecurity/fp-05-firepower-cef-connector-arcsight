@@ -39,7 +39,10 @@ class EventStreamRequestMessage( Base ):
 
         jsonSetting = estreamer.Settings.create( WORKING_DIRECTORY + "/request.conf" )
         s=bytes(json.dumps(jsonSetting.store), 'utf-8')
+
+        print ('timestamp ------')
+        print (timestamp)
         self.append( 0, 4 )
-        self.append( 0, 4 )
+        self.append( flags, 4 )
         self.append( s, len(s), '{}s'.format(len(s)) )
 #        self.append(s, sys.getsizeof(s), '{}s'.format(len(s)) )

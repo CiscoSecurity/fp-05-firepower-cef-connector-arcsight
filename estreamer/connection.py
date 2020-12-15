@@ -73,11 +73,14 @@ class Connection( object ):
         self.socket = ssl.wrap_socket(
             sock,
             keyfile = self.pkcs12.privateKeyFilepath,
-            certfile = self.pkcs12.certificateFilepath)
-#            do_handshake_on_connect = True)
-#            ssl_version = tlsVersion)
+            certfile = self.pkcs12.certificateFilepath,
+            do_handshake_on_connect = True,
+            ssl_version = tlsVersion)
 
         try:
+            print (host)
+            print (port)
+            print (self.settings.connectTimeout)
             self.socket.settimeout( self.settings.connectTimeout )
             self.socket.connect( ( host, port ) )
 

@@ -34,6 +34,8 @@ class StreamingRequestMessage( Base ):
 
         # temp slot for the second size (always zero)
         self.append( 0, 4 )
+        print ('request flags')
+        print (self.settings.requestFlags())
         self.append( self.settings.requestFlags(), 4 )
         self.append( self.settings.initialTimestamp(), 4 )
         self.__appendEvents()
@@ -53,14 +55,15 @@ class StreamingRequestMessage( Base ):
 
 
     def __appendEvents( self ):
+        return 
         # See page 49 / 2-33 of the 6.0.0 spec
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_INTRUSION )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_METADATA )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_CORRELATION )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_DISCOVERY )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_CONNECTION )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_USER )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_MALWARE )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_FILE )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_IMPACT )
-        self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_TERMINATE )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_INTRUSION )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_METADATA )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_CORRELATION )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_DISCOVERY )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_CONNECTION )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_USER )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_MALWARE )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_FILE )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_IMPACT )
+ #       self.__appendEvent( definitions.MESSAGE_EXTENDED_REQUEST_TERMINATE )
