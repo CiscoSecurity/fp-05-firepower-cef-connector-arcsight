@@ -1,0 +1,47 @@
+{
+    "Events":
+    {
+        "ConnectionEvent":
+        {
+            "FieldSetDef":
+            {
+                "OutputFieldSet": ["HeaderFieldSet", "ConnectionKeySet", "DetailFieldSet"]
+            },
+            "Fields": ["OutputFieldSet"]
+        },
+        "IntrusionEvent":
+        {
+            "FieldSetDef":
+            {
+                "OutputFieldSet": ["HeaderFieldSet", "ConnectionKeySet", "DetailFieldSet", "Impact"]
+            },
+            "Fields": ["OutputFieldSet"]
+        },
+        "FileEvent":
+        {
+            "FieldSetDef":
+            {
+                "OutputFieldSet": ["HeaderFieldSet", "ConnectionKeySet", "DetailFieldSet"]
+            },
+            "Fields": ["OutputFieldSet"],
+            "Exclude": "FileTypeID = 14"
+        }
+    },
+    "OutputFormat":
+    {
+        "Transform": "Text",
+        "TransformConfig":
+        {
+            "TextStart": "{",
+            "TextEnd": "}",
+            "ArrayStart": "[",
+            "ArrayEnd": "]",
+            "LabelSeparator": ":",
+            "FieldSeparator": ", ",
+            "ValueSeparator": "\u00A6",
+            "QuoteLabel": true,
+            "QuoteNonNumeric": true,
+            "Fields": ["OutputFieldSet"]
+        }
+    }
+}

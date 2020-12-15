@@ -22,6 +22,7 @@ stages in the eNcore pipeline. Namely:
 #*********************************************************************/
 
 import estreamer
+import json
 import estreamer.definitions as definitions
 import estreamer.crossprocesslogging as logging
 
@@ -44,6 +45,8 @@ def _shouldParse( record, settings ):
     too to see if the user wants us to decode.
     """
     recordTypeId = 0
+    return true #temp
+
     if 'recordType' in record:
         recordTypeId = record['recordType']
 
@@ -102,8 +105,8 @@ def _shouldOutput( record, settings ):
     written to output. The one exception to this is metadata, which may not be
     wanted but which we always need to parse for decorating.
     """
-    if record['recordType'] in definitions.TYPES['METADATA']:
-        return settings.writeMetadata
+#    if record['recordType'] in definitions.TYPES['METADATA']:
+#        return settings.writeMetadata
 
     return True
 
@@ -134,17 +137,23 @@ def parse( message, settings ):
     }
 
     try:
-        parser = Binary( message )
-        if _shouldParse( parser.record, settings ):
-            parser.parse()
+        print ('unfiltered message')
+        print (message)
+        #parser = Binary( message )
 
-            if 'archiveTimestamp' in parser.record:
-                event['bookmark'] = parser.record['archiveTimestamp']
+        event['record'] = message
+#        parser = message
+#        if _shouldParse( parser.record, settings ):
+#            print('should parse is true')
+#            parser.parse()
+
+#            if 'archiveTimestamp' in parser.record:
+#                event['bookmark'] = parser.record['archiveTimestamp']
 
             # Setting event['record'] means that we want to process, decorate and
             # output this event. If it is not set then the event will ultimately
             # be thrown away - but see below regarding sequencing.
-            event['record'] = parser.record
+#            event['record'] = parser.record
 
     except estreamer.EncoreException as ex:
         # We want to catch EncoreExceptions here. Left to propagate further up
@@ -180,13 +189,14 @@ def decorate( record, settings ):
     """
     Takes a record only, and decorates it
     """
-    if settings.decode:
+    return
+#    if settings.decode:
         # Update METADATA (this will only process certain record types)
-        settings.cache().store( record )
+ #       settings.cache().store( record )
 
         # Reads from METADATA and computes other things e.g. IP addrs
-        record[ View.OUTPUT_KEY ] = estreamer.metadata.View(
-            settings.cache(), record ).create()
+  #      record[ View.OUTPUT_KEY ] = estreamer.metadata.View(
+   #         settings.cache(), record ).create()
 
 
 
@@ -197,16 +207,20 @@ def transform( event, settings ):
     """
     adapters = settings.adapters()
 
+    print ("event message in transform")
+    print (event)
+
     payloads = []
     for index in range( 0, len( adapters ) ):
         outputter = settings.outputters[ index ]
 
         if not outputter.passthru:
-            output = adapters[ index ].dumps( event['record'] )
-
+            #output = adapters[ index ].dumps( event['record'] )
+            output = adapters[index].dumps(event)
         else:
-            output = adapters[ index ].dumps( event['message'] )
+            output = adapters[ index ].dumps( event )
 
+        #payloads.append( event )
         payloads.append( output )
 
     return {
@@ -229,10 +243,16 @@ def write( event, settings, delimiter = '\n' ):
     and writes it out to streams
     """
     streams = settings.streams()
-
+    print ( 'event in write')
+    print (event)
+#    streams[index].write(event + delimiter)
+#supporting streams later
     for index in range( 0, len( streams )):
-        if not event['payloads'][ index ] is None:
-            streams[ index ].write( event['payloads'][index] + delimiter )
+#        s=bytes(json.dumps(delimiter), 'utf-8')
+        streams[ index ].write ( event['message'] )
+#        if not event['payloads'][ index ] is None:
+#            streams[index].write(event + delimiter)
+#            streams[ index ].write( event['payloads'][index] + delimiter )
 
     # Handle bookmarking
     if event['bookmark'] > -1:
@@ -249,12 +269,13 @@ def parseDecorateTransformWrite( item, settings ):
     """
     event = parse( item, settings )
 
-    if event['record']:
-        decorate( event['record'], settings )
+    write( event, settings )
+#    if event['record']:
+#        decorate( event['record'], settings )
 
-        if _shouldOutput( event['record'], settings ):
-            event = transform( event, settings )
-            write( event, settings )
+#        if _shouldOutput( event['record'], settings ):
+#            event = transform( event, settings )
+#            write( event, settings )
 
 
 
@@ -340,10 +361,11 @@ class Decorator( BatchQueueProcess ):
     def onEvent( self, item ):
         # We should only decorate and forward this message on if we have a
         # 'record' item - its presence indicates that we are interested in it
-        if item['record']:
-            decorate( item['record'], self.settings )
-            if _shouldOutput( item['record'], self.settings ):
-                self.sendOutput( item )
+        #if item['record']:
+        #    decorate( item['record'], self.settings )
+        #    if _shouldOutput( item['record'], self.settings ):
+        #        self.sendOutput( item )
+        self.sendOutput( item ) 
 
     def onReceive( self, items ):
         def _do( items ):

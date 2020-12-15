@@ -19,6 +19,7 @@
 
 from __future__ import absolute_import
 import os
+import json
 import time
 import io
 import uuid
@@ -93,7 +94,36 @@ class FileStream( Base ):
     def write( self, data ):
         """Writes to the underlying stream"""
         self._ensureFile()
-        self.file.write( data.encode( self.encoding ).decode('utf-8') )
+        print ('data before write function in file.py')
+#        s= ''
+#        print (data)
+#        if(isinstance(type(data), dict)) :
+#            s = json.dumps(data)
+#            print ('is dict')
+#            self.file.write(s)
+#        elif (isinstance(type(data), bytes)):
+#            s = data.decode('utf-8')
+#            print ('is byte')
+#            self.file.write(s)
+#        else :
+#            print ('unknown type')
+#            s = str(data.encode('utf-8'), 'utf-8')
+#        s = str(json.dumps(data).encode('utf-8'), 'utf-8')
+ 
+#            print("different type------zzzzzz")
+#            print(type(data))
+#            print (data)
+#            print ("eend of different type -----z")
+
+#        print (s)
+        #self.file.write( data.encode( self.encoding ).decode('utf-8') )
+#        s = json.dumps(bytes(data))
+#                s=bytes(json.dumps(jsonSetting.store), 'utf-8')
+
+#        s=json.dumps(str(data.decode('utf-8'))
+        s= ", ".join("=".join((str(k),str(v))) for k,v in data.items())
+        s+='\n'
+        self.file.write(s)
         self.file.flush()
         self.lines += 1
         self._ensureRotation()

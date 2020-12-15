@@ -91,7 +91,7 @@ class Monitor( object ):
                     message += ' bookmark {0};'.format(
                         estreamer.common.convert.toIso8601( status['bookmark'] ))
 
-                self.logger.info( message )
+                #self.logger.info( message )
 
         except estreamer.UnsupportedTimestampException:
             # This is a workaround for the time being. Occasionally, on stopping

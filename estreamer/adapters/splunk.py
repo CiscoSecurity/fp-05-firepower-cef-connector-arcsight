@@ -1619,6 +1619,9 @@ def __convert( source ):
     dictionary. This must always return something even if it's just a dict
     containing a single 'rec_type' key
     """
+
+    print (source)
+    return source
     # Just in case things get this far but we don't know about the record
     if source['recordType'] not in definitions.RECORDS:
         return {
@@ -1639,26 +1642,26 @@ def dumps( source ):
     """Converts a source record into a splunk output line"""
     data = __convert( source )
 
-    line = '{0}={1} '.format('rec_type', data['rec_type'])
+    #line = '{0}={1} '.format('rec_type', data['rec_type'])
 
-    if 'eventSecond' in data.keys():
-        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
-        line = '{0} {1}'.format(line, eventSec)
-        del data['eventSecond']
+#    if 'eventSecond' in data.keys():
+#        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+#        line = '{0} {1}'.format(line, eventSec)
+#        del data['eventSecond']
 
-    if 'event_sec' in data.keys():
-        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
-        line = '{0}{1}'.format(line, eventSec)
-        del data['event_sec']
+#    if 'event_sec' in data.keys():
+#        eventSec = '{0}={1} '.format('event_sec', data['event_sec'])
+#        line = '{0}{1}'.format(line, eventSec)
+#        del data['event_sec']
 
 
-    del data['rec_type']
+    #del data['rec_type']
 
     # from datetime import datetime
     # secs = datetime.now() - datetime(1970, 1, 1)
     # data['event_sec'] = int( secs.total_seconds() )
 
-    line += kvdumps(
+    line = kvdumps(
         data,
         delimiter = ' ',
         quoteEmptyString = True,
