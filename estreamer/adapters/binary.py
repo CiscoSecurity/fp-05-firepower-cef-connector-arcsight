@@ -141,6 +141,7 @@ class Binary( object ):
          eventSubtype, ignore2, ignore3 ) = Binary.unpackDiscovery(
              data[ offset : offset + ( 4 * 10 ) ] )
 
+        recordLength = len( data )
         record[ 'deviceId' ] = deviceId
         record[ 'legacyIpAddress' ] = self._ip2str(
             socket.AF_INET,
@@ -154,7 +155,7 @@ class Binary( object ):
         record[ 'eventMicrosecond' ] = eventMicrosecond
         record[ 'eventType' ] = eventType
         record[ 'eventSubtype' ] = eventSubtype
-
+        record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[recordLength-17:recordLength-1] )
         offset += 40
 
         if hasIpv6 == 1:
