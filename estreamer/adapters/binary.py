@@ -142,25 +142,33 @@ class Binary( object ):
              data[ offset : offset + ( 4 * 10 ) ] )
 
         recordLength = len( data )
+        recordType =  record[ 'recordType' ]
         record[ 'deviceId' ] = deviceId
-        record[ 'legacyIpAddress' ] = self._ip2str(
-            socket.AF_INET,
-            data[ offset + 4 : offset + 8])
+
+        headerLength = int( record[ 'recordLength' ] )
+       
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log( logging.TRACE, "data value for host ip in bytes")
+
+        record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[56:72] )
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+
+            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) )
+
+            if recordType == 27 or recordType == 101 or recordType == 11 :
+                self.logger.log( logging.TRACE, "data for rectype:{0} - data: {1}".format(recordType, binascii.hexlify( data ) ) )
 
         record[ 'macAddress' ] = Binary._formatMacAddress(
             mac1, mac2, mac3, mac4, mac5, mac6 )
 
-        record[ 'hasIpv6' ] = hasIpv6
         record[ 'eventSecond' ] = eventSecond
         record[ 'eventMicrosecond' ] = eventMicrosecond
         record[ 'eventType' ] = eventType
         record[ 'eventSubtype' ] = eventSubtype
-        record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[recordLength-17:recordLength-1] )
         offset += 40
 
         if hasIpv6 == 1:
-            ipv6 = self._ip2str( socket.AF_INET6, data[40:56] )
-            record[ 'ipv6Address' ] = ipv6
             offset += 16
 
         return offset
@@ -401,6 +409,7 @@ class Binary( object ):
     def _parse( self, data, offset, record ):
         recordType = record[ 'recordType' ]
         recordLength = len( data )
+
         try:
             #if recordType == 95:
             attributes = RECORDS[ recordType ][ 'attributes' ]
