@@ -237,6 +237,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 12
@@ -307,6 +308,7 @@ FIELD_MAPPING = {
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
         'hasIpv6': u'has_ipv6',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 16
@@ -326,6 +328,7 @@ FIELD_MAPPING = {
         'hostServer.serverInformation': u'',
         'hostServer.webApplication': u'',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
     # 17
@@ -429,6 +432,7 @@ FIELD_MAPPING = {
     # 27
     definitions.RECORD_RNA_CHANGE_MAC_INFO: {
         'deviceId': u'device_id',
+        'hostIpAddr': u'src_host',
         'eventMicrosecond': u'event_usec',
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
@@ -888,6 +892,7 @@ FIELD_MAPPING = {
         'macAddress': u'mac_address',
         'hasIpv6': u'has_ipv6',
         'ipAddress': u'ip_address',
+        'hostIpAddr': u'src_host',
         'osfingerprint.blockLength': u'',
         'osfingerprint.blockType': u'',
         'osfingerprint.lastSeen': u'last_seen',
@@ -1607,39 +1612,11 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
-                    if index == 10 : 
-                        __logger().info("Record Type: 10")
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
+
+                    if index == 13 : 
                         for x in record :
-                            __logger().info("Full record: " +str(x))
-                            __logger().info("Value: " + str(record[x]))
+                            __logger().info("Record: {0}{1}{2}".format(index, str(x), str(record[x])))
 
-                    elif index == 12 : 
-                        __logger().info("Record Type: 12")
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-
-                        for x in record :
-                            __logger().info("Full record: " +str(x))
-                            __logger().info("Value: " + str(record[x]))
-
-                    elif index == 13 : 
-                        __logger().info("Record Type: 13")
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-
-                        for x in record :
-                            __logger().info("Full record" +str(x))
-                            __logger().info("Value: " + str(record[x]))
-
-                    elif index == 17 : 
-                        __logger().info("Record Type: 17")
-                        __logger().info("Key:  "+key)
-                        __logger().info("Value: "+str(record[key]))
-                        for x in record :
-                            __logger().info("Full record: " +str(x))
-                            __logger().info("Value: " + str(record[x]))
 
 
 
