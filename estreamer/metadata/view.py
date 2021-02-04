@@ -79,6 +79,7 @@ class View( object ):
     FW_RULE = 'firewallRule'
     FW_RULE_ACTION = 'firewallRuleAction'
     FW_RULE_REASON = 'firewallRuleReason'
+    HOST_IP_ADDR = 'hostIpAddr'
     IDS_POLICY = 'idsPolicy'
     IFACE_INGRESS = 'ingressInterface'
     IFACE_EGRESS = 'egressInterface'
