@@ -142,27 +142,33 @@ class Binary( object ):
          eventSubtype, ignore2, ignore3 ) = Binary.unpackDiscovery(
              data[ offset : offset + ( 4 * 10 ) ] )
 
+        recordLength = len( data )
+        recordType =  record[ 'recordType' ]
         record[ 'deviceId' ] = deviceId
-        record[ 'legacyIpAddress' ] = self._ip2str(
-            socket.AF_INET,
-            data[ offset + 4 : offset + 8])
+
+        headerLength = int( record[ 'recordLength' ] )
+       
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log( logging.TRACE, "data value for host ip in bytes")
+
+        record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[56:72] )
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+
+            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) )
 
         record[ 'macAddress' ] = Binary._formatMacAddress(
             mac1, mac2, mac3, mac4, mac5, mac6 )
 
-        record[ 'hasIpv6' ] = hasIpv6
         record[ 'eventSecond' ] = eventSecond
         record[ 'eventMicrosecond' ] = eventMicrosecond
         record[ 'eventType' ] = eventType
         record[ 'eventSubtype' ] = eventSubtype
-
         offset += 40
 
         if hasIpv6 == 1:
-            ipv6 = self._ip2str( socket.AF_INET6, data[40:56] )
-            record[ 'ipv6Address' ] = ipv6
             offset += 16
-
+            
         return offset
 
 
