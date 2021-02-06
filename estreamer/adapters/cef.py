@@ -704,7 +704,8 @@ class Cef( object ):
 
     @staticmethod
     def __sanitize( value ):
-
+        value = str(value)
+        
         # Escape \ " ]
         value = value.replace('\\', '\\\\')
         value = value.replace('"', '\\"')
