@@ -704,9 +704,6 @@ class Cef( object ):
 
     @staticmethod
     def __sanitize( value ):
-        """Escapes invalid characters"""
-        if not isinstance( value, basestring ):
-            value = str( value )
 
         # Escape \ " ]
         value = value.replace('\\', '\\\\')
