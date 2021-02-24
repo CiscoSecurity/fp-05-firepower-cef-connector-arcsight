@@ -276,7 +276,8 @@ class View( object ):
                         recordTypeId,
                         mapping['id'])
 
-                    self.logger.warning( msg )
+                    self.logger.
+                    warning( msg )
 
     def __isHex(self, s) :
         hex_digits = set("0123456789abcdef")
@@ -539,7 +540,6 @@ class View( object ):
             # 110
             self.data[ View.DATA ] = record['blob']['data']
             extraData = record['blob']['data']
-            self.logger.warning("XFF data{0}:-:{1}:-:{2}".format( extraData, record , len(extraData)) )
             if record['type'] == 2 :
                 if(extraData[0:20]==b'00000000000000000000') : #ipv4
                     d1 = str(int(extraData[24:26].decode('utf-8'),16))
