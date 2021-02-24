@@ -276,8 +276,7 @@ class View( object ):
                         recordTypeId,
                         mapping['id'])
 
-                    self.logger.
-                    warning( msg )
+                    self.logger.warning( msg )
 
     def __isHex(self, s) :
         hex_digits = set("0123456789abcdef")
