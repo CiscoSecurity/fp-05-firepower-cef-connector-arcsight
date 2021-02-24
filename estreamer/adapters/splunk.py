@@ -307,7 +307,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'hostIpAddr': u'src_host',
         'macAddress': u'mac_address'},
 
@@ -363,7 +363,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address'},
 
     # 20
@@ -414,7 +414,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'macAddress': u'mac_address',
         'port': u'port'},
 
@@ -453,7 +453,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'mac.address': u'additional_mac_address',
         'mac.blockLength': u'',
         'mac.blockType': u'',
@@ -912,7 +912,7 @@ FIELD_MAPPING = {
         'eventSecond': u'event_sec',
         'eventSubtype': u'event_subtype',
         'eventType': u'event_type',
-        'hasIpv6': u'has_ipv6',
+        'hostIpAddr':u'src_host',
         'identity.blockLength': u'',
         'identity.blockType': u'',
         'identity.sourceId': u'source_id',
@@ -1580,6 +1580,7 @@ FIELD_MAPPING = {
 
 
 
+
 # Copies
 
 # 35 <= 15
@@ -1612,14 +1613,6 @@ def __selectWithNewKeys( record ):
             if newKey is not None and len(newKey) > 0:
                 if key in record:
                     output[newKey] = record[key]
-
-                    if index == 13 : 
-                        for x in record :
-                            __logger().info("Record: {0}{1}{2}".format(index, str(x), str(record[x])))
-
-
-
-
 
     # Copy the computed fields
     try:
