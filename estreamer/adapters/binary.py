@@ -154,10 +154,7 @@ class Binary( object ):
 
         if self.logger.isEnabledFor( logging.TRACE ):
 
-            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) )
-
-            if recordType == 27 or recordType == 101 or recordType == 11 :
-                self.logger.log( logging.TRACE, "data for rectype:{0} - data: {1}".format(recordType, binascii.hexlify( data ) ) )
+            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) 
 
         record[ 'macAddress' ] = Binary._formatMacAddress(
             mac1, mac2, mac3, mac4, mac5, mac6 )
@@ -409,11 +406,16 @@ class Binary( object ):
     def _parse( self, data, offset, record ):
         recordType = record[ 'recordType' ]
         recordLength = len( data )
-
         try:
-            #if recordType == 95:
-            attributes = RECORDS[ recordType ][ 'attributes' ]
-            offset = self._parseAttributes( data, offset, attributes, record )
+            if recordType == 62 :
+                record['length'] = struct.unpack('>L', data[ 4 : 8 ] )[0]
+                record['id'] = struct.unpack('>L', data[ 8 : 12 ] )[0]
+                record['name'] = data[12:recordLength].decode('utf-8')
+
+                offset = recordLength
+            else :
+                attributes = RECORDS[ recordType ][ 'attributes' ]
+                offset = self._parseAttributes( data, offset, attributes, record )
 
         except (AttributeError, ValueError) as ex:
             hexRecord = binascii.hexlify( data )
