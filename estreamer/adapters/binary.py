@@ -152,10 +152,6 @@ class Binary( object ):
 
         record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[56:72] )
 
-        if self.logger.isEnabledFor( logging.TRACE ):
-
-            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) 
-
         record[ 'macAddress' ] = Binary._formatMacAddress(
             mac1, mac2, mac3, mac4, mac5, mac6 )
 
