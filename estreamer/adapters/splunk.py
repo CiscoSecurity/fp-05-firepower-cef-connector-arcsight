@@ -157,7 +157,9 @@ FIELD_MAPPING = {
         View.VPN_PROFILE: 'vpn_profile',
         View.VPN_POLICY: 'vpn_policy',
         View.VPN_TYPE: 'vpn_type',
-        View.WEB_APP: 'web_app' },
+        View.WEB_APP: 'web_app',
+        View.XFF_TYPE: 'xff_type',
+        View.XFF_HTTP_URI: 'xff_uri'},
 
     # 2
     definitions.RECORD_PACKET: {
