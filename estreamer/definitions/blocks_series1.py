@@ -17,6 +17,7 @@
 #*********************************************************************/
 
 from estreamer.definitions.core import TYPE_BYTE
+from estreamer.definitions.core import TYPE_UINT8
 from estreamer.definitions.core import TYPE_UINT16
 from estreamer.definitions.core import TYPE_UINT32
 from estreamer.definitions.core import TYPE_UINT64
@@ -63,6 +64,7 @@ BLOCK_SCAN_VULNERABILITY_DATA_41 = 109
 BLOCK_FULL_HOST_CLIENT_APPLICATION_50 = 112
 BLOCK_SERVER_INFORMATION_50 = 117
 BLOCK_USER_INFORMATION_DATA_50 = 120
+BLOCK_USER_LOGIN_INFORMATION_DATA_50 = 121
 BLOCK_HOST_CLIENT_APPLICATION_50 = 122
 BLOCK_WEB_APPLICATION_DATA_50 = 123
 BLOCK_USER_VULNERABILITY_DATA_50 = 124
@@ -78,11 +80,14 @@ BLOCK_SCAN_RESULT_DATA_52 = 142
 BLOCK_ATTRIBUTE_ADDRESS_52 = 146
 BLOCK_IOC_STATE_53 = 150
 BLOCK_INTRUSION_IMPACT_ALERT_53 = 153
+BLOCK_USER_INFORMATION_DATA_60 = 155
 BLOCK_CORRELATION_EVENT_54 = 156
 BLOCK_USER_LOGIN_INFORMATION_60 = 159
 BLOCK_CONNECTION_STATISTICS_60 = 160
 BLOCK_CONNECTION_STATISTICS_61 = 163
 BLOCK_USER_LOGIN_INFORMATION_61 = 165
+BLOCK_USER_INFORMATION_VPN_LOGIN_62 = 166
+BLOCK_USER_INFORMATION_VPN_LOGOFF_62 = 167
 
 # Custom data blocks
 BLOCK_METADATA_ID_LENGTH_NAME = 10000
@@ -359,7 +364,18 @@ BLOCKS_SERIES_1 = {
         { 'block': BLOCK_STRING, 'name': 'department' },
         { 'block': BLOCK_STRING, 'name': 'phone' }],
 
-    # 122
+    # 121
+
+    BLOCK_USER_LOGIN_INFORMATION_DATA_50: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'timestamp' },
+        { 'type': TYPE_UINT32, 'name': 'ipv4Address' },
+        { 'block': BLOCK_STRING, 'name': 'username' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' },
+        { 'block': BLOCK_STRING, 'name': 'email' }],
+
     BLOCK_HOST_CLIENT_APPLICATION_50: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
@@ -638,6 +654,23 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_UINT32, 'name': 'sslFlowStatus' },
         { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint'}],
 
+    # 158
+    BLOCK_USER_INFORMATION_DATA_60: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'block': BLOCK_STRING, 'name': 'username' },
+        { 'type': TYPE_UINT32, 'name': 'realmId' },
+        { 'type': TYPE_UINT32, 'name': 'protocol' },
+        { 'block': BLOCK_STRING, 'name': 'firstName' },
+        { 'block': BLOCK_STRING, 'name': 'lastName' },
+        { 'block': BLOCK_STRING, 'name': 'email' },
+        { 'block': BLOCK_STRING, 'name': 'department' },
+        { 'block': BLOCK_STRING, 'name': 'phone' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileID' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT128, 'name': 'locationIpv6Address' }],
+
     # 159
     BLOCK_USER_LOGIN_INFORMATION_60: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
@@ -888,6 +921,49 @@ BLOCKS_SERIES_1 = {
         { 'type': TYPE_BYTE, 'name': 'loginType' },
         { 'type': TYPE_BYTE, 'name': 'authType' },
         { 'block': BLOCK_STRING, 'name': 'reportedBy' }],
+
+    # 166
+    BLOCK_USER_INFORMATION_VPN_LOGIN_62: [
+        { 'type': TYPE_UINT32, 'name': 'index' },
+        { 'type': TYPE_BYTE, 'name': 'vpnType'},
+        { 'block': BLOCK_STRING, 'name': 'groupPolicy' },
+        { 'block': BLOCK_STRING, 'name': 'vpnConnectionProfile' },
+        { 'type': TYPE_UINT128, 'name': 'clientIP' },
+        { 'type': TYPE_UINT16, 'name': 'countryCode' },
+        { 'block': BLOCK_STRING, 'name': 'clientOS' },
+        { 'block': BLOCK_STRING, 'name': 'clientApplication'},
+        { 'type': TYPE_UINT32, 'name': 'connectionDuration' },
+        { 'type': TYPE_UINT64, 'name': 'bytesTransmitted' },
+        { 'type': TYPE_UINT64, 'name': 'bytesReceived' }],
+
+    # 167
+    BLOCK_USER_INFORMATION_VPN_LOGOFF_62: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'timestamp' },
+        { 'type': TYPE_IPV4, 'name': 'ipv4Address' },
+        { 'block': BLOCK_STRING, 'name': 'username' },
+        { 'block': BLOCK_STRING, 'name': 'domain' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'realmId' },
+        { 'type': TYPE_UINT32, 'name': 'endpointProfileId' },
+        { 'type': TYPE_UINT32, 'name': 'securityGroupId' },
+        { 'type': TYPE_UINT32, 'name': 'protocol' },
+        { 'type': TYPE_UINT16, 'name': 'port' },
+        { 'type': TYPE_UINT16, 'name': 'rangeStart' },
+        { 'type': TYPE_UINT16, 'name': 'startPort' },
+        { 'type': TYPE_UINT16, 'name': 'endPort' },
+        { 'block': BLOCK_STRING, 'name': 'email' },
+        { 'type': TYPE_UINT128, 'name': 'ipv6Address' },
+        { 'type': TYPE_UINT128, 'name': 'locationIpv6Address' },
+        { 'type': TYPE_BYTE, 'name': 'loginType' },
+        { 'type': TYPE_BYTE, 'name': 'authType' },
+        { 'block': BLOCK_STRING, 'name': 'reportedBy' },
+        { 'block': BLOCK_STRING, 'name': 'description' },
+        { 'list': BLOCK_USER_INFORMATION_VPN_LOGIN_62, 'name': 'vpnSession' }
+],
+
+
 
     # 10000
     # This is not strictly a block (there's no type or length) - and it's not
