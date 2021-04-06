@@ -31,6 +31,7 @@ import estreamer.crossprocesslogging as logging
 from estreamer import ParsingException
 
 from estreamer.definitions import TYPE_BYTE
+from estreamer.definitions import TYPE_UINT8
 from estreamer.definitions import TYPE_UINT16
 from estreamer.definitions import TYPE_UINT32
 from estreamer.definitions import TYPE_UINT64
@@ -146,9 +147,6 @@ class Binary( object ):
         record[ 'deviceId' ] = deviceId
 
         headerLength = int( record[ 'recordLength' ] )
-       
-        if self.logger.isEnabledFor( logging.TRACE ):
-            self.logger.log( logging.TRACE, "data value for host ip in bytes")
 
         record[ 'hostIpAddr'] = self._ip2str( socket.AF_INET6, data[56:72] )
 
@@ -159,6 +157,7 @@ class Binary( object ):
         record[ 'eventMicrosecond' ] = eventMicrosecond
         record[ 'eventType' ] = eventType
         record[ 'eventSubtype' ] = eventSubtype
+
         offset += 40
 
         if hasIpv6 == 1:
@@ -200,6 +199,9 @@ class Binary( object ):
             elif isinstance( attribute['block'], int ):
                 blockKey = attribute['block']
 
+            if self.logger.isEnabledFor( logging.TRACE ):
+                self.logger.log( logging.TRACE, "_parseBlock offset={0}:attribute={1}:blockKey={2}".format(offset,attribute, blockKey) )
+
         elif 'list' in attribute:
             if attribute['list'] == BLOCK_AUTO:
                 ( blockKey, ) = Binary.unpackUint32( data[ offset : ( offset + 4 ) ] )
@@ -218,6 +220,9 @@ class Binary( object ):
         lengthSource = attribute[ 'length' ]
         blockLength = context[ lengthSource ]
         attributeName = attribute[ 'name' ]
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log (logging.TRACE, '_parseVariable - offset={0}:attributre={1}:context={2}:data={3}'.format(offset,attribute,context,data) )
 
         if 'adjustment' in attribute:
             lengthAdjustment = attribute[ 'adjustment' ]
@@ -262,6 +267,10 @@ class Binary( object ):
         recordLength = len( data )
 
         for attribute in attributes:
+
+            if self.logger.isEnabledFor( logging.TRACE ):
+                self.logger.log( logging.TRACE, "_parseAttributes RecordType={0}:offset={0}:attribute={1}".format(recordType, offset, attribute) )
+
             attributeName = attribute[ 'name' ] if 'name' in attribute else None
 
             if self.logger.isEnabledFor( logging.TRACE ):
@@ -346,7 +355,8 @@ class Binary( object ):
                 else:
                     if attributeType == TYPE_BYTE:
                         byteLength = 1
-
+                    elif attributeType == TYPE_UINT8:
+                        byteLength = 1
                     elif attributeType == TYPE_UINT16:
                         byteLength = 2
 
@@ -394,6 +404,8 @@ class Binary( object ):
                     block = context[ attributeName ]
 
                 offset = self._parseBlock( data, offset, attribute, block )
+                if self.logger.isEnabledFor( logging.TRACE ):
+                    self.logger.log( logging.TRACE, 'Parsing Attribute (Block Type) :-: attr name={0}:attr={1}:offset={2}:block={3}:value={5}:offset={6}'.format(attributeName, attribute, offset, block, block, offset) )
 
         return offset
 
@@ -402,22 +414,17 @@ class Binary( object ):
     def _parse( self, data, offset, record ):
         recordType = record[ 'recordType' ]
         recordLength = len( data )
-        try:
-            if recordType == 62 :
-                record['length'] = struct.unpack('>L', data[ 4 : 8 ] )[0]
-                record['id'] = struct.unpack('>L', data[ 8 : 12 ] )[0]
-                record['name'] = data[12:recordLength].decode('utf-8')
 
-                offset = recordLength
-            else :
-                attributes = RECORDS[ recordType ][ 'attributes' ]
-                offset = self._parseAttributes( data, offset, attributes, record )
+        if recordType == 62 :
+            record['length'] = struct.unpack('>L', data[ 4 : 8 ] )[0]
+            record['id'] = struct.unpack('>L', data[ 8 : 12 ] )[0]
+            record['name'] = data[12:recordLength].decode('utf-8')
 
-        except (AttributeError, ValueError) as ex:
-            hexRecord = binascii.hexlify( data )
-            self.logger.error( 'AttributeError: Record={0}'.format( hexRecord ) )
-            self.logger.exception(ex)
-            return
+            offset = recordLength
+
+        else :
+            attributes = RECORDS[ recordType ][ 'attributes' ]
+            offset = self._parseAttributes( data, offset, attributes, record )
 
         if offset != recordLength:
             msg = '__parse(): Offset ({0}) != recordLength ({1}) for recordType {2}'.format(
@@ -508,6 +515,7 @@ class Binary( object ):
         eStreamer and loads it into a common dict format which is used
         everywhere else
         """
+
         if not self.isParsed:
             if self.recordType not in RECORDS:
                 self.logger.warning( '__decode(): Unknown record type {0}.'.format(
