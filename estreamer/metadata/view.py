@@ -167,7 +167,7 @@ class View( object ):
     VPN_TYPE = 'vpnType'
     WEB_APP = 'webApplication'
     XFF_HTTP_URI = 'xffUri'
-    XFF_TYPE = 'xfftype'
+    XFF_TYPE = 'xffType'
 
 
     AUTOMAP = {
