@@ -166,7 +166,7 @@ class Receiver( object ):
 
             elif message['messageType'] == definitions.MESSAGE_TYPE_ERROR:
                 messageException = estreamer.MessageErrorException( message )
-                self.logger.error( 'FMC Server error: {0}'.format( messageException ) )
+                #self.logger.error( 'FMC Server error: {0}'.format( messageException ) )
 
             else:
                 messageBase64 = estreamer.adapters.base64.dumps( message )
