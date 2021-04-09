@@ -615,7 +615,7 @@ class View( object ):
 
             self.__addValueIfAvailable(
                 View.XFF_TYPE, 
-                [ Cache.XFF_DATA_TYPES, record['type']] )
+                [ Cache.XFF_TYPES, record['type']] )
 
         elif recordTypeId == definitions.RECORD_CORRELATION_EVENT:
             # 112
