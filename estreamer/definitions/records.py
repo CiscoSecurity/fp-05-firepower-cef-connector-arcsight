@@ -862,11 +862,21 @@ RECORDS = {
         'attributes': [ { 'block': BLOCK_IOC_NAME_53 } ],
         'category': u'IOC' },
 
-    # 170
-    VPN_LOGIN_EVENT: {
-        'name': u'VPN Login Data',
-        'attributes': [ { 'block': BLOCK_USER_LOGIN_INFORMATION_DATA_50 } ],
-        'category': u'VPN LOGIN' },
+    # 170 6.2+
+    RECORD_NEW_VPN_LOGIN: {
+        'name': u'New VPN Device Login',
+        'attributes': [
+            { 'discovery': True },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogin' }],
+        'category': u'VPN' },
+
+    # 171 6.2+
+    RECORD_NEW_VPN_LOGOFF: {
+        'name': u'New VPN Device Logoff',
+        'attributes': [
+            { 'discovery': True },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogoff' }],
+        'category': u'VPN' },
 
     # 260
     METADATA_ICMP_TYPE: {
