@@ -32,6 +32,7 @@ import estreamer.crossprocesslogging as logging
 from estreamer import ParsingException
 
 from estreamer.definitions import TYPE_BYTE
+from estreamer.definitions import TYPE_UINT8
 from estreamer.definitions import TYPE_UINT16
 from estreamer.definitions import TYPE_UINT32
 from estreamer.definitions import TYPE_UINT64
@@ -351,7 +352,10 @@ class Binary( object ):
                 else:
                     if attributeType == TYPE_BYTE:
                         byteLength = 1
-
+                        
+                    elif attributeType == TYPE_UINT8:
+                        byteLength = 1
+                        
                     elif attributeType == TYPE_UINT16:
                         byteLength = 2
 
