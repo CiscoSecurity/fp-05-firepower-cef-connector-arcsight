@@ -374,7 +374,8 @@ class Binary( object ):
                             data[ offset : offset + byteLength ] )[ 0 ]
                     except struct.error:
                         hData = binascii.hexlify( data[ offset: offset + byteLength ] )
-                        raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3}'.format( recordType, attributeName, attributeType, hData ) )
+                        hexData = binascii.hexlify( data )
+                        raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( recordType, attributeName, attributeType, hData, hexData ) )
                     offset += byteLength
 
             elif 'list' in attribute:
