@@ -367,11 +367,14 @@ class Binary( object ):
 
                     else:
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
-
-                    context[ attributeName ] = struct.unpack(
-                        '>' + attributeType,
-                        data[ offset : offset + byteLength ] )[ 0 ]
-
+                    
+                    try:
+                        context[ attributeName ] = struct.unpack(
+                            '>' + attributeType,
+                            data[ offset : offset + byteLength ] )[ 0 ]
+                    except struct.error:
+                        hData = binascii.hexlify( data[ offset: offset + byteLength ] )
+                        raise ParsingException('Error Decoding binary for rec_type={0} attr={1} data={2}'.format( recordType, attributeType, hData ) )
                     offset += byteLength
 
             elif 'list' in attribute:
