@@ -562,7 +562,7 @@ class View( object ):
                             d1 = str(int(xffData[24:26],16))
                             d2 = str(int(xffData[26:28],16))
                             d3 = str(int(xffData[28:30],16))
-                            d4 = str(int([30:32],16))
+                            d4 = str(int(xffData[30:32],16))
                             ipv4 = d1 + "." + d2 +"." + d3 + "." + d4
                             self.data[ View.ORIGINAL_CLIENT_SRC_IP ] = ipv4
                         else :
