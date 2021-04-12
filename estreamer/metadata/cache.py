@@ -1380,7 +1380,8 @@ class Cache( object ):
                 1: 'Passive Authentication, AD Agent, or ISE Session',
                 2: 'Captive Portal Successfull Authenication',
                 3: 'Captive Portal Guest Authenication',
-                4: 'Captive Portal Failed Authenication'
+                4: 'Captive Portal Failed Authenication',
+                5: 'VPN Authorized Authenication'
             },
 
             Cache.USER_PROTOCOLS: {
