@@ -34,3 +34,4 @@ from estreamer.service import Service
 from estreamer.configure import Configure
 from estreamer.pidfile import PidFile
 from estreamer.controller import Controller
+__version__ = '4.2.0'
