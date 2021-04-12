@@ -858,7 +858,8 @@ class View( object ):
             self.__addValueIfAvailable(
                 View.SSL_FLOW_STATUS,
                 [ Cache.SSL_FLOWS_STATUSES, record['sslFlowStatus'] ] )
-  elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
+        
+        elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
             #170
 
             if 'index' in record['userLogin']['vpnSession']['items'][0] :
@@ -911,7 +912,6 @@ class View( object ):
             self.__addValueIfAvailable(
                 View.PROTOCOL,
                 [ Cache.USER_PROTOCOLS, record['userLogin']['protocol']] )
-
 
         elif recordTypeId == definitions.RECORD_NEW_VPN_LOGOFF:
             #171
