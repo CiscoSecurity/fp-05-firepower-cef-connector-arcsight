@@ -257,7 +257,9 @@ class View( object ):
         self.data = {}
         self.logger = estreamer.crossprocesslogging.getLogger( __name__ )
 
-
+    def __addValue( self, key, value ):
+        if value:
+            self.data[ key ] = value
 
     def __addValueIfAvailable( self, key, cacheKeys ):
         value = self.cache.get( cacheKeys )
