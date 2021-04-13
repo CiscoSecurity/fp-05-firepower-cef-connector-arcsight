@@ -406,6 +406,7 @@ class Binary( object ):
                     context[ attributeName ] = {}
                     block = context[ attributeName ]
 
+                self.logger.log( logging.TRACE, 'Parsing Attribute (Block Type) :-: attr name={0}:attr={1}:attr_type={2}:value={3}'.format(attributeName, attribute, block, offset) )
                 offset = self._parseBlock( data, offset, attribute, block )
 
         return offset
