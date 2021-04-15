@@ -78,7 +78,10 @@ def _shouldParse( record, settings ):
     elif recordTypeId in definitions.TYPES['INTRUSION']:
         if settings.writeIntrusion:
             result = True
-
+        
+    elif recordTypeId in definitions.TYPES['VPN']:
+        result = True
+    
     elif recordTypeId in definitions.TYPES['FILE_MALWARE'] or \
             recordTypeId in definitions.TYPES['CORRELATION'] or \
             recordTypeId in definitions.TYPES['EVENT']:
