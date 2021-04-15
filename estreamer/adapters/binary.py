@@ -368,15 +368,24 @@ class Binary( object ):
                     else:
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
                     
-                    try:
-                        context[ attributeName ] = struct.unpack(
-                            '>' + attributeType,
-                            data[ offset : offset + byteLength ] )[ 0 ]
-                    except struct.error:
-                        hData = binascii.hexlify( data[ offset: offset + byteLength ] )
-                        hexData = binascii.hexlify( data )
-                        raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( recordType, attributeName, attributeType, hData, hexData ) )
-                    offset += byteLength
+                    if recordType == 98 :
+                        recLen = int(context['recordLength'])
+                        maxLen = len(data)
+                        context['userId'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
+                        context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
+                        context['name'] = data[recLen : maxLen]
+                        offset = maxLen
+                    else:     
+                        try:
+                            context[ attributeName ] = struct.unpack(
+                                '>' + attributeType,
+                                data[ offset : offset + byteLength ] )[ 0 ]
+                            offset += byteLength
+                        except struct.error:
+                            hData = binascii.hexlify( data[ offset: offset + byteLength ] )
+                            hexData = binascii.hexlify( data )
+                            raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( recordType, attributeName, attributeType, hData, hexData ) )
+
 
             elif 'list' in attribute:
                 oldOffset = offset
