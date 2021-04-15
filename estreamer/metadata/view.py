@@ -301,6 +301,20 @@ class View( object ):
             if not (char in hex_digits):
                 return False
         return True
+    
+    def __convertIPv6(self, extraData) :
+                            
+        h1 = extraData[0:4].decode('utf-8')
+        h2 = extraData[4:8].decode('utf-8')
+        h3 = extraData[8:12].decode('utf-8')
+        h4 = extraData[12:16].decode('utf-8')
+        h5 = extraData[16:20].decode('utf-8')
+        h6 = extraData[20:24].decode('utf-8')
+        h7 = extraData[24:28].decode('utf-8')
+        h8 = extraData[28:32].decode('utf-8')
+        ipv6 = h1 + ':' + h2 + ':' + h3 + ':' + h4 + ':' + h5 + ':' + h6 + ':' + h7 +  ':' + h8
+             
+        return ipv6
 
     def create( self ):
         """Creates a dictionary with all appropriate record decorations"""
