@@ -595,7 +595,7 @@ class View( object ):
                     d3 = str(int(extraData[28:30].decode('utf-8'),16))
                     d4 = str(int(extraData[30:32].decode('utf-8'),16))
                     ipv4 = d1 + '.' + d2 + '.' + d3 + '.' + d4
-                    self.__addValue( VIEW.ORIGINAL_CLIENT_SRC_IP, ipv4)
+                    self.__addValue( View.ORIGINAL_CLIENT_SRC_IP, ipv4)
                  
                 else :
                     h1 = extraData[0:4].decode('utf-8')
