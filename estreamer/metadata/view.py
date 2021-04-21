@@ -231,15 +231,6 @@ class View( object ):
 
         # 95
         definitions.RUA_EVENT_CHANGE_USER_LOGIN: [
-            {
-                'cache': Cache.CLIENT_APPLICATIONS,
-                'id': ['user', 'applicationId'],
-                'view': CLIENT_APP
-            }, {
-                'cache': Cache.USERS,
-                'id': ['user', 'userId'],
-                'view': USER
-            }
             # These need to be added for version 6.0
             # , {
             #     'cache': Cache.REALMS,
