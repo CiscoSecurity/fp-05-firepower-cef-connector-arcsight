@@ -229,15 +229,7 @@ class View( object ):
 
         # 95
         definitions.RUA_EVENT_CHANGE_USER_LOGIN: [
-            {
-                'cache': Cache.CLIENT_APPLICATIONS,
-                'id': ['user', 'applicationId'],
-                'view': CLIENT_APP
-            }, {
-                'cache': Cache.USERS,
-                'id': ['user', 'userId'],
-                'view': USER
-            }
+
             # These need to be added for version 6.0
             # , {
             #     'cache': Cache.REALMS,
@@ -531,12 +523,6 @@ class View( object ):
                         Cache.FW_RULES,
                         record['policyRevision'],
                         value] )
-
-        elif recordTypeId == definitions.RUA_EVENT_NEW_USER:
-            # 94
-            self.__addValueIfAvailable(
-                View.USER,
-                [ Cache.USERS, record['user']['userId']] )
 
         elif recordTypeId == definitions.RECORD_RUA_USER:
             # 98
