@@ -367,14 +367,18 @@ class Binary( object ):
 
                     else:
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
-                    
+                   
                     if recordType == 98 :
                         recLen = int(context['recordLength'])
                         maxLen = len(data)
-                        context['userId'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
+                        size = len(data[recLen: maxLen])
+                        
+                        context['id'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
                         context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
-                        context['name'] = data[recLen : maxLen]
+                        name = struct.unpack('>'+str(size)+'s',data[recLen: maxLen])[0]
+                        context['name'] = name.decode('utf-8', 'ignore')
                         offset = maxLen
+
                     else:     
                         try:
                             context[ attributeName ] = struct.unpack(
