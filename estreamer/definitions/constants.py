@@ -96,9 +96,21 @@ then try enabling the EPEL repo. For more information see:
     https://fedoraproject.org/wiki/EPEL
 
 
-# 2. Alternatively you can use a command line version of OpenSSL and run the following two commands
+# 2. Alternatively you can use the built in Splunk OpenSSL binary
 
-openssl pkcs12 -in "{0}" -nocerts -nodes -out "{1}"
-openssl pkcs12 -in "{0}" -clcerts -nokeys -out "{2}"
+First, set the SPLUNK_HOME and LD_LIBRARY_PATH path(s) to the location of your Splunk install
+
+(For example. /opt/splunk)
+export SPLUNK_HOME=/opt/splunk
+export LD_LIBRARY_PATH=$SPLUNK_HOME/lib
+
+Then run the following two commands, alernatively you can use the command line version of OpenSSL
+
+$SPLUNK_HOME/bin/openssl pkcs12 -in "{0}" -nocerts -nodes -out "{1}"
+$SPLUNK_HOME/bin/openssl pkcs12 -in "{0}" -clcerts -nokeys -out "{2}"
+
+Note:  If you are using python3 the command to install OpenSSL is as follows
+
+    sudo apt install python3-openssl
 
 """
