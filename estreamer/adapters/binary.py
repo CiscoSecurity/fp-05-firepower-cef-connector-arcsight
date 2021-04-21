@@ -368,12 +368,27 @@ class Binary( object ):
 
                     else:
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
+                        
+                    if recordType == 98 :
+                        recLen = int(context['recordLength'])
+                        maxLen = len(data)
+                        size = len(data[recLen: maxLen])
+                        
+                        context['id'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
+                        context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
+                        context['name'] = struct.unpack('>'+str(size)+'s',data[recLen: maxLen])[0]
+                        offset = maxLen
 
-                    context[ attributeName ] = struct.unpack(
-                        '>' + attributeType,
-                        data[ offset : offset + byteLength ] )[ 0 ]
-
-                    offset += byteLength
+                    else:     
+                        try:
+                            context[ attributeName ] = struct.unpack(
+                                '>' + attributeType,
+                                data[ offset : offset + byteLength ] )[ 0 ]
+                            offset += byteLength
+                        except struct.error:
+                            hData = binascii.hexlify( data[ offset: offset + byteLength ] )
+                            hexData = binascii.hexlify( data )
+                            raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( recordType, attributeName, attributeType, hData, hexData ) )
 
             elif 'list' in attribute:
                 oldOffset = offset
