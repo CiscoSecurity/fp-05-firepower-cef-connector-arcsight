@@ -614,7 +614,7 @@ RECORDS = {
         'name': u'User Removed Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_DATA_50, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
         'category': u'RUA' },
 
     # 94
@@ -622,7 +622,7 @@ RECORDS = {
         'name': u'New User Identification Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_DATA_50, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
         'category': u'RUA' },
 
     # 95
@@ -630,7 +630,7 @@ RECORDS = {
         'name': u'User Login Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_LOGIN_INFORMATION_54, 'name': 'user' },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user' },
         ],
         'category': u'RUA' },
 
