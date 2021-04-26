@@ -66,7 +66,7 @@ class Binary( object ):
 
         self.inetNtop = socket.inet_ntop
         if os.name == 'nt':
-            self.inetNtop = win_inet_pton.inet_ntop
+            self.inetNtop = win_inet_pton.socket.inet_ntop
 
         # Do not touch source. Leave it alone.
         if 'data' not in source:
