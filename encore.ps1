@@ -228,3 +228,6 @@ function main {
         setup {setup}
     }
 }
+
+init
+main
