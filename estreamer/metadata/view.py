@@ -863,50 +863,55 @@ class View( object ):
         
         elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
             #170
+            if 'vpnSession' in record['userLogin'] :
+                try:
+                    if 'index' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.INDEX, record['userLogin']['vpnSession']['items'][0]['index']  )
 
-            if 'index' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.INDEX, record['userLogin']['vpnSession']['items'][0]['index']  )
+                    if 'bytesReceived' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.BYTES_RECEIVED, record['userLogin']['vpnSession']['items'][0]['bytesReceived'] )
 
-            if 'bytesReceived' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.BYTES_RECEIVED, record['userLogin']['vpnSession']['items'][0]['bytesReceived'] )
+                    if 'bytesTransmitted' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.BYTES_TRANSMITTED, record['userLogin']['vpnSession']['items'][0]['bytesTransmitted'] )
 
-            if 'bytesTransmitted' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.BYTES_TRANSMITTED, record['userLogin']['vpnSession']['items'][0]['bytesTransmitted'] )
+                    if 'countryCode' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.COUNTRY_CODE, record['userLogin']['vpnSession']['items'][0]['countryCode'] )
 
-            if 'countryCode' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.COUNTRY_CODE, record['userLogin']['vpnSession']['items'][0]['countryCode'] )
+                    if 'connectionDuration' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.DURATION, record['userLogin']['vpnSession']['items'][0]['connectionDuration'] )
 
-            if 'connectionDuration' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.DURATION, record['userLogin']['vpnSession']['items'][0]['connectionDuration'] )
+                    if 'clientOS' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.CLIENT_OS, record['userLogin']['vpnSession']['items'][0]['clientOS']['data']  )
 
-            if 'clientOS' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.CLIENT_OS, record['userLogin']['vpnSession']['items'][0]['clientOS']['data']  )
+                    if 'clientIP' in record['userLogin']['vpnSession']['items'][0] :
 
-            if 'clientIP' in record['userLogin']['vpnSession']['items'][0] :
+                        ipv4 = self.__convertIPv6(record['userLogin']['vpnSession']['items'][0]['clientIP'])
 
-                ipv4 = self.__convertIPv6(record['userLogin']['vpnSession']['items'][0]['clientIP'])
+                        self.__addValue(
+                            View.CLIENT_IP, ipv4 )
 
-                self.__addValue(
-                    View.CLIENT_IP, ipv4 )
+                    if 'clientApplication' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.CLIENT_APP, record['userLogin']['vpnSession']['items'][0]['clientApplication']['data']  )
 
-            if 'clientApplication' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.CLIENT_APP, record['userLogin']['vpnSession']['items'][0]['clientApplication']['data']  )
+                    if 'groupPolicy' in record['userLogin']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.VPN_POLICY, record['userLogin']['vpnSession']['items'][0]['groupPolicy']['data']  )
 
-            if 'groupPolicy' in record['userLogin']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.VPN_POLICY, record['userLogin']['vpnSession']['items'][0]['groupPolicy']['data']  )
+                except (TypeError, AttributeError, KeyError, IndexError):
+                    return
 
+                
             self.__addValueIfAvailable(
                 View.VPN_TYPE,
                 [ Cache.VPN_TYPES, record['userLogin']['vpnSession']['items'][0]['vpnType'] ] )
-
+                    
             self.__addValueIfAvailable(
                 View.USER_AUTH_TYPE,
                 [ Cache.USER_AUTH_TYPES, record['userLogin']['authType']] )
@@ -917,45 +922,48 @@ class View( object ):
 
         elif recordTypeId == definitions.RECORD_NEW_VPN_LOGOFF:
             #171
+            if 'vpnSession' in record['userLogoff'] :
+                try:
+                    if 'index' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.INDEX, record['userLogoff']['vpnSession']['items'][0]['index']  )
 
-            if 'index' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.INDEX, record['userLogoff']['vpnSession']['items'][0]['index']  )
+                    if 'countryCode' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.COUNTRY_CODE, record['userLogoff']['vpnSession']['items'][0]['countryCode'] )
 
-            if 'countryCode' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.COUNTRY_CODE, record['userLogoff']['vpnSession']['items'][0]['countryCode'] )
+                    if 'connectionDuration' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.DURATION, record['userLogoff']['vpnSession']['items'][0]['connectionDuration'] )
 
-            if 'connectionDuration' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.DURATION, record['userLogoff']['vpnSession']['items'][0]['connectionDuration'] )
+                    if 'clientOS' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.CLIENT_OS, record['userLogoff']['vpnSession']['items'][0]['clientOS']['data']  )
 
-            if 'clientOS' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.CLIENT_OS, record['userLogoff']['vpnSession']['items'][0]['clientOS']['data']  )
+                    if 'bytesReceived' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.BYTES_RECEIVED, record['userLogoff']['vpnSession']['items'][0]['bytesReceived'] )
 
-            if 'bytesReceived' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.BYTES_RECEIVED, record['userLogoff']['vpnSession']['items'][0]['bytesReceived'] )
+                    if 'bytesTransmitted' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.BYTES_TRANSMITTED, record['userLogoff']['vpnSession']['items'][0]['bytesTransmitted'] )
 
-            if 'bytesTransmitted' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.BYTES_TRANSMITTED, record['userLogoff']['vpnSession']['items'][0]['bytesTransmitted'] )
+                    if 'clientIP' in record['userLogoff']['vpnSession']['items'][0] :
+                        ipv4 = self.__convertIPv6(record['userLogoff']['vpnSession']['items'][0]['clientIP'])
 
-            if 'clientIP' in record['userLogoff']['vpnSession']['items'][0] :
-                ipv4 = self.__convertIPv6(record['userLogoff']['vpnSession']['items'][0]['clientIP'])
+                        self.__addValue(
+                            View.CLIENT_IP, ipv4 )
 
-                self.__addValue(
-                    View.CLIENT_IP, ipv4 )
+                    if 'clientApplication' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.CLIENT_APP, record['userLogoff']['vpnSession']['items'][0]['clientApplication']['data']  )
 
-            if 'clientApplication' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.CLIENT_APP, record['userLogoff']['vpnSession']['items'][0]['clientApplication']['data']  )
-
-            if 'groupPolicy' in record['userLogoff']['vpnSession']['items'][0] :
-                self.__addValue(
-                    View.VPN_POLICY, record['userLogoff']['vpnSession']['items'][0]['groupPolicy']['data']  )
-
+                    if 'groupPolicy' in record['userLogoff']['vpnSession']['items'][0] :
+                        self.__addValue(
+                            View.VPN_POLICY, record['userLogoff']['vpnSession']['items'][0]['groupPolicy']['data']  )
+                except (TypeError, AttributeError, KeyError, IndexError):
+                    return
+                
             self.__addValueIfAvailable(
                 View.VPN_TYPE,
                 [ Cache.VPN_TYPES, record['userLogoff']['vpnSession']['items'][0]['vpnType'] ] )
