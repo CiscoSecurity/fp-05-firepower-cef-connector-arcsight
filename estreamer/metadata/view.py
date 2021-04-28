@@ -861,9 +861,8 @@ class View( object ):
                 View.SSL_FLOW_STATUS,
                 [ Cache.SSL_FLOWS_STATUSES, record['sslFlowStatus'] ] )
         
-         elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
+        elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
             #170
-
             if 'items' in record['userLogin']['vpnSession'] :
                 if len(record['userLogin']['vpnSession']['items']) > 0 :
 
