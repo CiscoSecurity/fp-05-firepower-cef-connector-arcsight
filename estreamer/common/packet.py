@@ -38,7 +38,8 @@ class Packet( object ):
 
     def __getNyble( self, indexNyble ):
         byteIndex = int(indexNyble/2)
-        byte = struct.unpack( '>B', self.data[byteIndex] )[0]
+        #byte = struct.unpack( '>B', self.data[byteIndex] )[0]
+        byte = self.data[byteIndex]  #Python3 read ensures this is already in a binary format
         if indexNyble % 2 == 0:
             mask = 0b11110000
             return ( byte & mask ) >> 4
