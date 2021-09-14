@@ -27,4 +27,14 @@ def loads( line ):
 
 def dumps( data ):
     """Serializes the incoming object as a json string"""
-    return json.dumps( data )
+    print("json data")
+    print(data)
+    json_object = ""
+
+    for line in data:
+        if( isinstance(line, (bytes, bytearray)) ) :
+            json_object += line.decode('utf-8')
+        else :
+            json_object = line
+
+    return json.dumps( json_object )
