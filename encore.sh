@@ -156,6 +156,10 @@ stop() {
     fi
 }
 
+ts() {
+    tar -zcvf ../"encore-ts-$(date '+%Y-%m-%d_%H-%M-%S%z(%Z)').tar.gz" *
+}
+
 restart() {
     stop
     start
@@ -182,7 +186,11 @@ main() {
         foreground)
             foreground
             ;;
-
+	
+        ts)
+	        ts
+	        ;;
+	     
         setup)
             setup
             ;;
