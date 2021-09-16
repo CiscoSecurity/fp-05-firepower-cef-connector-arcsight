@@ -74,8 +74,6 @@ init() {
         exit $EXIT_CODE_ERROR
     fi
 
-    $configure --enabled=true
-
     pidFile=`$configure --print pidFile`
     pid=`$configure --print pid`
 
