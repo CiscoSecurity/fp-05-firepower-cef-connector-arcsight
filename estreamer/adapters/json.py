@@ -27,8 +27,6 @@ def loads( line ):
 
 def dumps( data ):
     """Serializes the incoming object as a json string"""
-    print("json data")
-    print(data)
     json_object = ""
 
     for line in data:
