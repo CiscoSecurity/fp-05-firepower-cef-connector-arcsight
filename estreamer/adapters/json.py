@@ -21,18 +21,16 @@ Transforms to and from JSON and a dict
 from __future__ import absolute_import
 import json
 
+class UTF8Encoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, bytes):
+            return str(obj, encoding='utf-8');
+        return json.JSONEncoder.default(self, obj)
+
 def loads( line ):
     """Converts a json line back into a dict"""
     return json.loads( line )
 
 def dumps( data ):
     """Serializes the incoming object as a json string"""
-    json_object = ""
-
-    for line in data:
-        if( isinstance(line, (bytes, bytearray)) ) :
-            json_object += line.decode('utf-8')
-        else :
-            json_object = line
-
-    return json.dumps( json_object )
+    return return json.dumps(data,cls=UTF8Encoder)
