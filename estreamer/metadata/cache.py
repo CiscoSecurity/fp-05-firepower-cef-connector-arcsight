@@ -51,6 +51,8 @@ class Cache( object ):
     DNS_RECORDS = 'dnsRecords'
     DNS_RESPONSES = 'dnsResponses'
     DIRECTIONS = 'directions'
+    DISPOSITIONS = 'dispositions'
+    ENDPOINT_PROFILE_ID = 'endpointProfileId'
     FILE_ACTIONS = 'fileActions'
     FILE_ARCHIVE_STATUS = 'archiveFileStatus'
     FILE_DISPOSITIONS = 'fileDispositions'
@@ -78,6 +80,7 @@ class Cache( object ):
     MALWARE_ANALYSIS_STATUS = 'malwareAnalysis'
     NET_PROTOS = 'networkProtocols'
     NETMAP_DOMAINS = 'netmapDomains'
+    ORIGINAL_SRC_IP = 'originalSrcIp'
     OS_FINGERPRINTS = 'osFingerprints'
     PAYLOADS = 'payloads'
     POLICIES = 'policies'
@@ -103,9 +106,12 @@ class Cache( object ):
     SYSTEM_USERS = 'systemUsers'
     URL_REPUTATIONS = 'urlReputations'
     URL_CATEGORIES = 'urlCategories'
+    USER_AUTH_TYPES = 'userAuthTypes'
     USER_PROTOCOLS = 'userProtocols'
     USERS = 'users'
+    VPN_TYPES = 'vpnTypes'
     XDATA_TYPES = 'xdataTypes'
+    XFF_TYPES = 'xffTypes'
 
     # Incase we need to map from the old perl metadata somehow
     mapping = {
@@ -156,8 +162,6 @@ class Cache( object ):
         USERS: 'users',
         XDATA_TYPES: 'xdata_types'
     }
-
-
 
     AUTOMAP = {
         # 4
@@ -809,6 +813,15 @@ class Cache( object ):
                 2: 'Upload',
             },
 
+            Cache.DISPOSITIONS: {
+                0: 'N/A',
+                1: 'Clean',
+                2: 'Unknown',
+                3: 'Malware',
+                4: 'Unavailable',
+                5: 'Custom signature'
+            },
+            
             Cache.FILE_ACTIONS: {
                 0: 'N/A',
                 1: 'Detect',
@@ -1370,10 +1383,42 @@ class Cache( object ):
                 128: 'Not valid yet - The server certificate is not yet valid.',
                 256: 'Revoked - The server certificate has been revoked.'
             },
-
+            
+            Cache.USER_AUTH_TYPES: {
+                0: 'No Authorization Required',
+                1: 'Passive Authentication, AD Agent, or ISE Session',
+                2: 'Captive Portal Successfull Authenication',
+                3: 'Captive Portal Guest Authenication',
+                4: 'Captive Portal Failed Authenication',
+                5: 'VPN Authorized Authenication'
+            },
+            
             Cache.USER_PROTOCOLS: {
+                165: 'FTP',
+                426: 'SIP',
+                547: 'AOL Instant Messenger',
                 683: 'IMAP',
-                710: 'LDAP'
+                710: 'LDAP',
+                767: 'NTP',
+                773: 'Oracle Database',
+                788: 'POP3',
+                1755: 'MDNS'
+            },
+
+            Cache.VPN_TYPES: {
+                0: 'Unknown',
+                1: 'Cisco IKEv1 Client',
+                2: 'AnyConnect IKEv1 Client',
+                3: 'AnyConnect SSL',
+                4: 'WebVPN Clientless',
+                5: 'Site to Site IKEv2',
+                6: 'Site to Site IKEv2',
+                7: 'Generic IKEv2 RA Client'
+            },
+
+            Cache.XFF_TYPES: {
+                2: 'XFF Client (Ipv6)',
+                9: 'HTTP URI'
             }
         }
 
@@ -1395,8 +1440,12 @@ class Cache( object ):
             # and will be dealth with below
             if recordTypeId in Cache.AUTOMAP:
                 mapping = Cache.AUTOMAP[recordTypeId]
-                self.set([ mapping['cache'], record[ mapping['id'] ] ], record[ mapping['value'] ] )
 
+                try:
+                    self.set([ mapping['cache'], record[ mapping['id'] ] ], record[ mapping['value'] ] )
+                except TypeError:
+                    self.logger.warning('Invalid mapping type (str) must use integer "rec_type: {0} index: {1} value: {2} record: {3}"'.
+                            format(recordTypeId, mapping['cache'], mapping['id'], mapping['value'] , record) ) 
 
             # Now we do the special cases which need to update complex objects
             if recordTypeId == definitions.METADATA_RNA_FINGERPRINT:
