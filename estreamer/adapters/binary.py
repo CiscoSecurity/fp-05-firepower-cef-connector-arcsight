@@ -32,6 +32,7 @@ import estreamer.crossprocesslogging as logging
 from estreamer import ParsingException
 
 from estreamer.definitions import TYPE_BYTE
+from estreamer.definitions import TYPE_UINT8
 from estreamer.definitions import TYPE_UINT16
 from estreamer.definitions import TYPE_UINT32
 from estreamer.definitions import TYPE_UINT64
@@ -61,6 +62,7 @@ class Binary( object ):
         self.data = None
         self.length = 0
         self.recordType = 0
+        self.blockType = 0
         self.offset = 0
         self.record = None
         self.isParsed = False
@@ -144,6 +146,7 @@ class Binary( object ):
 
         recordLength = len( data )
         recordType =  record[ 'recordType' ]
+        blockType = record[ 'blockType' ]
         record[ 'deviceId' ] = deviceId
 
         headerLength = int( record[ 'recordLength' ] )
@@ -155,7 +158,7 @@ class Binary( object ):
 
         if self.logger.isEnabledFor( logging.TRACE ):
 
-            self.logger.log( logging.TRACE, "rec type :-:{0}, ip host: {1}".format(recordType, record[ 'hostIpAddr' ]) )
+            self.logger.log( logging.TRACE, "rec type :-:{0}, block type:={1} ip host: {2}".format(recordType, eventSubtype, record[ 'hostIpAddr' ]) )
 
         record[ 'macAddress' ] = Binary._formatMacAddress(
             mac1, mac2, mac3, mac4, mac5, mac6 )
@@ -212,6 +215,11 @@ class Binary( object ):
             elif isinstance( attribute['list'], int ):
                 blockKey = attribute['list']
 
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log(logging.TRACE, '_parseBlock: recordType: {0} blockKey: {1} '.format(self.recordType, blockKey))
+
+        if blockKey != 0 :
+            self.blockType = blockKey
 
         blockDefinition = Binary._blockDefinition( blockKey )
         offset = self._parseAttributes( data, offset, blockDefinition, context )
@@ -220,13 +228,31 @@ class Binary( object ):
 
 
     def _parseVariable( self, data, offset, attribute, context ):
+
         lengthSource = attribute[ 'length' ]
         blockLength = context[ lengthSource ]
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+           binhex = data[offset:blockLength]
+           self.logger.log(
+              logging.TRACE,
+              'offset= {0}/{1} |  attribute={1} | context={2} | data[{0}:{1}]={3}'.format(
+                 offset, blockLength,
+                 attribute,
+                 context, binhex ))
+
         attributeName = attribute[ 'name' ]
 
         if 'adjustment' in attribute:
             lengthAdjustment = attribute[ 'adjustment' ]
 
+            if self.logger.isEnabledFor( logging.TRACE ):
+               binhex = data[offset:( offset + 8 ) ]
+               self.logger.log(
+                  logging.TRACE,
+                  'length adjustment= {0} | block size={1} | attribute={2} | blockLength={3}'.format(
+                     lengthAdjustment, binhex,
+                     attribute,blockLength))
         else:
             lengthAdjustment = 0
 
@@ -252,11 +278,17 @@ class Binary( object ):
             context[ attributeName ] = ''
 
         else:
+            value = data[ offset : ( offset + length ) ]
             raise ParsingException(
-                'Invalid block length ({0}). RecordType={1}, Field={2}'.format(
+                'Invalid block length ({0}) length2: {1} at pos {7}. RecordType={2}, BlockType={3}, Field={4} Length={5} Value={6}'.format(
                     blockLength,
+                    length,
                     self.recordType,
-                    attribute['name'] ))
+                    self.blockType,
+                    attribute['name'] ,
+                    attribute['length'],
+                    value,
+                    offset))
 
         return offset
 
@@ -264,24 +296,27 @@ class Binary( object ):
 
     def _parseAttributes( self, data, offset, attributes, context ):
         recordType = self.recordType
+        blockType = self.blockType
         recordLength = len( data )
 
         for attribute in attributes:
             attributeName = attribute[ 'name' ] if 'name' in attribute else None
 
             if self.logger.isEnabledFor( logging.TRACE ):
+                binhex = data[offset:recordLength]
                 self.logger.log(
                     logging.TRACE,
-                    'offset={0}/{1} | attribute={2}'.format(
+                    'offset={0}/{1} | attribute={2} | data[{0}:{1}]={3}'.format(
                         offset,
                         recordLength,
-                        attribute ))
+                        attribute, binhex ))
 
             if offset > recordLength:
                 raise ParsingException(
-                    '_attributes() | offset ({0}) > length ({1}) | recordType={2}'.format(
+                    '_attributes() | offset ({0}) > length ({1}) | blockType={2} recordType={3}'.format(
                         offset,
                         recordLength,
+                        blockType,
                         recordType ))
 
             elif offset == recordLength:
@@ -327,6 +362,13 @@ class Binary( object ):
                     offset += byteLength
 
                 elif attributeType == TYPE_VARIABLE:
+                    if self.logger.isEnabledFor( logging.TRACE ):
+                        self.logger.log(
+                        logging.TRACE,
+                        'attributeVariable: data={0} | offset={1} | attribute={2} | context={3}'.format(
+                            data,
+                            offset, attribute, context ))
+
                     offset = self._parseVariable( data, offset, attribute, context )
 
                 elif attributeType == TYPE_UINT128 or \
@@ -340,6 +382,14 @@ class Binary( object ):
                         '>' + attributeType,
                         data[ offset : offset + byteLength ])
 
+                    if self.logger.isEnabledFor( logging.TRACE ):
+                        self.logger.log(
+                        logging.TRACE,
+                        'offset={0}/{1} | attribute={2} | value={3} | data={4}'.format(
+                            offset,
+                            byteLength,
+                            attribute, value, data[offset : offset + byteLength] ))
+
                     # repack native. This step is probably not necessary as
                     # endianness should only apply to bytes, not bits and we're
                     # pulling out raw groups of bytes. TODO
@@ -351,7 +401,10 @@ class Binary( object ):
                 else:
                     if attributeType == TYPE_BYTE:
                         byteLength = 1
-
+                        
+                    elif attributeType == TYPE_UINT8:
+                        byteLength = 1
+                        
                     elif attributeType == TYPE_UINT16:
                         byteLength = 2
 
@@ -363,12 +416,36 @@ class Binary( object ):
 
                     else:
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
+                   
+                    if recordType == 98 :
+                        recLen = int(context['recordLength'])
+                        maxLen = len(data)
+                        size = len(data[recLen: maxLen])
+                        
+                        context['id'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
+                        context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
+                        name = struct.unpack('>'+str(size)+'s',data[recLen: maxLen])[0]
+                        context['name'] = name.decode('utf-8', 'ignore')
+                        offset = maxLen
 
-                    context[ attributeName ] = struct.unpack(
-                        '>' + attributeType,
-                        data[ offset : offset + byteLength ] )[ 0 ]
+                    else:     
+                        try:
+                            self.logger.log( logging.TRACE, 'unpacking binary data {0}'.format(attributeName) )
+                            context[ attributeName ] = struct.unpack(
+                                '>' + attributeType,
+                                data[ offset : offset + byteLength ] )[ 0 ]
+    
+                            offset += byteLength
 
-                    offset += byteLength
+                            if attributeName == 'blockType' and blockType == 0 :
+                                self.blockType = context [ attributeName ] 
+
+                        except struct.error:
+                            hData = binascii.hexlify( data[ offset: offset + byteLength ] )
+                            hexData = binascii.hexlify( data )
+                            raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( 
+recordType, attributeName, attributeType, hData, hexData ) )
+
 
             elif 'list' in attribute:
                 oldOffset = offset
@@ -398,6 +475,7 @@ class Binary( object ):
                     context[ attributeName ] = {}
                     block = context[ attributeName ]
 
+                self.logger.log( logging.TRACE, 'Parsing Attribute (Block Type) :-: attr name={0}:attr={1}:attr_type={2}:value={3}'.format(attributeName, attribute, block, offset) )
                 offset = self._parseBlock( data, offset, attribute, block )
 
         return offset
@@ -406,10 +484,83 @@ class Binary( object ):
 
     def _parse( self, data, offset, record ):
         recordType = record[ 'recordType' ]
+        blockType = self.blockType
         recordLength = len( data )
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log(
+                logging.TRACE,
+                '_parse offset={0}/{1} | recordType={2}  '.format(
+                    offset,
+                    recordLength, recordType))
         try:
-            #if recordType == 95:
             attributes = RECORDS[ recordType ][ 'attributes' ]
+
+            #Dynamic according to blocktype
+            if recordType == 71:
+                blockSubType = struct.unpack(
+                                '>' + TYPE_UINT32,
+                                data[ 72 : 76 ] )[ 0 ]
+
+                self.logger.log(logging.TRACE, 'parsing start {0} offset: {1} parsing: {2}'.format(data, offset, data[72:76]))
+                self.logger.log(logging.TRACE, 'parsing blockType {0}'.format(blockSubType))
+
+                if blockSubType == 160 :
+                    attributes = RECORDS[  1060 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'IPS BLOCK {0} attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 163 :
+                    attributes = RECORDS[ 1061 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 168 :
+                    attributes = RECORDS[ 1067 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 173 :
+                    attributes = RECORDS[ 1070 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 174 :
+                    attributes = RECORDS[ 1071 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+                else :
+                    attributes = RECORDS[ 1071 ][ 'attributes' ]
+
+                    self.logger.error( 'Unsupported Record/Block Type: Record={0} BlockType={1}'.format( recordType, blockType ) )
+                
+
+            elif recordType == 400 :
+                blockSubType = struct.unpack(
+                                '>' + TYPE_UINT32,
+                                data[ 16 : 20 ] )[ 0 ] 
+                self.logger.log(logging.TRACE, 'parsing blockType {0}'.format(blockSubType))
+
+                if blockSubType == 60 :
+                    attributes = RECORDS[  401 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'IPS BLOCK {0} attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 81 :
+                    attributes = RECORDS[ 402 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 85 :
+                    attributes = RECORDS[ 400 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                else :
+                    attributes = RECORDS[ recordType ][ 'attributes' ]
+
+                    self.logger.error( 'Unsupported Record/Block Type: Record={0} BlockType={1}'.format( recordType, blockType ) )
+
             offset = self._parseAttributes( data, offset, attributes, record )
 
         except (AttributeError, ValueError) as ex:
@@ -419,10 +570,10 @@ class Binary( object ):
             return
 
         if offset != recordLength:
-            msg = '__parse(): Offset ({0}) != recordLength ({1}) for recordType {2}'.format(
+            msg = '__parse(): Offset ({0}) != recordLength ({1}) for recordType {2} blockType {3}'.format(
                 offset,
                 recordLength,
-                recordType)
+                recordType, blockType)
 
             if offset < recordLength:
                 self.logger.warning( msg )
@@ -436,11 +587,23 @@ class Binary( object ):
         ( recordType, recordLength ) = struct.unpack( '>LL', data[0:8] )
 
         self.recordType = recordType
+        blockType = 0
+        #struct.unpack('>'+TYPE_UINT32, data[8:12])[0] epoch time for IPS events
+        #struct.unpack('>'+TYPE_UINT32, data[12:16])[0]  reserved IPS events
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log(
+                logging.TRACE,
+                '_eventHeader recordType={0} blockType={1} | data={2} | hex={3}'.format(
+                    recordType,
+                    blockType, data,  binascii.hexlify( data ) ))
 
         offset = 0
+
         record = {
             'recordType': recordType,
-            'recordLength': recordLength
+            'recordLength': recordLength,
+            'blockType': blockType
         }
 
         if len( data ) == ( 8 + recordLength ):
@@ -458,6 +621,22 @@ class Binary( object ):
 
         else:
             raise ParsingException('Invalid length')
+
+ #       if self.recordType == 400 :
+ #           (blockType, ) = struct.unpack('>'+TYPE_UINT32, data[16:20])
+ #       else :
+ #           (blockType, ) = struct.unpack('>'+TYPE_UINT32, data[offset: (offset + 4) ])
+
+#        self.blockType = blockType
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log(
+                logging.TRACE,
+                '_eventHeader recordType={0} blockType={1} | data={2} | hex={3}'.format(
+                    recordType,
+                    blockType, data,  binascii.hexlify( data ) ))
+
+#        record[ 'blockType' ]  = blockType
 
         self.offset = offset
         self.record = record
