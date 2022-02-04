@@ -43,12 +43,14 @@ MESSAGE_REQUEST_POLICY              = 1 << 29
 MESSAGE_REQUEST_EXTENDED            = 1 << 30
 
 # Extended requests
-MESSAGE_EXTENDED_REQUEST_INTRUSION      = { 'version': 9 , 'code': 12 }
+#MESSAGE_EXTENDED_REQUEST_INTRUSION_V64      = { 'version': 9 , 'code': 12 }
+MESSAGE_EXTENDED_REQUEST_INTRUSION      = { 'version': 11 , 'code': 12 }
 MESSAGE_EXTENDED_REQUEST_METADATA       = { 'version': 4 , 'code': 21 }
 MESSAGE_EXTENDED_REQUEST_CORRELATION    = { 'version': 9 , 'code': 31 }
 MESSAGE_EXTENDED_REQUEST_DISCOVERY      = { 'version': 11 , 'code': 61 }
-MESSAGE_EXTENDED_REQUEST_CONNECTION     = { 'version': 14 , 'code': 71 }
-MESSAGE_EXTENDED_REQUEST_USER           = { 'version': 4 , 'code': 91 }
+# version 14  prior
+MESSAGE_EXTENDED_REQUEST_CONNECTION     = { 'version': 16 , 'code': 71 }
+MESSAGE_EXTENDED_REQUEST_USER           = { 'version': 7 , 'code': 91 }
 MESSAGE_EXTENDED_REQUEST_MALWARE        = { 'version': 7 , 'code': 101 }
 MESSAGE_EXTENDED_REQUEST_FILE           = { 'version': 6 , 'code': 111 }
 MESSAGE_EXTENDED_REQUEST_IMPACT         = { 'version': 2 , 'code': 131 }
