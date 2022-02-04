@@ -445,12 +445,53 @@ RECORDS = {
         'category': u'RULE' },
 
     # 71
+
     RECORD_RNA_CONNECTION_STATISTICS: {
         'name': u'Connection Statistics',
         'attributes': [
             { 'discovery': True },
-            # This will be 160 or 163
-            { 'block': BLOCK_AUTO }],
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_71 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V60: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_60 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V61: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_61 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V67: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_67 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V70: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_70 }],
+        'category': u'RNA' },
+
+    RECORD_RNA_CONNECTION_STATISTICS_V71: {
+        'name': u'Connection Statistics',
+        'attributes': [
+            { 'discovery': True },
+            # This will be 160, 163, 168, 173 or 174
+            { 'block': BLOCK_CONNECTION_STATISTICS_71 }],
         'category': u'RNA' },
 
     # 73
@@ -614,7 +655,7 @@ RECORDS = {
         'name': u'User Removed Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_DATA_50, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
         'category': u'RUA' },
 
     # 94
@@ -622,7 +663,7 @@ RECORDS = {
         'name': u'New User Identification Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_INFORMATION_DATA_50, 'name': 'user'}],
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user'}],
         'category': u'RUA' },
 
     # 95
@@ -630,7 +671,7 @@ RECORDS = {
         'name': u'User Login Change Event',
         'attributes': [
             { 'discovery': True },
-            { 'block': BLOCK_USER_LOGIN_INFORMATION_54, 'name': 'user' },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'user' },
         ],
         'category': u'RUA' },
 
@@ -862,11 +903,21 @@ RECORDS = {
         'attributes': [ { 'block': BLOCK_IOC_NAME_53 } ],
         'category': u'IOC' },
 
-    # 170
-    VPN_LOGIN_EVENT: {
-        'name': u'VPN Login Data',
-        'attributes': [ { 'block': BLOCK_USER_LOGIN_INFORMATION_DATA_50 } ],
-        'category': u'VPN LOGIN' },
+    # 170 6.2+
+    RECORD_NEW_VPN_LOGIN: {
+        'name': u'New VPN Device Login',
+        'attributes': [
+            { 'discovery': True },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogin' }],
+        'category': u'VPN' },
+
+    # 171 6.2+
+    RECORD_NEW_VPN_LOGOFF: {
+        'name': u'New VPN Device Logoff',
+        'attributes': [
+            { 'discovery': True },
+            { 'block': BLOCK_USER_INFORMATION_VPN_LOGOFF_62, 'name': 'userLogoff' }],
+        'category': u'VPN' },
 
     # 260
     METADATA_ICMP_TYPE: {
@@ -942,10 +993,28 @@ RECORDS = {
         'attributes': [ { 'block': BLOCK_METADATA_ID_LENGTH_NAME } ],
         'category': u'NETMAP DOMAIN' },
 
-    # 400
-    RECORD_INTRUSION_EVENT: {
+    # 400 V9
+    #RECORD_INTRUSION_EVENT: {
+    #    'name': u'Intrusion Event',
+    #    'attributes': [ { 'block': BLOCK_INTRUSION_EVENT_60 } ],
+    #    'category': u'IPS EVENT' },
+
+    # 401 V9
+    RECORD_INTRUSION_EVENT_V9: {
         'name': u'Intrusion Event',
         'attributes': [ { 'block': BLOCK_INTRUSION_EVENT_60 } ],
+        'category': u'IPS EVENT' },
+
+    # 402 V10
+    RECORD_INTRUSION_EVENT_V10: {
+        'name': u'Intrusion Event',
+        'attributes': [ { 'block': BLOCK_INTRUSION_EVENT_81 } ],
+        'category': u'IPS EVENT' },
+
+    # 400 V11
+    RECORD_INTRUSION_EVENT: {
+        'name': u'Intrusion Event',
+        'attributes': [ { 'block': BLOCK_INTRUSION_EVENT_85 } ],
         'category': u'IPS EVENT' },
 
     # 500
