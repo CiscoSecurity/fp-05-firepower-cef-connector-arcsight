@@ -16,9 +16,13 @@
 #
 #*********************************************************************/
 
+from __future__ import absolute_import
 from estreamer.definitions.blocks_series1 import BLOCK_STRING
+from estreamer.definitions.blocks_series1 import BLOCK_METADATA_ID_LENGTH_NAME
+from estreamer.definitions.core import TYPE_VARIABLE
 from estreamer.definitions.blocks_series1 import BLOCK_BLOB
 from estreamer.definitions.core import TYPE_BYTE
+from estreamer.definitions.core import TYPE_UINT8
 from estreamer.definitions.core import TYPE_UINT16
 from estreamer.definitions.core import TYPE_UINT32
 from estreamer.definitions.core import TYPE_UINT64
@@ -51,6 +55,8 @@ BLOCK_USER_60                               = 57 | BLOCK_SERIES_2_SHIM
 BLOCK_ENDPOINT_PROFILE_60                   = 58 | BLOCK_SERIES_2_SHIM
 BLOCK_ACCESS_CONTROL_POLICY_RULE_REASON_60  = 59 | BLOCK_SERIES_2_SHIM
 BLOCK_INTRUSION_EVENT_60                    = 60 | BLOCK_SERIES_2_SHIM
+BLOCK_INTRUSION_EVENT_81                    = 81 | BLOCK_SERIES_2_SHIM
+BLOCK_INTRUSION_EVENT_85                    = 85 | BLOCK_SERIES_2_SHIM
 BLOCK_ID_NAME_DESCRIPTION                   = 61 | BLOCK_SERIES_2_SHIM
 BLOCK_MALWARE_EVENT_60                      = 62 | BLOCK_SERIES_2_SHIM
 BLOCK_ACCESS_CONTROL_POLICY_METADATA        = 64 | BLOCK_SERIES_2_SHIM
@@ -178,6 +184,7 @@ BLOCKS_SERIES_2 = {
         { 'type': TYPE_BYTE, 'name': 'impactFlags' },
         { 'type': TYPE_BYTE, 'name': 'impact' },
         { 'type': TYPE_BYTE, 'name': 'blocked' },
+        { 'type': TYPE_BYTE, 'name': 'blockedReasonId'},
         { 'type': TYPE_UINT32, 'name': 'mplsLabel' },
         { 'type': TYPE_UINT16, 'name': 'vlanId' },
         { 'type': TYPE_UINT16, 'name': 'pad' },
@@ -402,4 +409,116 @@ BLOCKS_SERIES_2 = {
         { 'type': TYPE_UUID, 'name': 'uuid' },
         { 'type': TYPE_UINT32, 'name': 'sensorId' },
         { 'block': BLOCK_STRING, 'name': 'name' } ],
+
+   # 81
+    BLOCK_INTRUSION_EVENT_81: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UINT32, 'name': 'eventId' },
+        { 'type': TYPE_UINT32, 'name': 'eventSecond' },
+        { 'type': TYPE_UINT32, 'name': 'eventMicrosecond' },
+        { 'type': TYPE_UINT32, 'name': 'ruleId' },
+        { 'type': TYPE_UINT32, 'name': 'generatorId' },
+        { 'type': TYPE_UINT32, 'name': 'ruleRevision' },
+        { 'type': TYPE_UINT32, 'name': 'classificationId' },
+        { 'type': TYPE_UINT32, 'name': 'priorityId' },
+        { 'type': TYPE_IPV6, 'name': 'sourceIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'destinationIpAddress' },
+        { 'type': TYPE_UINT16, 'name': 'sourcePortOrIcmpType' },
+        { 'type': TYPE_UINT16, 'name': 'destinationPortOrIcmpType' },
+        { 'type': TYPE_BYTE, 'name': 'ipProtocolId' },
+        { 'type': TYPE_BYTE, 'name': 'impactFlags' },
+        { 'type': TYPE_BYTE, 'name': 'impact' },
+        { 'type': TYPE_BYTE, 'name': 'blocked' },
+        { 'type': TYPE_BYTE, 'name': 'blockedReasonId'},
+        { 'type': TYPE_UINT32, 'name': 'mplsLabel' },
+        { 'type': TYPE_UINT16, 'name': 'vlanId' },
+        { 'type': TYPE_UINT16, 'name': 'pad' },
+        { 'type': TYPE_UUID, 'name': 'policyUuid' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' },
+        { 'type': TYPE_UINT32, 'name': 'accessControlRuleId' },
+        { 'type': TYPE_UUID, 'name': 'accessControlPolicyUuid' },
+        { 'type': TYPE_UUID, 'name': 'interfaceIngressUuid' },
+        { 'type': TYPE_UUID, 'name': 'interfaceEgressUuid' },
+        { 'type': TYPE_UUID, 'name': 'securityZoneIngressUuid' },
+        { 'type': TYPE_UUID, 'name': 'securityZoneEgressUuid' },
+        { 'type': TYPE_UINT32, 'name': 'connectionTimestamp' },
+        { 'type': TYPE_UINT16, 'name': 'connectionInstanceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT16, 'name': 'sourceCountry' },
+        { 'type': TYPE_UINT16, 'name': 'destinationCountry' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT128, 'name': 'securityContext' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'type': TYPE_UUID, 'name': 'networkAnalysisPolicyUuid' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse'},
+        { 'block': BLOCK_STRING, 'name': 'ingressVRFName' },
+        { 'block': BLOCK_STRING, 'name': 'engressVRFName' },
+        { 'type': TYPE_BYTE, 'name': 'snortVersion' }],
+
+   # 85
+    BLOCK_INTRUSION_EVENT_85: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UINT32, 'name': 'eventId' },
+        { 'type': TYPE_UINT32, 'name': 'eventSecond' },
+        { 'type': TYPE_UINT32, 'name': 'eventMicrosecond' },
+        { 'type': TYPE_UINT32, 'name': 'ruleId' },
+        { 'type': TYPE_UINT32, 'name': 'generatorId' },
+        { 'type': TYPE_UINT32, 'name': 'ruleRevision' },
+        { 'type': TYPE_UINT32, 'name': 'classificationId' },
+        { 'type': TYPE_UINT32, 'name': 'priorityId' },
+        { 'type': TYPE_IPV6, 'name': 'sourceIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'destinationIpAddress' },
+        { 'type': TYPE_UINT16, 'name': 'sourcePortOrIcmpType' },
+        { 'type': TYPE_UINT16, 'name': 'destinationPortOrIcmpType' },
+        { 'type': TYPE_BYTE, 'name': 'ipProtocolId' },
+        { 'type': TYPE_BYTE, 'name': 'impactFlags' },
+        { 'type': TYPE_BYTE, 'name': 'impact' },
+        { 'type': TYPE_BYTE, 'name': 'blocked' },
+        { 'type': TYPE_BYTE, 'name': 'blockedReasonId'},
+        { 'type': TYPE_UINT32, 'name': 'mplsLabel' },
+        { 'type': TYPE_UINT16, 'name': 'vlanId' },
+        { 'type': TYPE_UINT16, 'name': 'pad' },
+        { 'type': TYPE_UUID, 'name': 'policyUuid' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' },
+        { 'type': TYPE_UINT32, 'name': 'accessControlRuleId' },
+        { 'type': TYPE_UUID, 'name': 'accessControlPolicyUuid' },
+        { 'type': TYPE_UUID, 'name': 'interfaceIngressUuid' },
+        { 'type': TYPE_UUID, 'name': 'interfaceEgressUuid' },
+        { 'type': TYPE_UUID, 'name': 'securityZoneIngressUuid' },
+        { 'type': TYPE_UUID, 'name': 'securityZoneEgressUuid' },
+        { 'type': TYPE_UINT32, 'name': 'connectionTimestamp' },
+        { 'type': TYPE_UINT16, 'name': 'connectionInstanceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT16, 'name': 'sourceCountry' },
+        { 'type': TYPE_UINT16, 'name': 'destinationCountry' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT128, 'name': 'securityContext' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'type': TYPE_UUID, 'name': 'networkAnalysisPolicyUuid' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse'},
+        { 'block': BLOCK_STRING, 'name': 'ingressVRFName'},
+        { 'block': BLOCK_STRING, 'name': 'egressVRFName'},
+        { 'type': TYPE_BYTE, 'name': 'snortVersion' },
+        { 'type': TYPE_IPV6, 'name': 'originalSrcIP'},
+        { 'block': BLOCK_STRING, 'name': 'httpHostname'},
+        { 'block': BLOCK_STRING, 'name': 'httpURI'},
+        { 'block': BLOCK_STRING, 'name': 'smtpAttachments' },
+        { 'block': BLOCK_STRING, 'name': 'smtpFrom' },
+        { 'block': BLOCK_STRING, 'name': 'smtpHeaders' },
+        { 'block': BLOCK_STRING, 'name': 'smptTo'}],
+
 }
