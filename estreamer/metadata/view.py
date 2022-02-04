@@ -32,18 +32,23 @@ class View( object ):
     """
     OUTPUT_KEY = '@computed'
 
-
     ACTION = 'action'
     AGENT_USER = 'agentUser'
     APP_PROTO = 'applicationProtocol'
     ARCHIVE_FILE_STATUS = 'archiveFileStatus'
     BLOCKED = 'blocked'
+    BYTES_RECEIVED = 'bytesReceived'
+    BYTES_TRANSMITTED = 'bytesTransmitted'
     CLASSIFICATION_DESCRIPTION = 'classificationDescription'
     CLASSIFICATION_NAME = 'classificationName'
     CLIENT_APP = 'clientApplication'
+    CLIENT_IP = 'clientIp'
+    CLIENT_OS = 'clientOS'
     CLOUD = 'cloud'
+    CONNECTION_DURATION = 'connectionDuration'
     CORRELATION_RULE = 'correlationRule'
     CORRELATION_POLICY = 'correlationPolicy'
+    COUNTRY_CODE = 'countryCode'
     DATA = 'data'
     DESCRIPTION = 'description'
     DESTINATION_APP_PROTO = 'destinationApplicationProtocol'
@@ -58,12 +63,17 @@ class View( object ):
     DETECTOR = 'detector'
     DETECTION = 'detection'
     DETECTION_NAME = 'detectionName'
+    DEVICE_ID = 'deviceId'
     DIRECTION = 'direction'
     DISPOSITION = 'disposition'
     DNS_RECORD_NAME = 'dnsRecordName'
     DNS_RECORD_DESCRIPTION = 'dnsRecordDescription'
     DNS_RESPONSE_NAME = 'dnsResponseName'
     DNS_RESPONSE_DESCRIPTION = 'dnsResponseDescription'
+    DOMAIN = 'domain'
+    DURATION = 'connectionDuration'
+    END_PORT = 'endPort'
+    ENDPOINT_PROFILE_ID = 'endpointProfileId'
     EVENT_DESC = 'eventDescription'
     EVENT_SEC = 'eventSecond'
     EVENT_TYPE = 'eventType'
@@ -85,8 +95,10 @@ class View( object ):
     IFACE_EGRESS = 'egressInterface'
     IMPACT = 'impact'
     IMPACT_DESCRIPTION = 'impactDescription'
+    INDEX = 'index'
     IOC_CATEGORY = 'iocCategory'
     IP_PROTOCOL = 'transportProtocol'
+    LOGIN_TYPE = 'loginType'
     MALWARE_ANALYSIS_STATUS = 'malwareAnalysisStatus'
     MALWARE_EVENT_TYPE = 'malwareEventType'
     MALWARE_EVENT_SUBTYPE = 'malwareEventSubtype'
@@ -94,11 +106,12 @@ class View( object ):
     MSG = 'message'
     NET_PROTO = 'networkProtocol'
     NETWORK_ANALYSIS_POLICY = 'networkAnalysisPolicy'
-    ORIGINAL_CLIENT_SRC_IP = 'originalClientSrcIp'
+    ORIGINAL_CLIENT_SRC_IP = 'originalSrcIP'
     PARENT_DETECTION = 'parentDetection'
     PRIORITY = 'priority'
     PROTOCOL = 'protocol'
     REALM = 'realm'
+    REC_TYPE_CATEGORY = 'recordTypeCategory'
     REC_TYPE_DESCRIPTION = 'recordTypeDescription'
     REC_TYPE_SIMPLE = 'recordTypeCategory'
     RENDERED_ID = 'renderedId'
@@ -111,6 +124,7 @@ class View( object ):
     SEC_ZONE_INGRESS = 'ingressSecurityZone'
     SEC_ZONE_EGRESS = 'egressSecurityZone'
     SECURITY_GROUP = 'securityGroup'
+    SECURITY_GROUP_ID = 'securityGroupId'
     SENSOR = 'sensor'
     SINKHOLE = 'sinkhole'
     SOURCE = 'source'
@@ -134,14 +148,24 @@ class View( object ):
     SSL_SERVER_CERT_STATUS = 'sslServerCertificateStatus'
     SSL_URL_CATEGORY = 'sslUrlCategory'
     SSL_VERSION = 'sslVersion'
+    START_PORT = 'startPort'
     SUBTYPE = 'subtype'
     TYPE = 'type'
     UNHANDLED = 'unhandled'
     URL_CATEGORY = 'urlCategory'
     URL_REPUTATION = 'urlReputation'
     USER = 'user'
+    USER_AUTH_TYPE = 'userAuthType'
+    USER_ID = 'userId'
+    USER_LOGIN = 'userLogin'
+    VPN_CONNECTION_PROFILE = 'vpnConnectionProfile'
+    VPN_POLICY = 'groupPolicy'
+    VPN_PROFILE = 'vpnConnectionProfile'
+    VPN_SESSION = 'vpnSession'
+    VPN_TYPE = 'vpnType'
     WEB_APP = 'webApplication'
-
+    XFF_HTTP_URI = 'xffUri'
+    XFF_TYPE = 'xffType'
 
 
     AUTOMAP = {
@@ -205,15 +229,7 @@ class View( object ):
 
         # 95
         definitions.RUA_EVENT_CHANGE_USER_LOGIN: [
-            {
-                'cache': Cache.CLIENT_APPLICATIONS,
-                'id': ['user', 'applicationId'],
-                'view': CLIENT_APP
-            }, {
-                'cache': Cache.USERS,
-                'id': ['user', 'userId'],
-                'view': USER
-            }
+
             # These need to be added for version 6.0
             # , {
             #     'cache': Cache.REALMS,
@@ -233,7 +249,9 @@ class View( object ):
         self.data = {}
         self.logger = estreamer.crossprocesslogging.getLogger( __name__ )
 
-
+    def __addValue( self, key, value ):
+        if value:
+            self.data[ key ] = value
 
     def __addValueIfAvailable( self, key, cacheKeys ):
         value = self.cache.get( cacheKeys )
@@ -275,6 +293,20 @@ class View( object ):
             if not (char in hex_digits):
                 return False
         return True
+    
+    def __convertIPv6(self, extraData) :
+                            
+        h1 = extraData[0:4].decode('utf-8')
+        h2 = extraData[4:8].decode('utf-8')
+        h3 = extraData[8:12].decode('utf-8')
+        h4 = extraData[12:16].decode('utf-8')
+        h5 = extraData[16:20].decode('utf-8')
+        h6 = extraData[20:24].decode('utf-8')
+        h7 = extraData[24:28].decode('utf-8')
+        h8 = extraData[28:32].decode('utf-8')
+        ipv6 = h1 + ':' + h2 + ':' + h3 + ':' + h4 + ':' + h5 + ':' + h6 + ':' + h7 +  ':' + h8
+             
+        return ipv6
 
     def create( self ):
         """Creates a dictionary with all appropriate record decorations"""
@@ -492,12 +524,6 @@ class View( object ):
                         record['policyRevision'],
                         value] )
 
-        elif recordTypeId == definitions.RUA_EVENT_NEW_USER:
-            # 94
-            self.__addValueIfAvailable(
-                View.USER,
-                [ Cache.USERS, record['user']['userId']] )
-
         elif recordTypeId == definitions.RECORD_RUA_USER:
             # 98
             self.__addValueIfAvailable(
@@ -528,33 +554,36 @@ class View( object ):
 
         elif recordTypeId == definitions.RECORD_INTRUSION_EXTRA_DATA:
             # 110
-            self.data[ View.DATA ] = record['blob']['data']
-            if(len(str(record['blob']['data']))==32) :
-                hex32 = str(record['blob']['data'])
+            extraData = record['blob']['data']
 
-                if(self.__isHex(hex32)) :
-                    if(hex32[0:20]=="00000000000000000000") : #ipv4
-                        d1 = str(int(hex32[24:26],16))
-                        d2 = str(int(hex32[26:28],16))
-                        d3 = str(int(hex32[28:30],16))
-                        d4 = str(int(hex32[30:32],16))
-                        ipv4 = d1 + "." + d2 +"." + d3 + "." + d4
-                        self.data[ View.ORIGINAL_CLIENT_SRC_IP ] = ipv4
-                    else :
-                        h1 = str(hex32[0:4])
-                        h2 = str(hex32[4:8])
-                        h3 = str(hex32[8:12])
-                        h4 = str(hex32[12:16])
-                        h5 = str(hex32[16:20])
-                        h6 = str(hex32[20:24])
-                        h7 = str(hex32[24:28])
-                        h8 = str(hex32[28:32])
-                        ipv6 = h1 + ":" + h2 + ":" + h3 + ":" + h4 + ":" + h5 + ":" + h6 + ":" + h7 +  ":" + h8
+            if record['type'] == 2 :
+                if( extraData[0:20]==b'00000000000000000000' ) : #ipv4
+                    d1 = str(int(extraData[24:26].decode('utf-8'),16))
+                    d2 = str(int(extraData[26:28].decode('utf-8'),16))
+                    d3 = str(int(extraData[28:30].decode('utf-8'),16))
+                    d4 = str(int(extraData[30:32].decode('utf-8'),16))
+                    ipv4 = d1 + '.' + d2 + '.' + d3 + '.' + d4
+                    self.__addValue( View.ORIGINAL_SRC_IP, ipv4)
+                 
+                else :
+                    h1 = extraData[0:4].decode('utf-8')
+                    h2 = extraData[4:8].decode('utf-8')
+                    h3 = extraData[8:12].decode('utf-8')
+                    h4 = extraData[12:16].decode('utf-8')
+                    h5 = extraData[16:20].decode('utf-8')
+                    h6 = extraData[20:24].decode('utf-8')
+                    h7 = extraData[24:28].decode('utf-8')
+                    h8 = extraData[28:32].decode('utf-8')
+                    ipv6 = h1 + ':' + h2 + ':' + h3 + ':' + h4 + ':' + h5 + ':' + h6 + ':' + h7 +  ':' + h8
 
-                        self.data[ View.ORIGINAL_CLIENT_SRC_IP ] = ipv6
+                    self.__addValue( View.ORIGINAL_SRC_IP, ipv6)
+
+            elif record['type'] == 9 :
+                self.__addValue (View.XFF_HTTP_URI, extraData)
+
             self.__addValueIfAvailable(
-                View.TYPE,
-                [ Cache.XDATA_TYPES, record['type']] )
+                View.XFF_TYPE, 
+                [ Cache.XFF_TYPES, record['type']] )
 
         elif recordTypeId == definitions.RECORD_CORRELATION_EVENT:
             # 112
@@ -831,6 +860,123 @@ class View( object ):
             self.__addValueIfAvailable(
                 View.SSL_FLOW_STATUS,
                 [ Cache.SSL_FLOWS_STATUSES, record['sslFlowStatus'] ] )
+        
+        elif recordTypeId == definitions.RECORD_NEW_VPN_LOGIN:
+            #170
+            if 'items' in record['userLogin']['vpnSession'] :
+                if len(record['userLogin']['vpnSession']['items']) > 0 :
+
+                    vpnSession = record['userLogin']['vpnSession']['items'][0]
+
+                    #if 'index' in vpnSession
+                    #    self.__addValue( View.INDEX, vpnSession['index']  )
+                    if 'index' in vpnSession:
+                        self.__addValue( View.INDEX, vpnSession['index'] )
+
+                    if 'bytesReceived' in vpnSession :
+                        self.__addValue(
+                            View.BYTES_RECEIVED, vpnSession['bytesReceived'] )
+
+                    if 'bytesTransmitted' in vpnSession :
+                        self.__addValue(
+                            View.BYTES_TRANSMITTED, vpnSession['bytesTransmitted'] )
+
+                    if 'countryCode' in vpnSession :
+                        self.__addValue(
+                            View.COUNTRY_CODE, vpnSession['countryCode'] )
+
+                    if 'connectionDuration' in vpnSession :
+                        self.__addValue(
+                            View.DURATION, vpnSession['connectionDuration'] )
+
+                    if 'clientOS' in vpnSession :
+                        self.__addValue(
+                            View.CLIENT_OS, vpnSession['clientOS']['data']  )
+
+                    if 'clientIP' in vpnSession :
+
+                        ipv4 = self.__convertIPv6(vpnSession['clientIP'])
+
+                        self.__addValue(
+                            View.CLIENT_IP, ipv4 )
+
+                    if 'clientApplication' in vpnSession :
+                        self.__addValue(
+                            View.CLIENT_APP, vpnSession['clientApplication']['data']  )
+
+                    if 'groupPolicy' in vpnSession :
+                        self.__addValue(
+                            View.VPN_POLICY, vpnSession['groupPolicy']['data']  )
+
+                    self.__addValueIfAvailable(
+                        View.VPN_TYPE,
+                            [ Cache.VPN_TYPES, vpnSession['vpnType'] ] )
+
+            self.__addValueIfAvailable(
+                View.USER_AUTH_TYPE,
+                [ Cache.USER_AUTH_TYPES, record['userLogin']['authType']] )
+
+            self.__addValueIfAvailable(
+                View.PROTOCOL,
+                [ Cache.USER_PROTOCOLS, record['userLogin']['protocol']] )
+
+
+        elif recordTypeId == definitions.RECORD_NEW_VPN_LOGOFF:
+            #171
+            if 'items' in record['userLogoff']['vpnSession'] :
+                if len(record['userLogoff']['vpnSession']['items']) > 0 :
+
+                    vpnSession = record['userLogoff']['vpnSession']['items'][0] 
+
+                    if 'index' in vpnSession :
+                        self.__addValue(
+                            View.INDEX, vpnSession['index']  )
+
+                    if 'countryCode' in vpnSession :
+                        self.__addValue(
+                            View.COUNTRY_CODE, vpnSession['countryCode'] )
+
+                    if 'connectionDuration' in vpnSession :
+                        self.__addValue(
+                            View.DURATION, vpnSession['connectionDuration'] )
+
+                    if 'clientOS' in vpnSession :
+                        self.__addValue(
+                            View.CLIENT_OS, vpnSession['clientOS']['data']  )
+
+                    if 'bytesReceived' in vpnSession :
+                        self.__addValue(
+                            View.BYTES_RECEIVED, vpnSession['bytesReceived'] )
+
+                    if 'bytesTransmitted' in vpnSession :
+                        self.__addValue(
+                            View.BYTES_TRANSMITTED, vpnSession['bytesTransmitted'] )
+
+                    if 'clientIP' in vpnSession :
+                        ipv4 = self.__convertIPv6(vpnSession['clientIP'])
+
+                        self.__addValue(
+                            View.CLIENT_IP, ipv4 )
+
+                    if 'clientApplication' in vpnSession :
+                        self.__addValue(
+                            View.CLIENT_APP, vpnSession['clientApplication']['data']  )
+
+                    if 'groupPolicy' in vpnSession :
+                        self.__addValue(
+                            View.VPN_POLICY, vpnSession['groupPolicy']['data']  )
+   
+                        self.__addValueIfAvailable(
+                            View.VPN_TYPE,
+                            [ Cache.VPN_TYPES, vpnSession['vpnType'] ] )
+
+            self.__addValueIfAvailable(
+                View.USER_AUTH_TYPE,
+                [ Cache.USER_AUTH_TYPES, record['userLogoff']['authType'] ] )
+
+            self.__addValueIfAvailable(
+                View.PROTOCOL,
+                [ Cache.IP_PROTOCOLS, record['userLogoff']['protocol']] )
 
         elif recordTypeId == definitions.METADATA_ICMP_TYPE:
             # 260
@@ -978,7 +1124,7 @@ class View( object ):
 
             self.__addValueIfAvailable(
                 View.DISPOSITION,
-                [ Cache.FILE_DISPOSITIONS, record['disposition']] )
+                [ Cache.DISPOSITIONS, record['disposition']] )
 
             self.__addValueIfAvailable(
                 View.SPERO_DISPOSITION,
