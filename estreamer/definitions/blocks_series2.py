@@ -276,7 +276,7 @@ BLOCKS_SERIES_2 = {
         { 'type': TYPE_UINT32, 'name': 'blockLength' },
         { 'type': TYPE_UINT32, 'name': 'id' },
         { 'type': TYPE_UINT32, 'name': 'protocol' },
-        { 'block': BLOCK_STRING, 'name': 'name' }],
+        { 'block': BLOCK_STRING, 'name': 'username' }],
 
     # 58
     BLOCK_ENDPOINT_PROFILE_60: [
