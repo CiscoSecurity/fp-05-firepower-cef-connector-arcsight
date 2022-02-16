@@ -432,6 +432,10 @@ class Binary( object ):
                         self.logger.log ( logging.TRACE, 'username(len): {0}|size: {1}|data: {1}'.format (recLenBytes, nameLength, data[32: maxLength])  )
 
                         context['username'] = name.decode('utf-8')
+                        if (len(name) > 0 ) :
+                            username = str(context['username'])
+                            context['username'] = username.rstrip(username[-1])
+
                         self.logger.log( logging.TRACE, 'username : {0}'.format(name) )
                         offset = maxLength
 
