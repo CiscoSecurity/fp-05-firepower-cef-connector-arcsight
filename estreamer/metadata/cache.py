@@ -228,7 +228,7 @@ class Cache( object ):
         definitions.RECORD_RUA_USER: {
             'cache': USERS,
             'id': 'id',
-            'value': 'name.data' },
+            'value': 'username' },
 
         # 109
         definitions.RECORD_RNA_WEB_APPLICATION_PAYLOAD: {
