@@ -903,9 +903,7 @@ FIELD_MAPPING = {
         'blockType': u'',
         'protocol': u'ip_proto',
         'id': u'id',
-        'name.blockLength': u'',
-        'name.blockType': u'',
-        'name.data': u'name'},
+        'username': u'username'},
 
     # 101
     definitions.RECORD_RNA_NEW_OS: {
