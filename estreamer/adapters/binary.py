@@ -418,7 +418,7 @@ class Binary( object ):
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
                    
 
-                    if recordType == 98 or recordType == 62:
+                    if recordType == 98 :
                         maxLen = len(data)
 
                         context['id'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
