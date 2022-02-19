@@ -370,24 +370,37 @@ class Binary( object ):
                         raise ParsingException( 'Unknown type: {0}'.format( attributeType ) )
                         
                     if recordType == 98 :
-                        recLen = int(context['recordLength'])
                         maxLen = len(data)
-                        size = len(data[recLen: maxLen])
-                        
-                        context['id'] = struct.unpack('>'+TYPE_UINT32, data[12:16])[0]
-                        context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
-                        context['name'] = struct.unpack('>'+str(size)+'s',data[recLen: maxLen])[0]
-                        offset = maxLen
+
+                        context['id'] = struct.unpack('>'+TYPE_UINT32, data[16:20])[0]
+                        context['protocol'] = struct.unpack('>'+TYPE_UINT32, data[20:24])[0]
+
+                        #24-28  Type always 0
+                        recLenBytes = struct.unpack('>'+TYPE_UINT32, data[28:32])[0]
+                        nameLength = int( recLenBytes - 8 )  # 24 - 8
+                        maxLength = int(nameLength + 32)
+                        name = struct.unpack('>'+str(nameLength)+'s',data[32: maxLength])[0]
+                        self.logger.log ( logging.TRACE, 'username(len): {0}|size: {1}|data: {1}'.format (recLenBytes, nameLength, data[32: maxLength])  )
+
+                        context['username'] = name.decode('utf-8')
+                        if (len(name) > 0 ) :
+                            username = str(context['username'])
+                            context['username'] = username.rstrip(username[-1])
+
+                        self.logger.log( logging.TRACE, 'username : {0}'.format(name) )
+                        offset = maxLength
 
                     else:     
                         try:
+                            self.logger.log( logging.TRACE, 'unpacking binary data {0}'.format(attributeName) )
                             context[ attributeName ] = struct.unpack(
-                                '>' + attributeType,
-                                data[ offset : offset + byteLength ] )[ 0 ]
+                                 '>' + attributeType, data[ offset : offset + byteLength ] )[ 0 ]
                             offset += byteLength
+
                         except struct.error:
                             hData = binascii.hexlify( data[ offset: offset + byteLength ] )
                             hexData = binascii.hexlify( data )
+
                             raise ParsingException('Error Decoding binary for rec_type={0} attr={1} type={2} data={3} data_full={4}'.format( recordType, attributeName, attributeType, hData, hexData ) )
 
             elif 'list' in attribute:
