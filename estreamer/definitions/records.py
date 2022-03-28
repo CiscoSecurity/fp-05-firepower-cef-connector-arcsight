@@ -36,6 +36,19 @@ RECORDS = {
             { 'type': TYPE_VARIABLE, 'length': 'packetLength', 'name': 'packetData'}],
         'category': u'PACKET' },
 
+    RECORD_EMPTY_PACKET: {
+        'name': u'Packet Data (Empty)',
+        'attributes': [
+            { 'type': TYPE_UINT32, 'name': 'deviceId' },
+            { 'type': TYPE_UINT32, 'name': 'eventId' },
+            { 'type': TYPE_UINT32, 'name': 'eventSecond' },
+            { 'type': TYPE_UINT32, 'name': 'packetSecond' },
+            { 'type': TYPE_UINT32, 'name': 'packetMicrosecond' },
+            { 'type': TYPE_UINT32, 'name': 'linkType' },
+            { 'type': TYPE_UINT32, 'name': 'packetLength' },
+            { 'type': TYPE_VARIABLE, 'length': 0, 'name': 'packetData'}],
+        'category': u'PACKET' },
+
     # 4
     RECORD_PRIORITY: {
         'name': u'Priority Metadata',
