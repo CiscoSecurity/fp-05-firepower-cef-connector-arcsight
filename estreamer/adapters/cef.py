@@ -107,8 +107,12 @@ def __ipv6( ipAddress ):
 
 
 
-def __packetData( data ):
+def __packetData( data , packetLength):
     payload = ''
+
+    if packetLength == 0 :
+        return payload
+
     packet = estreamer.common.Packet.createFromHex( data )
 
     if PACKET_ENCODING == 'ascii':
@@ -144,7 +148,7 @@ MAPPING = {
             'rt': lambda rec: rec['eventSecond'] * 1000,
             'start': lambda rec: rec['packetSecond'] * 1000,
             'deviceExternalId': lambda rec: rec['deviceId'],
-            'cs1': lambda rec: __packetData( rec['packetData'] )
+            'cs1': lambda rec: __packetData( rec['packetData'], rec['packetLength'] )
         },
 
         'fields': {
