@@ -16,6 +16,7 @@
 #
 #*********************************************************************/
 from __future__ import absolute_import
+import estreamer.crossprocesslogging as logging
 import binascii
 import struct
 
@@ -35,11 +36,24 @@ class Packet( object ):
     def __init__( self, data ):
         self.data = data
         self.layer3HeaderLength = 0
+        self.logger = logging.getLogger( __name__ )
 
     def __getNyble( self, indexNyble ):
         byteIndex = int(indexNyble/2)
-        #byte = struct.unpack( '>B', self.data[byteIndex] )[0]
-        byte = self.data[byteIndex]  #Python3 read ensures this is already in a binary format
+
+        if self.logger.isEnabledFor( logging.TRACE ):
+            self.logger.log( logging.TRACE, 'Packet Helper Info: byteIndex: {0} data: {1}'.format(byteIndex, self.data))
+        try :
+            byte = struct.unpack( '>B', self.data[byteIndex:(byteIndex + 1)] )[0]
+
+        except struct.error:
+            self.logger.log( logging.INFO, 'Unable to decode {0}'.format(self.data[byteIndex:byteIndex+1]) )
+            raise TypeError('Packet Decoding Error')
+            return ''
+        byte = ''
+#        byte = struct.unpack( '>B', self.data[byteIndex:(byteIndex + 1)] )[0]
+
+
         if indexNyble % 2 == 0:
             mask = 0b11110000
             return ( byte & mask ) >> 4
@@ -52,6 +66,7 @@ class Packet( object ):
                 Packet.LAYER2_HEADER_LENGTH * 2 +
                 Packet.IP_HEADER_LENGTH_NYBLE )
 
+            self.logger.log( logging.TRACE, 'Packet Helper __getLayer3HeaderLength: ipOffsetNyble {0} data: {1}'.format(ipOffsetNyble, self.data))
             self.layer3HeaderLength = (
                 self.__getNyble( ipOffsetNyble ) *
                 Packet.WORDS_TO_BYTES_FACTOR )
@@ -74,6 +89,7 @@ class Packet( object ):
                 self.__getLayer3HeaderLength() * 2 +
                 Packet.TCP_HEADER_LENGTH_NYBLE )
 
+            self.logger.log( logging.TRACE, 'Packet Helper __getLayer4HeaderLength tcpOffsetNyble: {0} data: {1}'.format(tcpOffsetNyble, self.data))
             return (
                 self.__getNyble( tcpOffsetNyble ) *
                 Packet.WORDS_TO_BYTES_FACTOR )
