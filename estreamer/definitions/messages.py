@@ -55,3 +55,4 @@ MESSAGE_EXTENDED_REQUEST_MALWARE        = { 'version': 7 , 'code': 101 }
 MESSAGE_EXTENDED_REQUEST_FILE           = { 'version': 6 , 'code': 111 }
 MESSAGE_EXTENDED_REQUEST_IMPACT         = { 'version': 2 , 'code': 131 }
 MESSAGE_EXTENDED_REQUEST_TERMINATE      = { 'version': 0 , 'code': 0 }
+
