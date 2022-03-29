@@ -327,3 +327,4 @@ class Settings( object ):
 
     def toBase64( self ):
         return base64dump( self.store )
+    
