@@ -29,3 +29,5 @@ class OutputterSettings( object ):
             self.passthru = outputterSettings['passthru']
 
         self.stream = StreamSettings( outputterSettings['stream'] )
+
+        
