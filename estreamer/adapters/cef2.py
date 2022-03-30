@@ -107,8 +107,12 @@ def __ipv6( ipAddress ):
 
 
 
-def __packetData( data ):
+def __packetData( data , packetLength):
     payload = ''
+
+    if packetLength == 0 :
+        return payload
+
     packet = estreamer.common.Packet.createFromHex( data )
 
     if PACKET_ENCODING == 'ascii':
@@ -121,9 +125,7 @@ def __packetData( data ):
         payload = packet.getPayloadAsHex()
 
     else:
-        #default to ascii
-        payload = packet.getPayloadAsAscii()
-        #raise estreamer.EncoreException( 'Unknown packet encoding' )
+        raise estreamer.EncoreException( 'Unknown packet encoding' )
 
     return payload[ 0 : PACKET_LENGTH_MAX ]
 
@@ -146,7 +148,7 @@ MAPPING = {
             'rt': lambda rec: rec['eventSecond'] * 1000,
             'start': lambda rec: rec['packetSecond'] * 1000,
             'deviceExternalId': lambda rec: rec['deviceId'],
-            'cs1': lambda rec: __packetData( rec['packetData'] )
+            'cs1': lambda rec: __packetData( rec['packetData'], rec['packetLength'] )
         },
 
         'fields': {
@@ -221,6 +223,8 @@ MAPPING = {
             'qosRuleId': '',
             'userId': 'suser',
             'applicationId': 'app',
+            'urlCategory': 'urlCategory',
+            'urlReputation': 'urlReputation',
             'clientApplicationId': 'requestClientApplication',
             'webApplicationId': '',
             'clientUrl.data': 'request',
@@ -281,9 +285,7 @@ MAPPING = {
             'dnsQuery.data': 'destinationDnsDomain',
             'dnsRecordType': '',
             'dnsResponseType': '',
-            'urlCategory': 'urlCategory',
-            'urlReputation': 'urlReputation',
-            'dnsTtl': 'dnsTtl',
+            'dnsTtl': '',
             'sinkholeUuid': '',
             'securityIntelligenceList1': 'cs5',
             'securityIntelligenceList2': ''
@@ -301,9 +303,9 @@ MAPPING = {
             View.FW_RULE_ACTION: 'act',
             View.FW_RULE_REASON: 'reason',
             View.PROTOCOL: 'proto',
-            View.USER: 'suser',
-            View.URL_REPUTATION: 'urlReputation',
             View.URL_CATEGORY: 'urlCategory',
+            View.URL_REPUTATION: 'urlReputation',
+            View.USER: 'suser',
             View.APP_PROTO: 'app',
             View.CLIENT_APP: 'requestClientApplication',
         },
@@ -564,14 +566,14 @@ MAPPING = {
             'generatorId': '', # Used to generate sig_id
             'ruleRevision': '',
             'classificationId': 'cat',
-            'priorityId': 'priorityId', # Used to generate severity
+            'priorityId': '', # Used to generate severity
             'sourceIpAddress': '',
             'destinationIpAddress': '',
             'sourcePortOrIcmpType': 'spt',
             'destinationPortOrIcmpType': 'dpt',
             'ipProtocolId': 'proto',
-            'impactFlags': 'impactFlags',
-            'impact': 'impact', # Used to generate severity
+            'impactFlags': '',
+            'impact': 'cn2', # Used to generate severity
             'blocked': 'act',
             'mplsLabel': '',
             'vlanId': 'cn1',
@@ -598,7 +600,6 @@ MAPPING = {
             'sslActualAction': '',
             'sslFlowStatus': '',
             'networkAnalysisPolicyUuid': '',
-            'priority': 'priority',
             'httpResponse': '',
         },
     },
@@ -692,7 +693,7 @@ MAPPING[ definitions.RECORD_FILELOG_MALWARE_EVENT ]['sig_id'] = lambda rec: 'Fil
 
 
 
-class Cef2( object ):
+class Cef( object ):
     """Cef adapter class to contain implementation"""
     def __init__( self, source ):
         self.source = source
@@ -756,7 +757,7 @@ class Cef2( object ):
                 del self.output[ key ]
 
             else:
-                self.output[ key ] = Cef2.__sanitize( self.output[ key ] )
+                self.output[ key ] = Cef.__sanitize( self.output[ key ] )
 
 
 
@@ -821,5 +822,7 @@ class Cef2( object ):
 
 def dumps( source ):
     """Converts a source record into a CEF message"""
-    cef2Adapter = Cef2( source )
-    return cef2Adapter.dumps()
+    cefAdapter = Cef2( source )
+    return cef2dapter.dumps()
+
+
