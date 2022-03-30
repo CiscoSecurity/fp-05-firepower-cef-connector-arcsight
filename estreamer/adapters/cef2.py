@@ -757,7 +757,7 @@ class Cef2( object ):
                 del self.output[ key ]
 
             else:
-                self.output[ key ] = Cef.__sanitize( self.output[ key ] )
+                self.output[ key ] = Cef2.__sanitize( self.output[ key ] )
 
 
 
