@@ -441,7 +441,7 @@ class Binary( object ):
 
                     else:     
                         try:
-                            self.logger.log( logging.TRACE, 'unpacking binary data {0} offset: {1} byteLength: {2}'.format(attributeName, offset, byteLength) )
+                            self.logger.log( logging.TRACE, 'unpacking binary data {0}'.format(attributeName) )
                             context[ attributeName ] = struct.unpack(
                                  '>' + attributeType, data[ offset : offset + byteLength ] )[ 0 ]
                             offset += byteLength
@@ -503,38 +503,7 @@ class Binary( object ):
             attributes = RECORDS[ recordType ][ 'attributes' ]
 
             #Dynamic according to blocktype
-            if recordType == 2:
-
-                dataSize = len(data)
-                self.logger.log(logging.TRACE, 'data: {0}'.format(data) )
-
-                self.logger.log(logging.TRACE, 'packet data array size {0}: '.format(dataSize) )
-
-                messageLength = struct.unpack( '>' + TYPE_UINT32, data[ 8: 12])[0]
-                self.logger.log(logging.TRACE, 'packet record messageLength {0}: '.format(messageLength) )
-
-                deviceId = struct.unpack( '>' + TYPE_UINT32, data[ 12: 16])[0]
-                self.logger.log(logging.TRACE, 'packet record deviceId: {0}'.format(deviceId) )
-
-                eventId = struct.unpack( '>' + TYPE_UINT32, data[ 20: 24])[0]
-                self.logger.log(logging.TRACE, 'packet record eventId: {0}'.format(eventId) )
-
-                eventSec = struct.unpack( '>' + TYPE_UINT32, data[ 24: 28])[0]
-                self.logger.log(logging.TRACE, 'packet record eventSec: {0}'.format(eventSec) )
-
-                packetSec = struct.unpack( '>' + TYPE_UINT32, data[ 28: 32])[0]
-                self.logger.log(logging.TRACE, 'packet record packetSec: {0}'.format(packetSec) )
-
-                packetMicroSec = struct.unpack( '>' + TYPE_UINT32, data[ 32: 36])[0]
-                self.logger.log(logging.TRACE, 'packet record packetMicroSec: '.format(packetMicroSec) )
-
-                linkType = struct.unpack( '>' + TYPE_UINT32, data[ 36: 40])[0]
-                self.logger.log(logging.TRACE, 'packet record linkType: '.format(linkType) )
-
-                packetLength = struct.unpack( '>' + TYPE_UINT32, data[ 40: 44])[0]
-                self.logger.log(logging.TRACE, 'packet record packetLength: '.format(packetLength) )
-
-            elif recordType == 71:
+            if recordType == 71:
                 blockSubType = struct.unpack(
                                 '>' + TYPE_UINT32,
                                 data[ 72 : 76 ] )[ 0 ]
@@ -570,6 +539,7 @@ class Binary( object ):
                     attributes = RECORDS[ 1071 ][ 'attributes' ]
 
                     self.logger.error( 'Unsupported Record/Block Type: Record={0} BlockType={1}'.format( recordType, blockType ) )
+                
 
             elif recordType == 400 :
                 blockSubType = struct.unpack(
