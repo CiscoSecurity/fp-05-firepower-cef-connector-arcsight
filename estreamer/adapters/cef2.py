@@ -823,6 +823,6 @@ class Cef( object ):
 def dumps( source ):
     """Converts a source record into a CEF message"""
     cefAdapter = Cef2( source )
-    return cef2dapter.dumps()
+    return cefAdapter.dumps()
 
 
