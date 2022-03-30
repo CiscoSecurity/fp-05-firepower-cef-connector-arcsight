@@ -693,7 +693,7 @@ MAPPING[ definitions.RECORD_FILELOG_MALWARE_EVENT ]['sig_id'] = lambda rec: 'Fil
 
 
 
-class Cef( object ):
+class Cef2( object ):
     """Cef adapter class to contain implementation"""
     def __init__( self, source ):
         self.source = source
