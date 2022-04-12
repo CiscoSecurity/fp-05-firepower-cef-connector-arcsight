@@ -78,6 +78,7 @@ FIELD_MAPPING = {
         View.EVENT_USEC: 'event_usec',
         View.FILE_ACTION: 'file_action',
         View.FILE_POLICY: 'file_policy',
+        View.FILE_ANALYSIS_STATUS: 'file_analysis_status',
         View.FILE_STORAGE_STATUS: 'file_storage_status',
         View.FILE_SANDBOX_STATUS: 'file_sandbox_status',
         View.FILE_TYPE: 'file_type',
@@ -1512,6 +1513,7 @@ FIELD_MAPPING = {
         'deviceId': u'device_id',
         'direction': u'direction',
         'disposition': u'disposition',
+        'engressVRF': u'iface_egress',
         'fileAnalysisStatus': u'file_sandbox_status',
         'fileEventTimestamp': u'event_sec',
         'fileName.blockLength': u'',
@@ -1521,6 +1523,7 @@ FIELD_MAPPING = {
         'fileStorageStatus': u'file_storage_status',
         'fileTypeId': u'file_type',
         'httpResponse': u'http_response',
+        'ingressVRF': u'iface_ingress',
         'localMalwareAnalysisStatus': u'malware_analysis_status',
         'protocol': u'ip_proto',
         'securityContext': u'security_context',
@@ -1717,6 +1720,9 @@ def __selectWithNewKeys( record ):
                     output[ newKey ] = source[ computedKey ][ key ]
 
     except KeyError as keyError:
+
+        logger = logging.getLogger( __name__ )
+
         raise estreamer.EncoreException(
             'Unable to map {0} field: {1}'.format(
                 View.OUTPUT_KEY,
@@ -1768,6 +1774,10 @@ def dumps( source ):
         line = '{0}{1}'.format(line, eventSec)
         del data['event_sec']
 
+        if(data['rec_type'] == 502) :
+            logger = logging.getLogger( __name__ )
+
+            logger.log(logging.INFO, 'Dumps | Line={0} | Event Sec {1} '.format(line, eventSec))
 
     del data['rec_type']
 
