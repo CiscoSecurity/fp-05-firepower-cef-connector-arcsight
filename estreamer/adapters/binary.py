@@ -545,7 +545,7 @@ class Binary( object ):
                 blockSubType = struct.unpack(
                                 '>' + TYPE_UINT32,
                                 data[ 16 : 20 ] )[ 0 ] 
-                self.logger.log(logging.TRACE, 'parsing blockType {0}'.format(blockSubType))
+                self.logger.log(logging.TRACE, 'parsing IPS_EVENT blockType {0}'.format(blockSubType))
 
                 if blockSubType == 60 :
                     attributes = RECORDS[  401 ]['attributes']
@@ -566,6 +566,36 @@ class Binary( object ):
                     attributes = RECORDS[ recordType ][ 'attributes' ]
 
                     self.logger.error( 'Unsupported Record/Block Type: Record={0} BlockType={1}'.format( recordType, blockType ) )
+
+            elif recordType == 500 :
+
+                blockSubType = struct.unpack(
+                                '>' + TYPE_UINT32,
+                                data[ 16 : 20 ] )[ 0 ] 
+                self.logger.log(logging.TRACE, 'parsing FILE_EVENT blockType {0}'.format(blockSubType))
+
+                if blockSubType == 79 :
+                    attributes = RECORDS[ 501 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing FILE event {0} : attributes={1}'.format(blockType, attributes))
+
+                else :
+                    attributes = RECORDS[ recordType ][ 'attributes' ]
+
+            elif recordType == 502 :
+
+                blockSubType = struct.unpack(
+                                '>' + TYPE_UINT32,
+                                data[ 16 : 20 ] )[ 0 ] 
+                self.logger.log(logging.INFO, 'parsing FILE_MALWARE_EVENT blockType {0}'.format(blockSubType))
+
+                if blockSubType == 79 :
+                    attributes = RECORDS[ 503 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing FILE_MALWARE event {0} : attributes={1}'.format(blockType, attributes))
+
+                else :
+                    attributes = RECORDS[ recordType ][ 'attributes' ]
 
             offset = self._parseAttributes( data, offset, attributes, record )
 
