@@ -52,6 +52,7 @@ MESSAGE_EXTENDED_REQUEST_DISCOVERY      = { 'version': 11 , 'code': 61 }
 MESSAGE_EXTENDED_REQUEST_CONNECTION     = { 'version': 16 , 'code': 71 }
 MESSAGE_EXTENDED_REQUEST_USER           = { 'version': 7 , 'code': 91 }
 MESSAGE_EXTENDED_REQUEST_MALWARE        = { 'version': 7 , 'code': 101 }
-MESSAGE_EXTENDED_REQUEST_FILE           = { 'version': 6 , 'code': 111 }
+# 7.x update
+MESSAGE_EXTENDED_REQUEST_FILE           = { 'version': 7 , 'code': 111 }
 MESSAGE_EXTENDED_REQUEST_IMPACT         = { 'version': 2 , 'code': 131 }
 MESSAGE_EXTENDED_REQUEST_TERMINATE      = { 'version': 0 , 'code': 0 }
