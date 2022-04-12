@@ -36,19 +36,6 @@ RECORDS = {
             { 'type': TYPE_VARIABLE, 'length': 'packetLength', 'name': 'packetData'}],
         'category': u'PACKET' },
 
-    RECORD_EMPTY_PACKET: {
-        'name': u'Packet Data (Empty)',
-        'attributes': [
-            { 'type': TYPE_UINT32, 'name': 'deviceId' },
-            { 'type': TYPE_UINT32, 'name': 'eventId' },
-            { 'type': TYPE_UINT32, 'name': 'eventSecond' },
-            { 'type': TYPE_UINT32, 'name': 'packetSecond' },
-            { 'type': TYPE_UINT32, 'name': 'packetMicrosecond' },
-            { 'type': TYPE_UINT32, 'name': 'linkType' },
-            { 'type': TYPE_UINT32, 'name': 'packetLength' },
-            { 'type': TYPE_VARIABLE, 'length': 0, 'name': 'packetData'}],
-        'category': u'PACKET' },
-
     # 4
     RECORD_PRIORITY: {
         'name': u'Priority Metadata',
@@ -1042,6 +1029,18 @@ RECORDS = {
         'attributes': [ { 'block': BLOCK_FILE_EVENT_60 } ],
         'category': u'FILELOG MALWARE EVENT' },
 
+    # 501 V11
+    RECORD_FILELOG_EVENT_V11: {
+        'name': u'File Event',
+        'attributes': [ { 'block': BLOCK_FILE_EVENT_79 } ],
+        'category': u'FILELOG EVENT' },
+
+    # 503 V11
+    RECORD_FILELOG_MALWARE_EVENT_V11: {
+        'name': u'File Malware Event',
+        'attributes': [ { 'block': BLOCK_FILE_EVENT_79 } ],
+        'category': u'FILELOG MALWARE EVENT' },
+
     # 510
     METADATA_FILELOG_FILE_TYPE: {
         'name': u'File Type ID Metadata',
@@ -1177,5 +1176,3 @@ RECORDS = {
             { 'block': BLOCK_STRING, 'name': 'name' }],
         'category': u'NAP NAME'}
 }
-
-
