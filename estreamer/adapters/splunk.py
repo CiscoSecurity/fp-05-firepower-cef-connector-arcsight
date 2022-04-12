@@ -1777,7 +1777,7 @@ def dumps( source ):
         if(data['rec_type'] == 502) :
             logger = logging.getLogger( __name__ )
 
-            logger.log(logging.INFO, 'Dumps | Line={0} | Event Sec {1} '.format(line, eventSec))
+            logger.log(logging.TRACE, 'Dumps | Line={0} | Event Sec {1} '.format(line, eventSec))
 
     del data['rec_type']
 
