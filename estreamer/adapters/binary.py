@@ -587,7 +587,7 @@ class Binary( object ):
                 blockSubType = struct.unpack(
                                 '>' + TYPE_UINT32,
                                 data[ 16 : 20 ] )[ 0 ] 
-                self.logger.log(logging.INFO, 'parsing FILE_MALWARE_EVENT blockType {0}'.format(blockSubType))
+                self.logger.log(logging.TRACE, 'parsing FILE_MALWARE_EVENT blockType {0}'.format(blockSubType))
 
                 if blockSubType == 79 :
                     attributes = RECORDS[ 503 ]['attributes']
