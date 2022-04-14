@@ -60,6 +60,7 @@ BLOCK_INTRUSION_EVENT_81                    = 81 | BLOCK_SERIES_2_SHIM
 BLOCK_INTRUSION_EVENT_85                    = 85 | BLOCK_SERIES_2_SHIM
 BLOCK_ID_NAME_DESCRIPTION                   = 61 | BLOCK_SERIES_2_SHIM
 BLOCK_MALWARE_EVENT_60                      = 62 | BLOCK_SERIES_2_SHIM
+BLOCK_MALWARE_EVENT_80                      = 80 | BLOCK_SERIES_2_SHIM
 BLOCK_ACCESS_CONTROL_POLICY_METADATA        = 64 | BLOCK_SERIES_2_SHIM
 
 BLOCKS_SERIES_2 = {
@@ -457,7 +458,61 @@ BLOCKS_SERIES_2 = {
         { 'type': TYPE_UINT32, 'name': 'httpResponse'},
         { 'block': BLOCK_STRING, 'name': 'ingressVRF'},
         { 'block': BLOCK_STRING, 'name': 'egressVRF'}],
-
+    # 80
+    BLOCK_MALWARE_EVENT_80: [
+        { 'type': TYPE_UINT32, 'name': 'blockType' },
+        { 'type': TYPE_UINT32, 'name': 'blockLength' },
+        { 'type': TYPE_UUID, 'name': 'agentUuid' },
+        { 'type': TYPE_UUID, 'name': 'cloudUuid' },
+        { 'type': TYPE_UINT32, 'name': 'malwareEventTimestamp' },
+        { 'type': TYPE_UINT32, 'name': 'eventTypeId' },
+        { 'type': TYPE_UINT32, 'name': 'eventSubtypeId' },
+        { 'type': TYPE_BYTE, 'name': 'detectorId' },
+        { 'block': BLOCK_STRING, 'name': 'detectionName' },
+        { 'block': BLOCK_STRING, 'name': 'user' },
+        { 'block': BLOCK_STRING, 'name': 'fileName' },
+        { 'block': BLOCK_STRING, 'name': 'filePath' },
+        { 'block': BLOCK_STRING, 'name': 'fileShaHash' },
+        { 'type': TYPE_UINT32, 'name': 'fileSize' },
+        { 'type': TYPE_UINT32, 'name': 'fileType' },
+        { 'type': TYPE_UINT32, 'name': 'fileTimestamp' },
+        { 'block': BLOCK_STRING, 'name': 'parentFileName' },
+        { 'block': BLOCK_STRING, 'name': 'parentShaHash' },
+        { 'block': BLOCK_STRING, 'name': 'eventDescription' },
+        { 'type': TYPE_UINT32, 'name': 'deviceId' },
+        { 'type': TYPE_UINT16, 'name': 'connectionInstance' },
+        { 'type': TYPE_UINT16, 'name': 'connectionCounter' },
+        { 'type': TYPE_UINT32, 'name': 'connectionEventTimestamp' },
+        { 'type': TYPE_BYTE, 'name': 'direction' },
+        { 'type': TYPE_IPV6, 'name': 'sourceIpAddress' },
+        { 'type': TYPE_IPV6, 'name': 'destinationIpAddress' },
+        { 'type': TYPE_UINT32, 'name': 'applicationId' },
+        { 'type': TYPE_UINT32, 'name': 'userId' },
+        { 'type': TYPE_UUID, 'name': 'accessControlPolicyUuid' },
+        { 'type': TYPE_BYTE, 'name': 'disposition' },
+        { 'type': TYPE_BYTE, 'name': 'retroDisposition' },
+        { 'block': BLOCK_STRING, 'name': 'uri' },
+        { 'type': TYPE_UINT16, 'name': 'sourcePort' },
+        { 'type': TYPE_UINT16, 'name': 'destinationPort' },
+        { 'type': TYPE_UINT16, 'name': 'sourceCountry' },
+        { 'type': TYPE_UINT16, 'name': 'destinationCountry' },
+        { 'type': TYPE_UINT32, 'name': 'webApplicationId' },
+        { 'type': TYPE_UINT32, 'name': 'clientApplicationId' },
+        { 'type': TYPE_BYTE, 'name': 'action' },
+        { 'type': TYPE_BYTE, 'name': 'protocol' },
+        { 'type': TYPE_BYTE, 'name': 'threatScore' },
+        { 'type': TYPE_UINT16, 'name': 'iocNumber' },
+        { 'type': TYPE_UINT128, 'name': 'securityContext' },
+        { 'type': TYPE_UINT160, 'name': 'sslCertificateFingerprint' },
+        { 'type': TYPE_UINT16, 'name': 'sslActualAction' },
+        { 'type': TYPE_UINT16, 'name': 'sslFlowStatus' },
+        { 'block': BLOCK_STRING, 'name': 'archiveSha' },
+        { 'block': BLOCK_STRING, 'name': 'archiveName' },
+        { 'type': TYPE_BYTE, 'name': 'archiveDepth' },
+        { 'type': TYPE_UINT32, 'name': 'httpResponse'},
+        { 'block': BLOCK_STRING, 'name': 'ingressVRF'},
+        { 'block': BLOCK_STRING, 'name': 'egressVRF'}],
+    
    # 81
     BLOCK_INTRUSION_EVENT_81: [
         { 'type': TYPE_UINT32, 'name': 'blockType' },
