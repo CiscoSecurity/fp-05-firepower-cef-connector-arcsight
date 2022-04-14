@@ -578,11 +578,7 @@ class Binary( object ):
                     attributes = RECORDS[ 501 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing FILE event {0} : attributes={1}'.format(blockType, attributes))
-
-                elif blockSubType == 80 :
-                    attributes = RECORDS[ 504 ]['attributes']
-
-                    self.logger.log(logging.TRACE, 'parsing FILE_MALWARE event {0} : attributes={1}'.format(blockType, attributes))
+                    
                 else :
                     attributes = RECORDS[ recordType ][ 'attributes' ]
 
@@ -593,13 +589,8 @@ class Binary( object ):
                                 data[ 16 : 20 ] )[ 0 ] 
                 self.logger.log(logging.TRACE, 'parsing FILE_MALWARE_EVENT blockType {0}'.format(blockSubType))
 
-                if blockSubType == 79 :
+                if blockSubType == 80 :
                     attributes = RECORDS[ 503 ]['attributes']
-
-                    self.logger.log(logging.TRACE, 'parsing FILE_MALWARE event {0} : attributes={1}'.format(blockType, attributes))
-
-                elif blockSubType == 80 :
-                    attributes = RECORDS[ 504 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing FILE_MALWARE event {0} : attributes={1}'.format(blockType, attributes))
                     
