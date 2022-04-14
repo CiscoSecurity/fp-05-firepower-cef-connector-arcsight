@@ -1038,7 +1038,7 @@ RECORDS = {
     # 503 V11
     RECORD_FILELOG_MALWARE_EVENT_V11: {
         'name': u'File Malware Event',
-        'attributes': [ { 'block': BLOCK_FILE_EVENT_79 } ],
+        'attributes': [ { 'block': BLOCK_FILE_EVENT_80 } ],
         'category': u'FILELOG MALWARE EVENT' },
 
     # 510
