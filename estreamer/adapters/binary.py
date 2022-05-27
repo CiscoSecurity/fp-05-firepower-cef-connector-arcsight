@@ -503,13 +503,14 @@ class Binary( object ):
             attributes = RECORDS[ recordType ][ 'attributes' ]
 
             #Dynamic according to blocktype
-            if recordType == 71:
+            if recordType == 71 or recordType == 210:
                 blockSubType = struct.unpack(
                                 '>' + TYPE_UINT32,
                                 data[ 72 : 76 ] )[ 0 ]
 
                 self.logger.log(logging.TRACE, 'parsing start {0} offset: {1} parsing: {2}'.format(data, offset, data[72:76]))
                 self.logger.log(logging.TRACE, 'parsing blockType {0}'.format(blockSubType))
+                self.logger.log(logging.TRACE, 'parsing recordTypeType {0}'.format(recordType))
 
                 if blockSubType == 160 :
                     attributes = RECORDS[  1060 ]['attributes']
@@ -526,13 +527,28 @@ class Binary( object ):
 
                     self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
 
-                elif blockSubType == 173 :
+                elif blockSubType == 169 :
+                    attributes = RECORDS[ 1069 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 170 :
                     attributes = RECORDS[ 1070 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
 
-                elif blockSubType == 174 :
+                elif blockSubType == 171 :
                     attributes = RECORDS[ 1071 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 173 :
+                    attributes = RECORDS[ 1073 ]['attributes']
+
+                    self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
+
+                elif blockSubType == 174 :
+                    attributes = RECORDS[ 1074 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing IPS event {0} : attributes={1}'.format(blockType, attributes))
                 else :
@@ -578,7 +594,7 @@ class Binary( object ):
                     attributes = RECORDS[ 501 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing FILE event {0} : attributes={1}'.format(blockType, attributes))
-                    
+
                 else :
                     attributes = RECORDS[ recordType ][ 'attributes' ]
 
@@ -589,11 +605,11 @@ class Binary( object ):
                                 data[ 16 : 20 ] )[ 0 ] 
                 self.logger.log(logging.TRACE, 'parsing FILE_MALWARE_EVENT blockType {0}'.format(blockSubType))
 
-                if blockSubType == 80 :
+                if blockSubType == 79 :
                     attributes = RECORDS[ 503 ]['attributes']
 
                     self.logger.log(logging.TRACE, 'parsing FILE_MALWARE event {0} : attributes={1}'.format(blockType, attributes))
-                    
+
                 else :
                     attributes = RECORDS[ recordType ][ 'attributes' ]
 
