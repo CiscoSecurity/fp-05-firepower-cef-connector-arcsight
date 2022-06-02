@@ -30,7 +30,7 @@ This is a beta version of eNcore. Before the General Availability release this w
 updated with details of paying for and receiving support.
 
 Detailed setup instructions for the CLI are included here, the specific implementation correspondences to Microsoft Sentinel integration but the CLI is the same setup
-https://www.cisco.com/c/en/us/td/docs/security/firepower/670/api/eStreamer_enCore/eStreamereNcoreSentinelOperationsGuide_409.html
+https://www.cisco.com/c/en/us/td/docs/security/firepower/70/api/eNcore/eNcore_Operations_Guide_v08.html
 
 # Python3
 
