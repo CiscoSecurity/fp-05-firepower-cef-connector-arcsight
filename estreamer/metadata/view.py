@@ -551,40 +551,45 @@ class View( object ):
             self.__addValueIfAvailable(
                 View.APP_PROTO,
                 [ Cache.APPLICATION_PROTOCOLS, record['client']['applicationProto']] )
+            
 
         elif recordTypeId == definitions.RECORD_INTRUSION_EXTRA_DATA:
             # 110
-            extraData = record['blob']['data']
+           if record['blob']['data'] :
 
-            if record['type'] == 2 :
-                if( extraData[0:20]==b'00000000000000000000' ) : #ipv4
-                    d1 = str(int(extraData[24:26].decode('utf-8'),16))
-                    d2 = str(int(extraData[26:28].decode('utf-8'),16))
-                    d3 = str(int(extraData[28:30].decode('utf-8'),16))
-                    d4 = str(int(extraData[30:32].decode('utf-8'),16))
-                    ipv4 = d1 + '.' + d2 + '.' + d3 + '.' + d4
-                    self.__addValue( View.ORIGINAL_SRC_IP, ipv4)
+                extraData = record['blob']['data']
+
+                if record['type'] == 2 :
+
+                    if( extraData[0:20]==b'00000000000000000000' ) : #ipv4
+                        d1 = str(int(extraData[24:26].decode('utf-8'),16))
+                        d2 = str(int(extraData[26:28].decode('utf-8'),16))
+                        d3 = str(int(extraData[28:30].decode('utf-8'),16))
+                        d4 = str(int(extraData[30:32].decode('utf-8'),16))
+                        ipv4 = d1 + '.' + d2 + '.' + d3 + '.' + d4
+                        self.__addValue( View.ORIGINAL_CLIENT_SRC_IP, ipv4)
                  
-                else :
-                    h1 = extraData[0:4].decode('utf-8')
-                    h2 = extraData[4:8].decode('utf-8')
-                    h3 = extraData[8:12].decode('utf-8')
-                    h4 = extraData[12:16].decode('utf-8')
-                    h5 = extraData[16:20].decode('utf-8')
-                    h6 = extraData[20:24].decode('utf-8')
-                    h7 = extraData[24:28].decode('utf-8')
-                    h8 = extraData[28:32].decode('utf-8')
-                    ipv6 = h1 + ':' + h2 + ':' + h3 + ':' + h4 + ':' + h5 + ':' + h6 + ':' + h7 +  ':' + h8
+                    else :
+                        if len(extraData) > 32 :
+                            h1 = extraData[0:4].decode('utf-8')
+                            h2 = extraData[4:8].decode('utf-8')
+                            h3 = extraData[8:12].decode('utf-8')
+                            h4 = extraData[12:16].decode('utf-8')
+                            h5 = extraData[16:20].decode('utf-8')
+                            h6 = extraData[20:24].decode('utf-8')
+                            h7 = extraData[24:28].decode('utf-8')
+                            h8 = extraData[28:32].decode('utf-8')
+                            ipv6 = h1 + ':' + h2 + ':' + h3 + ':' + h4 + ':' + h5 + ':' + h6 + ':' + h7 +  ':' + h8
 
-                    self.__addValue( View.ORIGINAL_SRC_IP, ipv6)
+                            self.__addValue( View.ORIGINAL_CLIENT_SRC_IP, ipv6)
 
-            elif record['type'] == 9 :
-                self.__addValue (View.XFF_HTTP_URI, extraData)
+                elif record['type'] == 9 :
+                    self.__addValue (View.XFF_HTTP_URI, extraData)
 
-            self.__addValueIfAvailable(
-                View.XFF_TYPE, 
-                [ Cache.XFF_TYPES, record['type']] )
-
+                self.__addValueIfAvailable(
+                    View.XFF_TYPE, 
+                    [ Cache.XFF_TYPES, record['type']] )         
+ 
         elif recordTypeId == definitions.RECORD_CORRELATION_EVENT:
             # 112
             self.__addValueIfAvailable(
